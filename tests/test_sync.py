@@ -103,6 +103,30 @@ class ProfileTests(unittest.TestCase):
         for name in ("snode.c", "mqttsuite", "SNode.C-Book-Companion", "Packages"):
             self.assertIn("https://github.com/SNodeC/" + name, self.profile)
         self.assertIn('alt="SNode.C mark"', self.profile)
+        import xml.etree.ElementTree as ET
+        menu = re.search(r"<p>\n(.*?)\n</p>", self.profile, re.S).group(1)
+        buttons = re.findall(r'<a href="#([^"]+)" title="([^"]+)"><img src="([^"]+)" alt="([^"]+)" width="108" height="24"></a>', menu)
+        self.assertEqual(len(buttons), len(AREAS) - 1)
+        self.assertNotIn("<details>", menu)
+        self.assertNotIn("[Framework](#framework)", self.profile)
+        ns = {"svg": "http://www.w3.org/2000/svg"}
+        for (area, title), (anchor, label, asset, alt) in zip(list(AREAS.items())[:-1], buttons):
+            with self.subTest(area=area):
+                self.assertEqual(anchor, title.lower().replace(" & ", "--").replace(" ", "-"))
+                self.assertEqual(label, title.replace("&", "&amp;"))
+                self.assertEqual(alt, label)
+                self.assertEqual(asset, f"media/menu/{area}-108.svg")
+                svg = ET.parse(ROOT / "profile" / asset).getroot()
+                self.assertEqual(svg.attrib["viewBox"], "0 0 108 24")
+                self.assertEqual(svg.find("svg:title", ns).text, area.capitalize())
+                rect, text = svg.find("svg:rect", ns), svg.find("svg:text", ns)
+                self.assertEqual(text.text, area.capitalize())
+                self.assertEqual(rect.attrib["fill"], "#203440")
+                self.assertEqual(rect.attrib["stroke"], "#395260")
+                self.assertEqual(text.attrib["fill"], "#ffffff")
+                self.assertEqual(text.attrib["font-size"], "13")
+                self.assertEqual(text.attrib["font-weight"], "600")
+                self.assertGreaterEqual(contrast(text.attrib["fill"], rect.attrib["fill"]), 4.5)
         self.assertNotRegex(self.profile, r"\b\d+ (?:projects|repositories)\b")
         self.assertNotIn("2026-10-10", self.profile)
 
@@ -127,8 +151,31 @@ class ProfileTests(unittest.TestCase):
             row = next(line for line in self.profile.splitlines() if line.startswith(f"| [{name}]("))
             self.assertEqual("[![CI]" in row, "workflow" in self.metadata[name])
             self.assertEqual("/releases/tag/" in row, "release" in self.metadata[name])
+        for entry in self.catalog:
+            row = next(line for line in self.profile.splitlines() if line.startswith(f"| [{entry['name']}]("))
+            self.assertIn(f" · {entry['kind']} |", row)
+            self.assertEqual("Depends on:" in row, bool(entry["depends_on"]))
+            for dep in entry["depends_on"]:
+                self.assertIn(f"[{dep}](https://github.com/SNodeC/{dep}" + (f"#{self.metadata[dep]['readme_anchor']}" if self.metadata[dep].get("readme_anchor") else "") + ")", row)
         self.assertIn("[v2.0.0]", self.profile)
         self.assertIn("[v1.0.2]", self.profile)
+
+    def test_repository_navigation_uses_verified_banner_anchors_only(self):
+        for name in ("snode.c", "mqttsuite", "AISuite", "CodexUI"):
+            with self.subTest(name=name):
+                self.assertEqual(self.metadata[name]["readme_anchor"], "project-overview")
+                destinations = re.findall(r"\]\((https://github.com/SNodeC/" + re.escape(name) + r"(?:#[^)]*)?)\)", self.profile)
+                self.assertTrue(destinations)
+                self.assertEqual(set(destinations), {f"https://github.com/SNodeC/{name}#project-overview"})
+                self.assertNotIn(f"{name}#project-overview/actions/", self.profile)
+                self.assertNotIn(f"{name}#project-overview/releases/", self.profile)
+        self.assertIn("[Packages](https://github.com/SNodeC/Packages)", self.profile)
+        self.metadata["AISuite"].pop("readme_anchor")
+        result = render_profile(self.catalog, self.metadata)
+        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite) · product", result)
+        self.metadata["AISuite"]["readme_anchor"] = "banner/with space"
+        result = render_profile(self.catalog, self.metadata)
+        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite#banner%2Fwith%20space)", result)
 
     def test_notes_and_footer(self):
         self.assertEqual(self.profile.count("Standalone tool, not built on SNode.C"), 2)

@@ -33,7 +33,7 @@
 - name: CodexUI
   area: applications
   kind: app
-  summary: Native Qt UI for Codex built on the AISuite frontend SDK
+  summary: Native Qt and browser UI for Codex built on the AISuite frontend SDK
   depends_on:
   - AISuite
   - snode.c
