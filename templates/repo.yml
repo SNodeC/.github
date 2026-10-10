@@ -1,13 +1,18 @@
-# Copy to .snodec/repo.yml in a non-fork C++ repository in a later phase.
+# Copy to .snodec/repo.yml in a non-fork C++ repository.
 # Identity (area, kind, summary and ecosystem edges) lives only in catalog.yml.
 ci:
   profile: cpp
   container: gcc:15.3.0-trixie
   apt: []                # Additional Debian packages; individual package names.
   deps: []               # Ordered source builds, e.g. [snode.c@source, AISuite@source].
-                         # @source resolves each dependency's default branch via the API.
+                         # @source resolves the default branch via API; @dev downloads a tested SDK.
+                         # @dev must exist first: merge/publish dependencies before consumers.
   cmake_options: []      # Individual CMake arguments, e.g. [-DCMAKE_BUILD_TYPE=Release].
   ctest: true
   ctest_args: [--output-on-failure]
   ipv6: false            # NET_ADMIN, IPv6 enabled and dummy interface fd00::1/128.
   runtime_dirs: false    # snodec group; /etc/snode.c, /var/log/snode.c, /var/run/snode.c.
+  parallel: 2           # Build workers (1–32); ctest parallelism belongs in ctest_args.
+  sdk: false            # Export on default branch; product x-sdk job publishes separately.
+  env: {}               # Non-secret build/test environment, e.g. CODEXUI_TIMING_POLICY.
+  ctest_launcher: []    # Optional argument-list wrapper, e.g. [xvfb-run, -a].

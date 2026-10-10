@@ -7,7 +7,7 @@ rewrite their READMEs, change the package pipeline or create release tags.
 ## Local checks
 
 Python 3 with PyYAML is sufficient for catalog/profile work. CMake, Ninja, Git
-and a C++ compiler are also needed for the workflow boundary integration tests.
+zstd, tar and a C++ compiler are also needed for the workflow boundary integration tests.
 
 ```sh
 python3 -m venv .venv
@@ -51,44 +51,87 @@ In particular, snode.c and mqttsuite still show their current release-package
 workflow until callers are added in a later phase. The control repository's CI
 path is included because that workflow is delivered here.
 
-## Reusable C++ Verify
+## Shared Verify (Phase 2)
 
-`.github/workflows/verify.yml` is `workflow_call`-only. A preparation job
-validates the caller's manifest and selects the container/capabilities before the
-`snodec / cpp` job is scheduled. Checkouts use the exact PR head SHA (otherwise
-the event SHA); checkout credentials are not persisted. The C++ checkout includes
-submodules.
+`.github/workflows/verify.yml` remains `workflow_call`-only and read-only. The
+manifest is the single authority for build options; the catalog holds identity.
+Preparation validates the manifest before selecting the C++ container or native
+Python matrix. Every checkout uses the exact PR head SHA, otherwise the event
+SHA, with no persisted credentials. C++ includes recursive submodules.
 
-The default image is `gcc:15.3.0-trixie`. Base packages are the specified build
-dependencies plus Python 3 for stdlib command orchestration. Extra packages must
-be individual package names. CMake and CTest arguments are passed as argument
-lists, never evaluated as shell fragments.
+### C++
 
-Dependencies support `<SNodeC-repository>@source` only, in declared order.
-The GitHub API supplies each default branch and resolves it to a commit before
-checkout; source submodules are included. Each dependency is configured in
-Release mode with `BUILD_TESTING=OFF`, built and installed into its own staging
-prefix. Previously staged dependencies flow through `CMAKE_PREFIX_PATH` and
-`LD_LIBRARY_PATH` (`lib` and `lib64`). The API token is removed from the
-environment before any dependency/caller build code runs.
+The default container is `gcc:15.3.0-trixie`. Extra apt packages, CMake arguments,
+CTest arguments and optional `ctest_launcher` are argument lists, not shell
+fragments. `parallel` controls build workers. Non-secret `env` values reach
+builds and tests; reserved GitHub/runner/token variables are rejected.
 
-The caller is configured with Ninja and its `cmake_options`, built, tested
-when enabled, and installed into a staging prefix. The workflow owns staging
-prefixes and the dependency search path; it sets `CMAKE_INSTALL_LIBDIR=lib`.
-Runtime directories and the snodec group are opt-in. IPv6 is also opt-in and
-enables NET_ADMIN, the IPv6 sysctl and a dummy interface with `fd00::1/128`.
-Whitespace checking runs even after a build/test failure, against the PR base
-or the previous push commit (the empty tree for an initial commit).
+Ordered dependencies accept `<repository>@source` (API-resolved default branch,
+exact commit, Debug build with `BUILD_TESTING=OFF`) or `<repository>@dev` (tested
+SDK for the same distribution/version/architecture). Both stage installs and
+supply `CMAKE_PREFIX_PATH` and `LD_LIBRARY_PATH`. SDK downloads verify the GitHub
+asset SHA-256 digest, use safe tar extraction, check repository/target/commit
+identity, and reject inconsistent dependency revisions. There is no source
+fallback when an SDK is absent or stale. Dependency updates must publish in
+order: snode.c, then AISuite, then CodexUI. mqttsuite depends only on snode.c.
+The read token is removed before executing any build code.
 
-Tests execute the actual inline workflow scripts, including a real two-dependency
-CMake/CTest/install boundary fixture. They do not duplicate the implementation.
-The control CI runs catalog checks, tests and profile drift independently so
-one failure does not suppress subsequent checks.
+The caller configures with Ninja, builds, runs CTest as an unprivileged `snodec`
+user when enabled (`--no-tests=error`), then installs into a staging prefix.
+`CMAKE_INSTALL_LIBDIR=lib` and dependency paths are owned by the workflow.
+Runtime directories and IPv6 remain opt-in; IPv6 adds NET_ADMIN, the sysctl and
+`fd00::1/128` on a dummy interface. snode.c enables its existing component, unit,
+policy and staged installed-consumer tests explicitly in its manifest.
 
-After merge, **the maintainer** publishes `v1.0.0` and the moving `v1`.
-Templates are not installed into other repositories in this phase. Other CI
-profiles, organization sync PRs, package/release/site/figure lanes and dev SDK
-assets belong to later phases.
+### Python
 
-See [evidence](EVIDENCE.md), [brand values](brand/README.md),
-[contributing](CONTRIBUTING.md) and [security](SECURITY.md).
+AutoTalk's existing qualification becomes the shared `python` profile:
+Python 3.12 on Ubuntu 24.04, Windows 2025 and macOS 15, editable development
+install, pytest excluding physical audio devices, native package build,
+packaged smoke launch and archive/checksum upload. The manifest supplies only
+local project arguments, build/launch commands and artifact paths. Matrix
+failures do not cancel the other platforms. Package qualification can still run
+after test failures, without turning a failed test job green.
+
+### Independent hygiene
+
+Whitespace checks run against the PR base or previous push commit (empty tree
+on the initial commit). An independent job also checks changed C/C++ and CMake
+files against existing repository formatting policies and changed Markdown's
+local file links. It neither invents a style where none exists nor performs
+unreliable external-URL probes. Failures are collected rather than stopping at
+the first file. This job still runs when compilation/tests fail.
+
+### Development SDK publication
+
+`sdk: true` exports a staged install after successful default-branch C++ tests.
+The product's separate `x-sdk` job calls `publish-dev.yml`, with the only
+`contents: write` grant. It waits for all shared Verify jobs; AISuite also waits
+for `x-protocol`. The publisher never checks out or executes product code. It
+checks the current API-resolved default-branch HEAD, rejects superseded runs and
+mismatched artifact identities, and creates/updates only the unsigned rolling
+`dev` prerelease/tag. Asset names are `<project>-dev-<distro>-<version>-<arch>.tar.zst`.
+Stable version tags, secrets and package workflows are untouched.
+
+### Coordinated rollout
+
+Merge the control workflow change first. The maintainer then publishes the
+reviewed shared-workflow version and moving `v1` alias in **SNodeC/.github**.
+The existing `v1.0` does not substitute for `@v1`, and predates these extensions.
+Merge snode.c next and wait for green default-branch CI plus its `dev` SDK.
+Then merge mqttsuite and AISuite; wait for AISuite's green CI/protocol check and
+SDK before CodexUI. AutoTalk can follow the control workflow independently.
+Caller PRs must not merge while `v1` or their development SDK dependencies are
+missing. No duplicate old/native build jobs remain after their migration.
+
+Tests execute the actual inline workflow scripts, including ordered source
+builds, a real SDK export/download/relocation/CTest/install consumer, invalid
+SDK identities/digests, Python commands, hygiene aggregation and publication
+boundaries. Local boundary tests additionally require **zstd** and tar.
+
+Repository README frames are **Phase 4**, not Phase 2. Package/release/site,
+figure, ecosystem and org-sync lanes remain separate later phases.
+
+See [Phase 2 evidence and rollout](PHASE2.md), [Phase 1 evidence](EVIDENCE.md),
+[brand values](brand/README.md), [contributing](CONTRIBUTING.md) and
+[security](SECURITY.md).
