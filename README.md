@@ -7,7 +7,7 @@ rewrite their READMEs, change the package pipeline or create release tags.
 ## Local checks
 
 Python 3 with PyYAML is sufficient for catalog/profile work. CMake, Ninja, Git
-zstd, tar and a C++ compiler are also needed for the workflow boundary integration tests.
+and a C++ compiler are also needed for the workflow boundary integration tests.
 
 ```sh
 python3 -m venv .venv
@@ -47,8 +47,8 @@ organization profile. Retiring/retired entries are catalog classifications only:
 this repository does not archive anything. All six upstream forks remain active.
 
 Workflow badges show an existing workflow, **not** a promise of push/PR testing.
-In particular, snode.c and mqttsuite still show their current release-package
-workflow until callers are added in a later phase. The control repository's CI
+The snode.c and mqttsuite release-package workflows remain tag-triggered;
+shared Verify callers are manual-only. The control repository's CI
 path is included because that workflow is delivered here.
 
 ## Shared Verify (Phase 2)
@@ -56,7 +56,11 @@ path is included because that workflow is delivered here.
 `.github/workflows/verify.yml` remains `workflow_call`-only and read-only. The
 manifest is the single authority for build options; the catalog holds identity.
 Preparation validates the manifest before selecting the C++ container or native
-Python matrix. Every checkout uses the exact PR head SHA, otherwise the event
+Python matrix. The canonical caller uses only `workflow_dispatch`: full
+Verify does not run on ordinary pushes, PRs or version-tag pushes. Heavy
+release builds/tests stay in the existing tag-triggered package pipeline.
+The control repository retains its lightweight catalog/unit/drift checks.
+Every checkout uses the exact PR head SHA, otherwise the event
 SHA, with no persisted credentials. C++ includes recursive submodules.
 
 ### C++
@@ -104,7 +108,8 @@ Merge the control workflow change first. The maintainer then publishes the
 reviewed shared-workflow commit by moving the existing `v1.0` tag in
 **SNodeC/.github**. Callers and the canonical template use `@v1.0`; no new
 `v1` tag is created. The maintainer explicitly approved moving this existing tag.
-Merge snode.c next and require green default-branch Verify. Consumers build
+Merge callers without dispatching Verify. Release qualification is triggered
+through the existing product version-tag package pipeline. Consumers build
 their ordered dependencies from source, with no release-asset prerequisites.
 AutoTalk can follow the control workflow independently. No duplicate old/native
 build jobs remain after migration.

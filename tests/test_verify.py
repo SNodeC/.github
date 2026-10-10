@@ -116,7 +116,7 @@ class WorkflowContractTests(unittest.TestCase):
 
     def test_template_exact_and_control_checks_independent(self):
         self.assertEqual((ROOT / "templates/ci.yml").read_text(),
-                         "name: CI\non: [push, pull_request, workflow_dispatch]\n"
+                         "name: CI\non: [workflow_dispatch]\n"
                          "permissions: { contents: read }\njobs:\n  snodec:\n"
                          "    uses: SNodeC/.github/.github/workflows/verify.yml@v1.0\n"
                          "    secrets: inherit\n")

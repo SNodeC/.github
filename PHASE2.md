@@ -48,14 +48,15 @@ explicitly deferred by the maintainer, not silently skipped.
 1. Merge the control PR and tag-reference follow-up; move the existing `v1.0`
    tag to that reviewed control commit, as explicitly approved by the maintainer.
    Callers use `@v1.0`; no `v1` tag is created and no `Book-*` tag is changed.
-2. Merge snode.c and require green default-branch Verify.
-3. Merge mqttsuite and AISuite; verify their source dependency builds and tests,
-   plus AISuite protocol validation. No release asset is required.
+2. Merge manual-only callers; do not dispatch their full Verify jobs.
+3. Retain the existing version-tag-triggered package build/test path unchanged.
+   Standalone Verify remains available only when explicitly requested.
 4. CodexUI builds snode.c then AISuite from source; AutoTalk depends only on the
    shared workflow release. The maintainer explicitly deferred their existing
    test defects to later work; tests and failure gates remain enabled.
-5. Phase 2 gate: snode.c and mqttsuite are green on their API-reported default
-   branches. Phase 3 package migration and Phase 4 README alignment are not started.
+5. Trigger policy follows the maintainer override below, not the original
+   automatic default-branch Verify gate. Phase 3 package migration and Phase 4
+   README alignment are not started.
 
 ## Local results before opening PRs
 
@@ -117,3 +118,16 @@ environment only; this does not change the package pipeline or product tags.
 Removal verification: all 30 control tests pass, including the real ordered
 source-build/CTest/staged-install consumer and source-only negative contracts;
 catalog, deterministic profile drift, workflow syntax and whitespace pass.
+
+## Maintainer trigger-policy override
+
+The maintainer rejected full build/test jobs on every push and PR. All five
+Verify callers and the canonical template now use `workflow_dispatch` only.
+Their tests remain intact; only automatic scheduling is removed. The control
+repository retains lightweight catalog/unit/profile checks. Product package
+workflows keep their existing version-tag/package-build dispatch triggers.
+This intentionally supersedes Claude's proposed push/PR Verify scheduling.
+No manual GitHub Verify dispatch is performed during this rollout. Existing
+qualification runs are cancelled; the requested SNode.C version-tag move starts
+the unchanged package pipeline after the caller changes merge. Book tags are
+never moved.
