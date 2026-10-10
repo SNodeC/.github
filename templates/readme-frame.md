@@ -33,3 +33,20 @@ Preservation takes precedence over the original three-screen aspiration: complet
 ## Secondary navigation buttons
 
 Existing “Go further:” callouts use one short SVG button per existing destination, retaining order, full descriptive alternative text and substantive explanations. Remove the navigation prefixes, not their content or links. Append a right arrow to each secondary label; keep multiple buttons in one paragraph so they wrap naturally on narrow screens. Existing back buttons keep their left arrows. Labels retain Arial 13 px / weight 600 and baseline 16. Arrows are drawn inside each button SVG with one filled 9×4 shape (`M0 1.25H5.5V0L9 2L5.5 4V2.75H0Z`), a 1.5 px shaft and vertical centre y=12; back arrows mirror that same shape. The shape replaces font arrows, rather than adding a second renderer, and preserves their measured ink bounds and existing button dimensions. Main-menu labels remain arrow-free at their existing 108×24 size and wrap naturally; do not force the menu into a single unbroken browser-width line. Ordinary text links do not gain arrows.
+
+## Common navigation semantics and depth
+
+Labels and order alone are insufficient: each standard menu item must perform the same job across the four READMEs. Root and docs-index menus enter the same README-level section; a section links one level down to its authoritative detailed guide. The existing API item remains a direct reference-site link and is omitted where no API site exists. Do not turn topic guides into copies of the README or duplicate build/configuration procedures to create matching section names.
+
+| Menu label | README entry | Responsibility |
+| --- | --- | --- |
+| Start | Quick start | A short ordered route through Install, Use and Configure; no repeated package/source instructions. |
+| Install | Install | Available installation routes, requirements and installation steps; source-only projects must not imply binary releases. |
+| Build | Build from source | Compile this repository, select build options and verify the result; link to prerequisites and the detailed source guide. |
+| Use | First success (product) / First run (app) | Reach a working result, with complete retained examples, expected results and boundaries. |
+| Configure | Configuration | Runtime endpoints, persisted settings and access boundaries, not CMake options or a generic architecture dump. |
+| Architecture | Architecture | Component responsibilities and ownership at overview depth, then detailed architecture references. |
+| API | Existing API site | Generated reference lookup; never invent a site. |
+| Contribute | Contributing | Project-specific reporting/contribution guidance and existing community defaults. |
+
+Products keep their mandatory product headings; the app keeps its mandatory app headings. Semantic symmetry does not require renaming every kind-specific heading or imposing identical headings on topic guides. Quick start remains a short route, Install contains installation decisions, Build contains compilation decisions, and Use contains execution; these must not be aliases for the same content. When installation instructions move out of Build, retain their commands, prefix/privilege caveats and prerequisites in the README exactly once. Preserve old anchors when headings change, and preserve all banners, figures, commands, warnings and qualifications.
