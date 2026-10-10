@@ -38,7 +38,7 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 
 | Repository | Purpose | CI | Latest release |
 | --- | --- | --- | --- |
-| [CodexUI](https://github.com/SNodeC/CodexUI#project-overview) · app | Native Qt UI for Codex built on the AISuite frontend SDK<br>Depends on: [AISuite](https://github.com/SNodeC/AISuite#project-overview), [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml) |  |
+| [CodexUI](https://github.com/SNodeC/CodexUI#project-overview) · app | Native Qt and browser UI for Codex built on the AISuite frontend SDK<br>Depends on: [AISuite](https://github.com/SNodeC/AISuite#project-overview), [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml) |  |
 | [AutoTalk](https://github.com/SNodeC/AutoTalk) · app | Qt desktop app for timed PDF presentations with narration<br>_Standalone tool, not built on SNode.C_ | [![CI](https://github.com/SNodeC/AutoTalk/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SNodeC/AutoTalk/actions/workflows/ci.yml) |  |
 | [GpsdOsmViewer](https://github.com/SNodeC/GpsdOsmViewer) · app | Android app showing gpsd positions on OpenStreetMap<br>_Standalone tool, not built on SNode.C_ |  |  |
 

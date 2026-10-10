@@ -11,11 +11,11 @@ Header chips are presentation assets derived from the authoritative accent pairs
 ## Frame order
 
 1. `header`: original banner, project title, area/kind chip with light/dark variants.
-2. `status`: CI · Release · Packages · Licence, omitting inapplicable badges. Workflow existence is not a promise of automatic push/PR testing. Packages links the existing signed distribution, not an invented publication count. Licence appears only for an existing file.
+2. `status`: CI · Release · Packages · License, omitting inapplicable badges. Workflow existence is not a promise of automatic push/PR testing. Packages links the existing signed distribution, not an invented publication count. License appears only for an existing file.
 3. Repository-authored pitch and relevant product/consumer relationships; remove redundant links.
 4. `menu`: **Start · Install · Build · Use · Configure · Architecture · API · Contribute**; retain only available destinations, using the original repository blue-gray SVG block-button style at a consistent 108×24 size, with meaningful link titles and image alternative text. The menu contains only linked buttons: no “Text navigation” dropdown or duplicate plain-link row.
 5. Kind core, in the order below; text remains repository-authored.
-6. Repository-specific sections, including all existing complete examples and project-specific guides.
+6. Repository-specific sections: nest integration/first-use extensions under First success where they support that journey; deeper walkthroughs belong in existing authoritative guides, with discoverable README entry links.
 7. `ecosystem`: organization and direct project relationships.
 8. `footer`: existing licensing and independence statements, maintainer, contributing and security links.
 
@@ -23,16 +23,16 @@ Use paired `<!-- snodec:begin NAME -->` / `<!-- snodec:end NAME -->` markers for
 
 ## Mandatory kind cores
 
-- **product:** Quick start · First success · Capabilities · Architecture · Documentation · Platforms and packages · Releases.
-- **app:** What you see · Install · First run · Configuration · Platforms.
+- **product:** Quick start · First success · Capabilities · Architecture · Configuration · Documentation · Platforms and packages · Releases.
+- **app:** Quick start · What you see · Install · First run · Configuration · Architecture · Documentation · Platforms · Releases.
 
 Update links when a section moves into a guide; do not retain an empty README build section or misleading anchor merely to preserve its old URL. A `docs/index.md` routes to authoritative guides without duplicating their contents. Do not break links to guides that remain in use. Keep one physical source line per prose paragraph.
 
-Preservation takes precedence over the original three-screen aspiration: complete first-use examples are not moved out of a README merely to shorten it. No placeholder section, unsupported platform promise, unverified release number or invented maintainer contact may be introduced. Existing repository-specific README policies still apply.
+Preserve complete first successes in L1. Extract advanced walkthroughs only when their prerequisites and depth belong in L2, moving full commands, configuration, expected results and boundaries together. The README collection retains essential information; reducing duplicate authorities takes precedence over preserving wording or section location. No placeholder section, unsupported platform promise, unverified release number or invented maintainer contact may be introduced. Existing repository-specific README policies still apply.
 
 ## Secondary navigation buttons
 
-For retained “Go further:” destinations, use one short SVG button per link, with descriptive alternative text and necessary explanations. Remove the navigation prefixes; redundant callouts and their links may be removed. Append a right arrow to each secondary label; keep multiple buttons in one paragraph so they wrap naturally on narrow screens. Existing back buttons keep their left arrows. Labels retain Arial 13 px / weight 600 and baseline 16. Arrows are drawn inside each button SVG with one filled 9×4 shape (`M0 1.25H5.5V0L9 2L5.5 4V2.75H0Z`), a 1.5 px shaft and vertical centre y=12; back arrows mirror that same shape. The shape replaces font arrows, rather than adding a second renderer, and preserves their measured ink bounds and existing button dimensions. Main-menu labels remain arrow-free at their existing 108×24 size and wrap naturally; do not force the menu into a single unbroken browser-width line. Ordinary text links do not gain arrows.
+For retained “Go further:” destinations, use one short SVG button per link, with descriptive alternative text and necessary explanations. Remove the navigation prefixes; redundant callouts and their links may be removed. Draw a right arrow in each secondary SVG; omit decorative arrows from its alternative text; keep multiple buttons in one paragraph so they wrap naturally on narrow screens. Existing back buttons keep their left arrows. Labels retain Arial 13 px / weight 600 and baseline 16. Arrows are drawn inside each button SVG with one filled 9×4 shape (`M0 1.25H5.5V0L9 2L5.5 4V2.75H0Z`), a 1.5 px shaft and vertical centre y=12; back arrows mirror that same shape. The shape replaces font arrows, rather than adding a second renderer, and preserves their measured ink bounds and existing button dimensions. Main-menu labels remain arrow-free at their existing 108×24 size and wrap naturally; do not force the menu into a single unbroken browser-width line. Ordinary text links do not gain arrows.
 
 ## Common navigation semantics and depth
 
@@ -53,4 +53,10 @@ Products keep their mandatory product headings; the app keeps its mandatory app 
 
 ## Installation presentation
 
-Install begins with **Choose your route.**, followed by short, separate paragraphs with bold route labels ending in a colon—not a table, grid, bordered panel or long dash separator. Quick-start role links likewise use colons instead of long dash separators. Show only available routes, once each. Packaged projects present signed packages before source installation; source-only projects say so without empty package options. Keep route-specific qualifications with their route. Link the current package matrix instead of repeating a platform inventory; retain dependency behavior and availability qualifications without a second package pitch or duplicate route-link line. The source link goes directly to the build guide, as does the Build menu button. That guide owns prerequisites, compilation, verification and installation; preserve complete commands and prefix/privilege caveats there. Install remains a concise chooser without a second procedure. Runtime/deployment warnings belong in Configuration and retain their safety meaning, not necessarily their wording. Repository-specific routes differ, but their responsibility and entry depth do not.
+Install begins with **Choose your route.**, followed by short, separate paragraphs with bold route labels ending in a colon—not a table, grid, bordered panel or long dash separator. Quick-start role links likewise use colons instead of long dash separators. Show only available routes, once each. Packaged projects present signed packages before source installation; source-only projects say so without empty package options. Keep route-specific qualifications with their route. State the broad supported environment once under Platforms, and link the current package matrix for distribution releases and architectures; retain dependency behavior and availability qualifications without a second package pitch or duplicate route-link line. The source link goes directly to the build guide, as does the Build menu button. That guide owns prerequisites, compilation, verification and installation; preserve complete commands and prefix/privilege caveats there. Install remains a concise chooser without a second procedure. Runtime/deployment warnings belong in Configuration and retain their safety meaning, not necessarily their wording. Repository-specific routes differ, but their responsibility and entry depth do not.
+
+## Documentation ownership and return navigation
+
+Configuration is an H2 overview in all four READMEs: endpoints, persisted settings and trust boundaries, then the authoritative runtime guide. Build guides own installation and verification; first-success procedures are never duplicated in those guides. Footer contribution links point to the repository's own Contributing section; shared organization defaults must not describe control-repository operations as product contribution instructions.
+
+Docs indexes retain the common menu as route maps. Individual L2 guides use a consistent linked SVG back button and only relevant local navigation, not another complete README menu or a self-linking Build button. Standard menu targets are available on preview branches; preserve meaningful existing anchors when they still name substantive sections. Do not fabricate compatibility or platform support from version numbers alone.
