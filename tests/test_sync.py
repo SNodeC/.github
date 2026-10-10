@@ -103,8 +103,30 @@ class ProfileTests(unittest.TestCase):
         for name in ("snode.c", "mqttsuite", "SNode.C-Book-Companion", "Packages"):
             self.assertIn("https://github.com/SNodeC/" + name, self.profile)
         self.assertIn('alt="SNode.C mark"', self.profile)
-        self.assertIn("[Framework](#framework)", self.profile)
-        self.assertIn("[Distribution & infrastructure](#distribution--infrastructure)", self.profile)
+        import xml.etree.ElementTree as ET
+        menu = re.search(r"<p>\n(.*?)\n</p>", self.profile, re.S).group(1)
+        buttons = re.findall(r'<a href="#([^"]+)" title="([^"]+)"><img src="([^"]+)" alt="([^"]+)" width="108" height="24"></a>', menu)
+        self.assertEqual(len(buttons), len(AREAS) - 1)
+        self.assertNotIn("<details>", menu)
+        self.assertNotIn("[Framework](#framework)", self.profile)
+        ns = {"svg": "http://www.w3.org/2000/svg"}
+        for (area, title), (anchor, label, asset, alt) in zip(list(AREAS.items())[:-1], buttons):
+            with self.subTest(area=area):
+                self.assertEqual(anchor, title.lower().replace(" & ", "--").replace(" ", "-"))
+                self.assertEqual(label, title.replace("&", "&amp;"))
+                self.assertEqual(alt, label)
+                self.assertEqual(asset, f"media/menu/{area}-108.svg")
+                svg = ET.parse(ROOT / "profile" / asset).getroot()
+                self.assertEqual(svg.attrib["viewBox"], "0 0 108 24")
+                self.assertEqual(svg.find("svg:title", ns).text, area.capitalize())
+                rect, text = svg.find("svg:rect", ns), svg.find("svg:text", ns)
+                self.assertEqual(text.text, area.capitalize())
+                self.assertEqual(rect.attrib["fill"], "#203440")
+                self.assertEqual(rect.attrib["stroke"], "#395260")
+                self.assertEqual(text.attrib["fill"], "#ffffff")
+                self.assertEqual(text.attrib["font-size"], "13")
+                self.assertEqual(text.attrib["font-weight"], "600")
+                self.assertGreaterEqual(contrast(text.attrib["fill"], rect.attrib["fill"]), 4.5)
         self.assertNotRegex(self.profile, r"\b\d+ (?:projects|repositories)\b")
         self.assertNotIn("2026-10-10", self.profile)
 

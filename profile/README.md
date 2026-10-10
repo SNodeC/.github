@@ -12,7 +12,14 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 - **Learn:** [Book companion](https://github.com/SNodeC/SNode.C-Book-Companion) and [examples](#learn)
 - **Install:** [Packages](https://github.com/SNodeC/Packages)
 
-[Framework](#framework) · [Suites](#suites) · [Applications](#applications) · [Learn](#learn) · [Community projects](#community-projects) · [Distribution & infrastructure](#distribution--infrastructure)
+<p>
+<a href="#framework" title="Framework"><img src="media/menu/framework-108.svg" alt="Framework" width="108" height="24"></a>
+<a href="#suites" title="Suites"><img src="media/menu/suites-108.svg" alt="Suites" width="108" height="24"></a>
+<a href="#applications" title="Applications"><img src="media/menu/applications-108.svg" alt="Applications" width="108" height="24"></a>
+<a href="#learn" title="Learn"><img src="media/menu/learn-108.svg" alt="Learn" width="108" height="24"></a>
+<a href="#community-projects" title="Community projects"><img src="media/menu/community-108.svg" alt="Community projects" width="108" height="24"></a>
+<a href="#distribution--infrastructure" title="Distribution &amp; infrastructure"><img src="media/menu/infrastructure-108.svg" alt="Distribution &amp; infrastructure" width="108" height="24"></a>
+</p>
 
 ## Framework
 
