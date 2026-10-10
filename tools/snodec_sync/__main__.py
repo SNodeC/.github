@@ -112,8 +112,8 @@ def render_profile(catalog, metadata):
     ]
 
     def table(entries, forks=False):
-        result = ["| Repository | Purpose | CI | Latest release |",
-                  "| --- | --- | --- | --- |"]
+        result = ["| Repository | Purpose | Status |",
+                  "| --- | --- | --- |"]
         for entry in entries:
             name = entry["name"]
             info = metadata.get(name, {})
@@ -131,13 +131,13 @@ def render_profile(catalog, metadata):
                 default = quote(info["default_branch"], safe="")
                 badge = f"[![CI]({url}/badge.svg?branch={default})]({url})"
             release = info.get("release")
-            latest = ""
+            latest = "—"
             if release:
                 tag = release["tag"]
                 latest = f"[{text(tag)}]({repo_url(name)}/releases/tag/{quote(tag, safe='')})"
                 if release["prerelease"]:
                     latest += " (pre-release)"
-            result.append(f"| [{text(name)}]({repo_url(name, info.get('readme_anchor', ''))}) · {entry['kind']} | {purpose} | {badge} | {latest} |")
+            result.append(f"| [{text(name)}]({repo_url(name, info.get('readme_anchor', ''))})<br>{entry['kind']} | {purpose} | {badge + '<br>' if badge else ''}{latest} |")
         return result + [""]
 
     for area, title in AREAS.items():

@@ -153,7 +153,7 @@ class ProfileTests(unittest.TestCase):
             self.assertEqual("/releases/tag/" in row, "release" in self.metadata[name])
         for entry in self.catalog:
             row = next(line for line in self.profile.splitlines() if line.startswith(f"| [{entry['name']}]("))
-            self.assertIn(f" · {entry['kind']} |", row)
+            self.assertIn(f"<br>{entry['kind']} |", row)
             self.assertEqual("Depends on:" in row, bool(entry["depends_on"]))
             for dep in entry["depends_on"]:
                 self.assertIn(f"[{dep}](https://github.com/SNodeC/{dep}" + (f"#{self.metadata[dep]['readme_anchor']}" if self.metadata[dep].get("readme_anchor") else "") + ")", row)
@@ -172,10 +172,24 @@ class ProfileTests(unittest.TestCase):
         self.assertIn("[Packages](https://github.com/SNodeC/Packages)", self.profile)
         self.metadata["AISuite"].pop("readme_anchor")
         result = render_profile(self.catalog, self.metadata)
-        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite) · product", result)
+        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite)<br>product", result)
         self.metadata["AISuite"]["readme_anchor"] = "banner/with space"
         result = render_profile(self.catalog, self.metadata)
         self.assertIn("[AISuite](https://github.com/SNodeC/AISuite#banner%2Fwith%20space)", result)
+
+    def test_compact_status_preserves_ci_and_release(self):
+        self.assertIn("| Repository | Purpose | Status |", self.profile)
+        self.assertNotIn("| CI | Latest release |", self.profile)
+        for entry in self.catalog:
+            name = entry["name"]
+            row = next(line for line in self.profile.splitlines() if line.startswith(f"| [{name}]("))
+            info = self.metadata[name]
+            self.assertEqual("[![CI]" in row, bool(info.get("workflow")))
+            self.assertEqual("/releases/tag/" in row, bool(info.get("release")))
+            if not info.get("release"):
+                self.assertTrue(row.endswith("— |"))
+            if info.get("workflow") and info.get("release"):
+                self.assertIn(")<br>[", row)
 
     def test_notes_and_footer(self):
         self.assertEqual(self.profile.count("Standalone tool, not built on SNode.C"), 2)

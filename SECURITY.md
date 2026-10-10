@@ -5,5 +5,4 @@ requests. Contact the organization maintainer privately at
 [me@vchrist.at](mailto:me@vchrist.at), the address published in the
 [SNodeC organization metadata](https://api.github.com/orgs/SNodeC).
 
-This phase does not configure private vulnerability reporting, signing keys,
-application secrets or a response-time commitment.
+Use the private maintainer contact above rather than a public issue. This policy does not promise a response time or a configured GitHub private-reporting channel.
