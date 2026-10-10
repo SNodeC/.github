@@ -87,7 +87,7 @@ jobs:
               raise ValueError("apt must contain package names, not options")
           if profile == "cpp" and any(not re.fullmatch(r"[A-Za-z0-9_.-]+@(source|dev)", d) for d in config["deps"]):
               raise ValueError("deps supports SNodeC repository names with @source or @dev")
-          if profile == "cpp" and len(config["deps"]) != len(set(config["deps"])):
+          if profile == "cpp" and len(config["deps"]) != len({d.split("@")[0] for d in config["deps"]}):
               raise ValueError("deps must be unique and ordered")
           options = "--cap-add=NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0" if config.get("ipv6") else ""
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:

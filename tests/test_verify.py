@@ -81,7 +81,7 @@ class ManifestTests(unittest.TestCase):
     def test_invalid_manifests_fail_before_container(self):
         cases = [{"profile": "python"}, {"ipv6": "true"}, {"runtime_dirs": 1},
                  {"ctest": None}, {"apt": "--bad"}, {"deps": ["snode.c@release"]},
-                 {"deps": ["snode.c@source"] * 2}, {"apt": ["--allow-unauthenticated"]},
+                 {"deps": ["snode.c@source"] * 2}, {"deps": ["snode.c@source", "snode.c@dev"]}, {"apt": ["--allow-unauthenticated"]},
                  {"apt": ["libssl-dev;echo bad"]}, {"container": "gcc:15\noptions=bad"},
                  {"cmake_options": [False]}, {"ctest_args": ["bad\0argument"]},
                  {"deps": ["other/snode.c@source"]}, {"unknown": 1}, {"parallel": 0}, {"parallel": True},
