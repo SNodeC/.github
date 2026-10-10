@@ -1,0 +1,65 @@
+area_accents:
+  framework: foundation-blue
+  suites: iot-green
+  applications: interface-amber
+  learn: teal
+  community: coral
+  infrastructure: slate
+  forks: neutral-grey
+accents:
+  foundation-blue:
+    light:
+      text: '#075985'
+      background: '#e0f2fe'
+    dark:
+      text: '#7dd3fc'
+      background: '#082f49'
+  iot-green:
+    light:
+      text: '#166534'
+      background: '#dcfce7'
+    dark:
+      text: '#86efac'
+      background: '#052e16'
+  protocol-violet:
+    light:
+      text: '#5b21b6'
+      background: '#ede9fe'
+    dark:
+      text: '#c4b5fd'
+      background: '#2e1065'
+  interface-amber:
+    light:
+      text: '#92400e'
+      background: '#fef3c7'
+    dark:
+      text: '#fcd34d'
+      background: '#451a03'
+  teal:
+    light:
+      text: '#115e59'
+      background: '#ccfbf1'
+    dark:
+      text: '#5eead4'
+      background: '#042f2e'
+  coral:
+    light:
+      text: '#9f1239'
+      background: '#ffe4e6'
+    dark:
+      text: '#fda4af'
+      background: '#4c0519'
+  slate:
+    light:
+      text: '#334155'
+      background: '#f1f5f9'
+    dark:
+      text: '#cbd5e1'
+      background: '#0f172a'
+  neutral-grey:
+    light:
+      text: '#374151'
+      background: '#f3f4f6'
+    dark:
+      text: '#d1d5db'
+      background: '#111827'

@@ -1,0 +1,256 @@
+# Identity only. Build settings belong in each repository.
+- name: snode.c
+  area: framework
+  kind: product
+  summary: Event-driven C++ networking framework for embedded and IoT systems
+  depends_on: []
+  status: active
+  packaged: true
+  site: true
+  pinned: true
+  accent: foundation-blue
+- name: mqttsuite
+  area: suites
+  kind: product
+  summary: MQTT broker, bridge, integrator, store and CLI built on SNode.C
+  depends_on:
+  - snode.c
+  status: active
+  packaged: true
+  site: true
+  pinned: true
+  accent: iot-green
+- name: AISuite
+  area: suites
+  kind: product
+  summary: Typed AI provider middleware and bridge built on SNode.C
+  depends_on:
+  - snode.c
+  status: active
+  packaged: false
+  pinned: true
+  accent: protocol-violet
+- name: CodexUI
+  area: applications
+  kind: app
+  summary: Native Qt UI for Codex built on the AISuite frontend SDK
+  depends_on:
+  - AISuite
+  - snode.c
+  status: active
+  pinned: true
+- name: AutoTalk
+  area: applications
+  kind: app
+  summary: Qt desktop app for timed PDF presentations with narration
+  depends_on: []
+  status: active
+  note: Standalone tool, not built on SNode.C
+- name: GpsdOsmViewer
+  area: applications
+  kind: app
+  summary: Android app showing gpsd positions on OpenStreetMap
+  depends_on: []
+  status: active
+  confirm: true
+  note: Standalone tool, not built on SNode.C
+- name: SNode.C-Book-Companion
+  area: learn
+  kind: learning
+  summary: Examples, exercises and solutions for the book Layered Network Programming with SNode.C
+  depends_on:
+  - snode.c
+  status: active
+  pinned: true
+- name: talks
+  area: learn
+  kind: learning
+  summary: Talks and slides about SNode.C
+  depends_on: []
+  status: active
+- name: echo
+  area: learn
+  kind: example
+  summary: TCP echo server and client demonstrating SNode.C socket contexts
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: websocket-echo
+  area: learn
+  kind: example
+  summary: WebSocket echo server, client and browser demo built on SNode.C
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: tiktaktoe
+  area: learn
+  kind: example
+  summary: Browser tic-tac-toe game with a SNode.C WebSocket subprotocol
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: ServerClient
+  area: learn
+  kind: example
+  summary: Interactive chat server and client built on SNode.C
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: MiniGateway
+  area: learn
+  kind: example
+  summary: Simulated measurement gateway with HTTP, server-sent events and MQTT
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: INJA-Templatebuilder
+  area: learn
+  kind: example
+  summary: Web interface for rendering Inja templates with JSON data through SNode.C
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: IM510-Project
+  area: community
+  kind: community
+  summary: Course forum web application with users, topics, threads and posts
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: snodec-forum-webapp
+  area: community
+  kind: community
+  summary: SNode.C forum web application with a MariaDB backend
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: SnodeCWebForum
+  area: community
+  kind: community
+  summary: SNode.C web forum with users, topics, posts and comments
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: simple-form-snodec
+  area: community
+  kind: community
+  summary: Vue frontend and SNode.C REST backend for a discussion forum
+  depends_on:
+  - snode.c
+  status: active
+  confirm: true
+- name: IOTApplicationDesigner
+  area: community
+  kind: community
+  summary: Visual editor for IoT topics and mappings with import and export
+  depends_on: []
+  status: active
+  confirm: true
+- name: leiches-masterproject
+  area: community
+  kind: community
+  summary: HTTP and WebSocket backend and web frontend for Philips Hue control
+  depends_on: []
+  status: active
+  confirm: true
+- name: mqtt-open-hue
+  area: community
+  kind: community
+  summary: Headless C++ gateway connecting a Philips Hue Bridge with MQTT
+  depends_on: []
+  status: active
+  confirm: true
+- name: .github
+  area: infrastructure
+  kind: infra
+  summary: Organization catalog, profile, brand tokens and reusable CI workflows
+  depends_on: []
+  status: active
+- name: Packages
+  area: infrastructure
+  kind: infra
+  summary: Signed SNode.C and MQTTSuite package repositories for several Linux distributions
+  depends_on: []
+  status: active
+  pinned: true
+- name: DistributionPackages
+  area: infrastructure
+  kind: infra
+  summary: Build recipes, release CI and signing for distribution packages
+  depends_on: []
+  status: active
+- name: SNode.C-Landingpages
+  area: infrastructure
+  kind: infra
+  summary: Shared landing-page and technical-figure sources
+  depends_on: []
+  status: retiring
+- name: snode.c-doc
+  area: infrastructure
+  kind: infra
+  summary: Published Doxygen reference for SNode.C
+  depends_on: []
+  status: retiring
+- name: mqttsuite-doc
+  area: infrastructure
+  kind: infra
+  summary: Published Doxygen reference for MQTTSuite
+  depends_on: []
+  status: retiring
+- name: OpenWRT
+  area: infrastructure
+  kind: infra
+  summary: Retired predecessor of the distribution package pipeline
+  depends_on: []
+  status: retired
+- name: CLI11
+  area: forks
+  kind: fork
+  summary: Fork of CLIUtils/CLI11 — kept for future work
+  depends_on: []
+  status: active
+  upstream: CLIUtils/CLI11
+- name: json-schema-validator
+  area: forks
+  kind: fork
+  summary: Fork of pboettch/json-schema-validator — kept for future work
+  depends_on: []
+  status: active
+  upstream: pboettch/json-schema-validator
+- name: libucontext
+  area: forks
+  kind: fork
+  summary: Fork of kaniini/libucontext — kept for future work
+  depends_on: []
+  status: active
+  upstream: kaniini/libucontext
+- name: termux-packages
+  area: forks
+  kind: fork
+  summary: Fork of termux/termux-packages — kept for future work
+  depends_on: []
+  status: active
+  upstream: termux/termux-packages
+- name: arduino-LoRa
+  area: forks
+  kind: fork
+  summary: Fork of sandeepmistry/arduino-LoRa — kept for future work
+  depends_on: []
+  status: active
+  upstream: sandeepmistry/arduino-LoRa
+- name: iotempower
+  area: forks
+  kind: fork
+  summary: Fork of iotempire/iotempower — kept for future work
+  depends_on: []
+  status: active
+  upstream: iotempire/iotempower
