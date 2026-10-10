@@ -33,7 +33,7 @@ repository, not the working directory.
   branches, workflow paths and release tags. No timestamps or network requests
   enter rendering. Update this snapshot deliberately when those facts change;
   profile generation is not a live inventory sync. Missing workflow/release
-  fields produce empty cells, not invented badges or version numbers.
+  fields never invent badges or version numbers: the compact Status cell omits an unavailable CI badge and uses a dash for an unavailable release.
 - `brand/tokens.yml`: one authority for light/dark text and tinted backgrounds,
   plus area-to-accent mappings. Products may override their area's accent.
   CodexUI inherits Applications' interface amber; app entries never use `accent`.

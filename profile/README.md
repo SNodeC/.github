@@ -23,69 +23,69 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 
 ## Framework
 
-| Repository | Purpose | CI | Latest release |
-| --- | --- | --- | --- |
-| [snode.c](https://github.com/SNodeC/snode.c#project-overview) · product | Event-driven C++ networking framework for embedded and IoT systems | [![CI](https://github.com/SNodeC/snode.c/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/snode.c/actions/workflows/ci.yml) | [v2.0.0](https://github.com/SNodeC/snode.c/releases/tag/v2.0.0) |
+| Repository | Purpose | Status |
+| --- | --- | --- |
+| [snod&#8203;e.c](https://github.com/SNodeC/snode.c#project-overview)<br>prod&#8203;uct | Event-driven C++ networking framework for embedded and IoT systems | [![CI](https://github.com/SNodeC/snode.c/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/snode.c/actions/workflows/ci.yml)<br>[v2.0.0](https://github.com/SNodeC/snode.c/releases/tag/v2.0.0) |
 
 ## Suites
 
-| Repository | Purpose | CI | Latest release |
-| --- | --- | --- | --- |
-| [mqttsuite](https://github.com/SNodeC/mqttsuite#project-overview) · product | MQTT broker, bridge, integrator, store and CLI built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/mqttsuite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/mqttsuite/actions/workflows/ci.yml) | [v1.0.2](https://github.com/SNodeC/mqttsuite/releases/tag/v1.0.2) |
-| [AISuite](https://github.com/SNodeC/AISuite#project-overview) · product | Typed AI provider middleware and bridge built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/AISuite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/AISuite/actions/workflows/ci.yml) |  |
+| Repository | Purpose | Status |
+| --- | --- | --- |
+| [mqtt&#8203;suit&#8203;e](https://github.com/SNodeC/mqttsuite#project-overview)<br>prod&#8203;uct | MQTT broker, bridge, integrator, store and CLI built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/mqttsuite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/mqttsuite/actions/workflows/ci.yml)<br>[v1.0.2](https://github.com/SNodeC/mqttsuite/releases/tag/v1.0.2) |
+| [AISu&#8203;ite](https://github.com/SNodeC/AISuite#project-overview)<br>prod&#8203;uct | Typed AI provider middleware and bridge built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/AISuite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/AISuite/actions/workflows/ci.yml)<br>— |
 
 ## Applications
 
-| Repository | Purpose | CI | Latest release |
-| --- | --- | --- | --- |
-| [CodexUI](https://github.com/SNodeC/CodexUI#project-overview) · app | Native Qt and browser UI for Codex built on the AISuite frontend SDK<br>Depends on: [AISuite](https://github.com/SNodeC/AISuite#project-overview), [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml) |  |
-| [AutoTalk](https://github.com/SNodeC/AutoTalk) · app | Qt desktop app for timed PDF presentations with narration<br>_Standalone tool, not built on SNode.C_ | [![CI](https://github.com/SNodeC/AutoTalk/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SNodeC/AutoTalk/actions/workflows/ci.yml) |  |
-| [GpsdOsmViewer](https://github.com/SNodeC/GpsdOsmViewer) · app | Android app showing gpsd positions on OpenStreetMap<br>_Standalone tool, not built on SNode.C_ |  |  |
+| Repository | Purpose | Status |
+| --- | --- | --- |
+| [Code&#8203;xUI](https://github.com/SNodeC/CodexUI#project-overview)<br>app | Native Qt and browser UI for Codex built on the AISuite frontend SDK<br>Depends on: [AISuite](https://github.com/SNodeC/AISuite#project-overview), [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml)<br>— |
+| [Auto&#8203;Talk](https://github.com/SNodeC/AutoTalk)<br>app | Qt desktop app for timed PDF presentations with narration<br>_Standalone tool, not built on SNode.C_ | [![CI](https://github.com/SNodeC/AutoTalk/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SNodeC/AutoTalk/actions/workflows/ci.yml)<br>— |
+| [Gpsd&#8203;OsmV&#8203;iewe&#8203;r](https://github.com/SNodeC/GpsdOsmViewer)<br>app | Android app showing gpsd positions on OpenStreetMap<br>_Standalone tool, not built on SNode.C_ | — |
 
 ## Learn
 
-| Repository | Purpose | CI | Latest release |
-| --- | --- | --- | --- |
-| [SNode.C-Book-Companion](https://github.com/SNodeC/SNode.C-Book-Companion) · learning | Examples, exercises and solutions for the book Layered Network Programming with SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [talks](https://github.com/SNodeC/talks) · learning | Talks and slides about SNode.C |  |  |
-| [echo](https://github.com/SNodeC/echo) · example | TCP echo server and client demonstrating SNode.C socket contexts<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [websocket-echo](https://github.com/SNodeC/websocket-echo) · example | WebSocket echo server, client and browser demo built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [tiktaktoe](https://github.com/SNodeC/tiktaktoe) · example | Browser tic-tac-toe game with a SNode.C WebSocket subprotocol<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [ServerClient](https://github.com/SNodeC/ServerClient) · example | Interactive chat server and client built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [MiniGateway](https://github.com/SNodeC/MiniGateway) · example | Simulated measurement gateway with HTTP, server-sent events and MQTT<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [INJA-Templatebuilder](https://github.com/SNodeC/INJA-Templatebuilder) · example | Web interface for rendering Inja templates with JSON data through SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| Repository | Purpose | Status |
+| --- | --- | --- |
+| [SNod&#8203;e.C-&#8203;Book&#8203;-Com&#8203;pani&#8203;on](https://github.com/SNodeC/SNode.C-Book-Companion)<br>lear&#8203;ning | Examples, exercises and solutions for the book Layered Network Programming with SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [talk&#8203;s](https://github.com/SNodeC/talks)<br>lear&#8203;ning | Talks and slides about SNode.C | — |
+| [echo](https://github.com/SNodeC/echo)<br>exam&#8203;ple | TCP echo server and client demonstrating SNode.C socket contexts<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [webs&#8203;ocke&#8203;t-ec&#8203;ho](https://github.com/SNodeC/websocket-echo)<br>exam&#8203;ple | WebSocket echo server, client and browser demo built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [tikt&#8203;akto&#8203;e](https://github.com/SNodeC/tiktaktoe)<br>exam&#8203;ple | Browser tic-tac-toe game with a SNode.C WebSocket subprotocol<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [Serv&#8203;erCl&#8203;ient](https://github.com/SNodeC/ServerClient)<br>exam&#8203;ple | Interactive chat server and client built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [Mini&#8203;Gate&#8203;way](https://github.com/SNodeC/MiniGateway)<br>exam&#8203;ple | Simulated measurement gateway with HTTP, server-sent events and MQTT<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [INJA&#8203;-Tem&#8203;plat&#8203;ebui&#8203;lder](https://github.com/SNodeC/INJA-Templatebuilder)<br>exam&#8203;ple | Web interface for rendering Inja templates with JSON data through SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
 
 ## Community projects
 
-| Repository | Purpose | CI | Latest release |
-| --- | --- | --- | --- |
-| [IM510-Project](https://github.com/SNodeC/IM510-Project) · community | Course forum web application with users, topics, threads and posts<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [snodec-forum-webapp](https://github.com/SNodeC/snodec-forum-webapp) · community | SNode.C forum web application with a MariaDB backend<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [SnodeCWebForum](https://github.com/SNodeC/SnodeCWebForum) · community | SNode.C web forum with users, topics, posts and comments<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [simple-form-snodec](https://github.com/SNodeC/simple-form-snodec) · community | Vue frontend and SNode.C REST backend for a discussion forum<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
-| [IOTApplicationDesigner](https://github.com/SNodeC/IOTApplicationDesigner) · community | Visual editor for IoT topics and mappings with import and export |  |  |
-| [leiches-masterproject](https://github.com/SNodeC/leiches-masterproject) · community | HTTP and WebSocket backend and web frontend for Philips Hue control |  |  |
-| [mqtt-open-hue](https://github.com/SNodeC/mqtt-open-hue) · community | Headless C++ gateway connecting a Philips Hue Bridge with MQTT |  |  |
+| Repository | Purpose | Status |
+| --- | --- | --- |
+| [IM51&#8203;0-Pr&#8203;ojec&#8203;t](https://github.com/SNodeC/IM510-Project)<br>comm&#8203;unit&#8203;y | Course forum web application with users, topics, threads and posts<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [snod&#8203;ec-f&#8203;orum&#8203;-web&#8203;app](https://github.com/SNodeC/snodec-forum-webapp)<br>comm&#8203;unit&#8203;y | SNode.C forum web application with a MariaDB backend<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [Snod&#8203;eCWe&#8203;bFor&#8203;um](https://github.com/SNodeC/SnodeCWebForum)<br>comm&#8203;unit&#8203;y | SNode.C web forum with users, topics, posts and comments<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [simp&#8203;le-f&#8203;orm-&#8203;snod&#8203;ec](https://github.com/SNodeC/simple-form-snodec)<br>comm&#8203;unit&#8203;y | Vue frontend and SNode.C REST backend for a discussion forum<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | — |
+| [IOTA&#8203;ppli&#8203;cati&#8203;onDe&#8203;sign&#8203;er](https://github.com/SNodeC/IOTApplicationDesigner)<br>comm&#8203;unit&#8203;y | Visual editor for IoT topics and mappings with import and export | — |
+| [leic&#8203;hes-&#8203;mast&#8203;erpr&#8203;ojec&#8203;t](https://github.com/SNodeC/leiches-masterproject)<br>comm&#8203;unit&#8203;y | HTTP and WebSocket backend and web frontend for Philips Hue control | — |
+| [mqtt&#8203;-ope&#8203;n-hu&#8203;e](https://github.com/SNodeC/mqtt-open-hue)<br>comm&#8203;unit&#8203;y | Headless C++ gateway connecting a Philips Hue Bridge with MQTT | — |
 
 ## Distribution & infrastructure
 
-| Repository | Purpose | CI | Latest release |
-| --- | --- | --- | --- |
-| [.github](https://github.com/SNodeC/.github) · infra | Organization catalog, profile, brand tokens and reusable CI workflows | [![CI](https://github.com/SNodeC/.github/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SNodeC/.github/actions/workflows/ci.yml) |  |
-| [Packages](https://github.com/SNodeC/Packages) · infra | Signed SNode.C and MQTTSuite package repositories for several Linux distributions |  |  |
-| [DistributionPackages](https://github.com/SNodeC/DistributionPackages) · infra | Build recipes, release CI and signing for distribution packages | [![CI](https://github.com/SNodeC/DistributionPackages/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/SNodeC/DistributionPackages/actions/workflows/release.yml) |  |
+| Repository | Purpose | Status |
+| --- | --- | --- |
+| [.git&#8203;hub](https://github.com/SNodeC/.github)<br>infr&#8203;a | Organization catalog, profile, brand tokens and reusable CI workflows | [![CI](https://github.com/SNodeC/.github/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SNodeC/.github/actions/workflows/ci.yml)<br>— |
+| [Pack&#8203;ages](https://github.com/SNodeC/Packages)<br>infr&#8203;a | Signed SNode.C and MQTTSuite package repositories for several Linux distributions | — |
+| [Dist&#8203;ribu&#8203;tion&#8203;Pack&#8203;ages](https://github.com/SNodeC/DistributionPackages)<br>infr&#8203;a | Build recipes, release CI and signing for distribution packages | [![CI](https://github.com/SNodeC/DistributionPackages/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/SNodeC/DistributionPackages/actions/workflows/release.yml)<br>— |
 
 <details>
 <summary>Upstream forks — kept for future work</summary>
 
-| Repository | Purpose | CI | Latest release |
-| --- | --- | --- | --- |
-| [CLI11](https://github.com/SNodeC/CLI11) · fork | Fork of CLIUtils/CLI11 — kept for future work<br>[Upstream](https://github.com/CLIUtils/CLI11) | [![CI](https://github.com/SNodeC/CLI11/actions/workflows/arm_mac_gcc.yml/badge.svg?branch=main)](https://github.com/SNodeC/CLI11/actions/workflows/arm_mac_gcc.yml) |  |
-| [json-schema-validator](https://github.com/SNodeC/json-schema-validator) · fork | Fork of pboettch/json-schema-validator — kept for future work<br>[Upstream](https://github.com/pboettch/json-schema-validator) | [![CI](https://github.com/SNodeC/json-schema-validator/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/SNodeC/json-schema-validator/actions/workflows/test.yaml) |  |
-| [libucontext](https://github.com/SNodeC/libucontext) · fork | Fork of kaniini/libucontext — kept for future work<br>[Upstream](https://github.com/kaniini/libucontext) |  |  |
-| [termux-packages](https://github.com/SNodeC/termux-packages) · fork | Fork of termux/termux-packages — kept for future work<br>[Upstream](https://github.com/termux/termux-packages) | [![CI](https://github.com/SNodeC/termux-packages/actions/workflows/package_updates.yml/badge.svg?branch=master)](https://github.com/SNodeC/termux-packages/actions/workflows/package_updates.yml) |  |
-| [arduino-LoRa](https://github.com/SNodeC/arduino-LoRa) · fork | Fork of sandeepmistry/arduino-LoRa — kept for future work<br>[Upstream](https://github.com/sandeepmistry/arduino-LoRa) |  |  |
-| [iotempower](https://github.com/SNodeC/iotempower) · fork | Fork of iotempire/iotempower — kept for future work<br>[Upstream](https://github.com/iotempire/iotempower) |  |  |
+| Repository | Purpose | Status |
+| --- | --- | --- |
+| [CLI1&#8203;1](https://github.com/SNodeC/CLI11)<br>fork | Fork of CLIUtils/CLI11 — kept for future work<br>[Upstream](https://github.com/CLIUtils/CLI11) | [![CI](https://github.com/SNodeC/CLI11/actions/workflows/arm_mac_gcc.yml/badge.svg?branch=main)](https://github.com/SNodeC/CLI11/actions/workflows/arm_mac_gcc.yml)<br>— |
+| [json&#8203;-sch&#8203;ema-&#8203;vali&#8203;dato&#8203;r](https://github.com/SNodeC/json-schema-validator)<br>fork | Fork of pboettch/json-schema-validator — kept for future work<br>[Upstream](https://github.com/pboettch/json-schema-validator) | [![CI](https://github.com/SNodeC/json-schema-validator/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/SNodeC/json-schema-validator/actions/workflows/test.yaml)<br>— |
+| [libu&#8203;cont&#8203;ext](https://github.com/SNodeC/libucontext)<br>fork | Fork of kaniini/libucontext — kept for future work<br>[Upstream](https://github.com/kaniini/libucontext) | — |
+| [term&#8203;ux-p&#8203;acka&#8203;ges](https://github.com/SNodeC/termux-packages)<br>fork | Fork of termux/termux-packages — kept for future work<br>[Upstream](https://github.com/termux/termux-packages) | [![CI](https://github.com/SNodeC/termux-packages/actions/workflows/package_updates.yml/badge.svg?branch=master)](https://github.com/SNodeC/termux-packages/actions/workflows/package_updates.yml)<br>— |
+| [ardu&#8203;ino-&#8203;LoRa](https://github.com/SNodeC/arduino-LoRa)<br>fork | Fork of sandeepmistry/arduino-LoRa — kept for future work<br>[Upstream](https://github.com/sandeepmistry/arduino-LoRa) | — |
+| [iote&#8203;mpow&#8203;er](https://github.com/SNodeC/iotempower)<br>fork | Fork of iotempire/iotempower — kept for future work<br>[Upstream](https://github.com/iotempire/iotempower) | — |
 
 </details>
 
@@ -94,12 +94,12 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 
 ### Distribution & infrastructure
 
-| Repository | Purpose | CI | Latest release |
-| --- | --- | --- | --- |
-| [SNode.C-Landingpages](https://github.com/SNodeC/SNode.C-Landingpages) · infra | Shared landing-page and technical-figure sources<br>_Retiring_ | [![CI](https://github.com/SNodeC/SNode.C-Landingpages/actions/workflows/publish-mqtt-figures.yml/badge.svg?branch=main)](https://github.com/SNodeC/SNode.C-Landingpages/actions/workflows/publish-mqtt-figures.yml) |  |
-| [snode.c-doc](https://github.com/SNodeC/snode.c-doc) · infra | Published Doxygen reference for SNode.C<br>_Retiring_ |  |  |
-| [mqttsuite-doc](https://github.com/SNodeC/mqttsuite-doc) · infra | Published Doxygen reference for MQTTSuite<br>_Retiring_ |  |  |
-| [OpenWRT](https://github.com/SNodeC/OpenWRT) · infra | Retired predecessor of the distribution package pipeline<br>_Retired_ | [![CI](https://github.com/SNodeC/OpenWRT/actions/workflows/openwrt.yml/badge.svg?branch=main)](https://github.com/SNodeC/OpenWRT/actions/workflows/openwrt.yml) | [debian-upgrade-fixtures](https://github.com/SNodeC/OpenWRT/releases/tag/debian-upgrade-fixtures) (pre-release) |
+| Repository | Purpose | Status |
+| --- | --- | --- |
+| [SNod&#8203;e.C-&#8203;Land&#8203;ingp&#8203;ages](https://github.com/SNodeC/SNode.C-Landingpages)<br>infr&#8203;a | Shared landing-page and technical-figure sources<br>_Retiring_ | [![CI](https://github.com/SNodeC/SNode.C-Landingpages/actions/workflows/publish-mqtt-figures.yml/badge.svg?branch=main)](https://github.com/SNodeC/SNode.C-Landingpages/actions/workflows/publish-mqtt-figures.yml)<br>— |
+| [snod&#8203;e.c-&#8203;doc](https://github.com/SNodeC/snode.c-doc)<br>infr&#8203;a | Published Doxygen reference for SNode.C<br>_Retiring_ | — |
+| [mqtt&#8203;suit&#8203;e-do&#8203;c](https://github.com/SNodeC/mqttsuite-doc)<br>infr&#8203;a | Published Doxygen reference for MQTTSuite<br>_Retiring_ | — |
+| [Open&#8203;WRT](https://github.com/SNodeC/OpenWRT)<br>infr&#8203;a | Retired predecessor of the distribution package pipeline<br>_Retired_ | [![CI](https://github.com/SNodeC/OpenWRT/actions/workflows/openwrt.yml/badge.svg?branch=main)](https://github.com/SNodeC/OpenWRT/actions/workflows/openwrt.yml)<br>[debian-upgrade-fixtures](https://github.com/SNodeC/OpenWRT/releases/tag/debian-upgrade-fixtures) (pre-release) |
 
 </details>
 

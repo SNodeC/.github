@@ -132,8 +132,8 @@ class ProfileTests(unittest.TestCase):
 
     def test_every_repository_once_and_archived_separately(self):
         for entry in self.catalog:
-            self.assertEqual(self.profile.count(f"| [{entry['name']}]("), 1)
-        visible, archive = self.profile.split("<summary>Archive</summary>")
+            self.assertEqual(self.profile.replace("&#8203;", "").count(f"| [{entry['name']}]("), 1)
+        visible, archive = self.profile.replace("&#8203;", "").split("<summary>Archive</summary>")
         for entry in self.catalog:
             row = f"| [{entry['name']}]("
             if entry["status"] != "active":
@@ -148,12 +148,12 @@ class ProfileTests(unittest.TestCase):
     def test_only_verified_workflows_and_releases(self):
         for entry in self.catalog:
             name = entry["name"]
-            row = next(line for line in self.profile.splitlines() if line.startswith(f"| [{name}]("))
+            row = next(line for line in self.profile.replace("&#8203;", "").splitlines() if line.startswith(f"| [{name}]("))
             self.assertEqual("[![CI]" in row, "workflow" in self.metadata[name])
             self.assertEqual("/releases/tag/" in row, "release" in self.metadata[name])
         for entry in self.catalog:
-            row = next(line for line in self.profile.splitlines() if line.startswith(f"| [{entry['name']}]("))
-            self.assertIn(f" · {entry['kind']} |", row)
+            row = next(line for line in self.profile.replace("&#8203;", "").splitlines() if line.startswith(f"| [{entry['name']}]("))
+            self.assertIn(f"<br>{entry['kind']} |", row)
             self.assertEqual("Depends on:" in row, bool(entry["depends_on"]))
             for dep in entry["depends_on"]:
                 self.assertIn(f"[{dep}](https://github.com/SNodeC/{dep}" + (f"#{self.metadata[dep]['readme_anchor']}" if self.metadata[dep].get("readme_anchor") else "") + ")", row)
@@ -172,10 +172,40 @@ class ProfileTests(unittest.TestCase):
         self.assertIn("[Packages](https://github.com/SNodeC/Packages)", self.profile)
         self.metadata["AISuite"].pop("readme_anchor")
         result = render_profile(self.catalog, self.metadata)
-        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite) · product", result)
+        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite)<br>product", result.replace("&#8203;", ""))
         self.metadata["AISuite"]["readme_anchor"] = "banner/with space"
         result = render_profile(self.catalog, self.metadata)
-        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite#banner%2Fwith%20space)", result)
+        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite#banner%2Fwith%20space)", result.replace("&#8203;", ""))
+
+    def test_compact_status_preserves_ci_and_release(self):
+        self.assertIn("| Repository | Purpose | Status |", self.profile)
+        self.assertNotIn("| CI | Latest release |", self.profile)
+        for entry in self.catalog:
+            name = entry["name"]
+            row = next(line for line in self.profile.replace("&#8203;", "").splitlines() if line.startswith(f"| [{name}]("))
+            info = self.metadata[name]
+            self.assertEqual("[![CI]" in row, bool(info.get("workflow")))
+            self.assertEqual("/releases/tag/" in row, bool(info.get("release")))
+            if not info.get("release"):
+                self.assertTrue(row.endswith("— |"))
+            if info.get("workflow") and info.get("release"):
+                self.assertIn(")<br>[", row)
+
+    def test_identity_soft_breaks_preserve_names_and_short_runs(self):
+        rows = [line for line in self.profile.splitlines() if line.startswith("| [")]
+        self.assertEqual(len(rows), len(self.catalog))
+        for entry in self.catalog:
+            row = next(line for line in rows if line.replace("&#8203;", "").startswith(f"| [{entry['name']}]("))
+            display = re.match(r"\| \[(.*?)\]", row).group(1)
+            self.assertEqual(display.replace("&#8203;", ""), entry["name"])
+            self.assertTrue(all(len(part) <= 4 for part in display.split("&#8203;")))
+            self.assertIn("https://github.com/SNodeC/" + entry["name"], row)
+        self.catalog[0]["name"] = "unsafe_but_valid_name"
+        self.catalog[0]["depends_on"] = []
+        for entry in self.catalog[1:]:
+            entry["depends_on"] = ["unsafe_but_valid_name" if d == "snode.c" else d for d in entry["depends_on"]]
+        rendered = render_profile(self.catalog, self.metadata)
+        self.assertIn(r"unsa&#8203;fe\_b&#8203;ut\_v&#8203;alid&#8203;\_nam&#8203;e", rendered)
 
     def test_notes_and_footer(self):
         self.assertEqual(self.profile.count("Standalone tool, not built on SNode.C"), 2)
