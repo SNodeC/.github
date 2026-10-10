@@ -1,0 +1,161 @@
+{
+  ".github": {
+    "default_branch": "main",
+    "workflow": ".github/workflows/ci.yml"
+  },
+  "AISuite": {
+    "default_branch": "master",
+    "source_commit": "4f936b61a9200df1c08b276e745e67c549736dd8",
+    "workflow": ".github/workflows/ci.yml"
+  },
+  "AutoTalk": {
+    "default_branch": "main",
+    "source_commit": "e6e13a0f894e2ca586de83a2ad1a51eb714435f1",
+    "workflow": ".github/workflows/native-builds.yml"
+  },
+  "CLI11": {
+    "default_branch": "main",
+    "source_commit": "a41ba814b3202aeb35f6ed36f0fde80402bf85cc",
+    "workflow": ".github/workflows/arm_mac_gcc.yml"
+  },
+  "CodexUI": {
+    "default_branch": "master",
+    "source_commit": "00802e4cb42c1564b0c62753a97c6492670ac56c",
+    "workflow": ".github/workflows/ci.yml"
+  },
+  "DistributionPackages": {
+    "default_branch": "main",
+    "source_commit": "40d7a9638125de8e384150693cf3328d6afaed72",
+    "workflow": ".github/workflows/release.yml"
+  },
+  "GpsdOsmViewer": {
+    "default_branch": "master",
+    "source_commit": "d15df4a185160856823f65746a1f9ee1584b3435"
+  },
+  "IM510-Project": {
+    "default_branch": "master",
+    "source_commit": "0bd5f6f0e831cc7f9cb53ec7e9879cb87c058ec0"
+  },
+  "INJA-Templatebuilder": {
+    "default_branch": "main",
+    "source_commit": "c770eafb4e852981888efc8f6fafb922530dda60"
+  },
+  "IOTApplicationDesigner": {
+    "default_branch": "main",
+    "source_commit": "c89caddefbed1391581f68bfb00fb369a8882031"
+  },
+  "MiniGateway": {
+    "default_branch": "main",
+    "source_commit": "2647f13bd9ee0dffdd4947818dbff50c40d73014"
+  },
+  "OpenWRT": {
+    "default_branch": "main",
+    "release": {
+      "prerelease": true,
+      "tag": "debian-upgrade-fixtures"
+    },
+    "source_commit": "2c5bddc6f40cfd7c92c5ea136f569c6e28a89222",
+    "workflow": ".github/workflows/openwrt.yml"
+  },
+  "Packages": {
+    "default_branch": "main",
+    "source_commit": "5db17156d81577f85705c114ccb4c73e635dfe75"
+  },
+  "SNode.C-Book-Companion": {
+    "default_branch": "main",
+    "source_commit": "6a273b1dd038acde4da5f6b084179fbe4d905eab"
+  },
+  "SNode.C-Landingpages": {
+    "default_branch": "main",
+    "source_commit": "6c02cbed4cb2fa1baf1bf003b0a37a4b24cc14eb",
+    "workflow": ".github/workflows/publish-mqtt-figures.yml"
+  },
+  "ServerClient": {
+    "default_branch": "master",
+    "source_commit": "d063975460cd6d0f1f522a87f7ac3748c4aa131c"
+  },
+  "SnodeCWebForum": {
+    "default_branch": "main",
+    "source_commit": "ebf5a4595f7313f3c82f35d221f40a1260e677db"
+  },
+  "arduino-LoRa": {
+    "default_branch": "master",
+    "source_commit": "f7b08b06373880a2a17e55577c0ddb759c608e62"
+  },
+  "echo": {
+    "default_branch": "main",
+    "source_commit": "b8be500441c387c6cb834d584b7810b17d59bcec"
+  },
+  "iotempower": {
+    "default_branch": "master",
+    "source_commit": "88a40ab985f068c56dbbaa668a4e9692c0ae4d65"
+  },
+  "json-schema-validator": {
+    "default_branch": "main",
+    "source_commit": "f15f156c69bfea115267b189c0129462f6511913",
+    "workflow": ".github/workflows/test.yaml"
+  },
+  "leiches-masterproject": {
+    "default_branch": "main",
+    "source_commit": "167e3b7de85b192ffc698777af02ea5df1ae467a"
+  },
+  "libucontext": {
+    "default_branch": "master",
+    "source_commit": "a0323579ac50b9a9d4033754d089f1fed0f59a00"
+  },
+  "mqtt-open-hue": {
+    "default_branch": "main",
+    "source_commit": "b4ee0bc58e893fcbc532697b24aaa2bc15c1145e"
+  },
+  "mqttsuite": {
+    "default_branch": "master",
+    "release": {
+      "prerelease": false,
+      "tag": "v1.0.2"
+    },
+    "source_commit": "9a1d02794d9371e82a7a1883d6e93646df01787a",
+    "workflow": ".github/workflows/packages.yml"
+  },
+  "mqttsuite-doc": {
+    "default_branch": "main",
+    "source_commit": "b8324f82d693f1c7f2d6595e15d67b52cc2fd9a6"
+  },
+  "simple-form-snodec": {
+    "default_branch": "main",
+    "source_commit": "157c860bc91ab678658a9f8ca37f69e866bffefd"
+  },
+  "snode.c": {
+    "default_branch": "master",
+    "release": {
+      "prerelease": false,
+      "tag": "v2.0.0"
+    },
+    "source_commit": "c17b9aee773efa763f0fe092e626b07e76350b8b",
+    "workflow": ".github/workflows/packages.yml"
+  },
+  "snode.c-doc": {
+    "default_branch": "main",
+    "source_commit": "bd5b09a593f982258b4b1cdae2782a8814b41da2"
+  },
+  "snodec-forum-webapp": {
+    "default_branch": "main",
+    "source_commit": "20fba09d2b66a57a98a9b3812bd6c89f5d439ef0"
+  },
+  "talks": {
+    "default_branch": "main",
+    "source_commit": "23772b2428c4303e26fd2f5880927accf40753b4"
+  },
+  "termux-packages": {
+    "default_branch": "master",
+    "source_commit": "0ed9823767def02ceb75ac41ea867e0d3045ddd2",
+    "workflow": ".github/workflows/package_updates.yml"
+  },
+  "tiktaktoe": {
+    "default_branch": "main",
+    "source_commit": "5c61f6bfc8a74b450f2fb4e83a3e4521a6a08b3c"
+  },
+  "websocket-echo": {
+    "default_branch": "main",
+    "source_commit": "c8ee1f6f792e195e1aa95a1ebe12ecde084067e5"
+  }
+}

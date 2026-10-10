@@ -1,0 +1,13 @@
+# Copy to .snodec/repo.yml in a non-fork C++ repository in a later phase.
+# Identity (area, kind, summary and ecosystem edges) lives only in catalog.yml.
+ci:
+  profile: cpp
+  container: gcc:15.3.0-trixie
+  apt: []                # Additional Debian packages; individual package names.
+  deps: []               # Ordered source builds, e.g. [snode.c@source, AISuite@source].
+                         # @source resolves each dependency's default branch via the API.
+  cmake_options: []      # Individual CMake arguments, e.g. [-DCMAKE_BUILD_TYPE=Release].
+  ctest: true
+  ctest_args: [--output-on-failure]
+  ipv6: false            # NET_ADMIN, IPv6 enabled and dummy interface fd00::1/128.
+  runtime_dirs: false    # snodec group; /etc/snode.c, /var/log/snode.c, /var/run/snode.c.
