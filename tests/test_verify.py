@@ -36,7 +36,21 @@ def prepare(path, ci):
     output.write_text("")
     with directory(path), patch.dict(os.environ, {"GITHUB_OUTPUT": str(output)}):
         exec(compile(script("prepare", "Read and validate manifest"), "manifest", "exec"), {})
-    return dict(line.split("=", 1) for line in output.read_text().splitlines())
+    result = {}
+    lines = iter(output.read_text().splitlines())
+    for line in lines:
+        if "<<" in line:
+            key, delimiter = line.split("<<", 1)
+            values = []
+            for value in lines:
+                if value == delimiter:
+                    break
+                values.append(value)
+            result[key] = "\n".join(values)
+        else:
+            key, value = line.split("=", 1)
+            result[key] = value
+    return result
 
 
 class ManifestTests(unittest.TestCase):
@@ -66,11 +80,12 @@ class ManifestTests(unittest.TestCase):
 
     def test_invalid_manifests_fail_before_container(self):
         cases = [{"profile": "python"}, {"ipv6": "true"}, {"runtime_dirs": 1},
-                 {"ctest": None}, {"apt": "--bad"}, {"deps": ["snode.c@dev"]},
+                 {"ctest": None}, {"apt": "--bad"}, {"deps": ["snode.c@release"]},
                  {"deps": ["snode.c@source"] * 2}, {"apt": ["--allow-unauthenticated"]},
                  {"apt": ["libssl-dev;echo bad"]}, {"container": "gcc:15\noptions=bad"},
                  {"cmake_options": [False]}, {"ctest_args": ["bad\0argument"]},
-                 {"deps": ["other/snode.c@source"]}, {"unknown": 1}]
+                 {"deps": ["other/snode.c@source"]}, {"unknown": 1}, {"parallel": 0}, {"parallel": True},
+                 {"sdk": "yes"}, {"env": {"GH_READ_TOKEN": "bad"}}, {"env": {"OK": 1}}]
         with tempfile.TemporaryDirectory() as directory_name:
             for ci in cases:
                 with self.subTest(ci=ci), self.assertRaises(ValueError):
@@ -128,7 +143,9 @@ class WorkflowContractTests(unittest.TestCase):
         with patch("subprocess.run") as run, patch.dict(os.environ, {"CI_CONFIG": json.dumps(
             {"apt": [], "runtime_dirs": False, "ipv6": False})}):
             exec(code, {})
-            run.assert_not_called()
+            commands = [call.args[0] for call in run.call_args_list]
+            self.assertTrue(any(c[0] == "useradd" for c in commands))
+            self.assertFalse(any(c[0] in ("ip", "install", "apt-get") for c in commands))
         with patch("subprocess.run") as run, patch("grp.getgrnam", side_effect=KeyError), \
                 patch.dict(os.environ, {"CI_CONFIG": json.dumps(
                     {"apt": ["zlib1g-dev"], "runtime_dirs": True, "ipv6": True})}):
@@ -143,11 +160,13 @@ class WorkflowContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory_name:
             ci = json.loads(prepare(Path(directory_name), {"ctest": False,
                             "cmake_options": ["-DTEXT=a value;echo not executed"]})["config"])
-            with patch("subprocess.run") as run, patch.dict(os.environ, {
+            with patch("subprocess.run") as run, patch("subprocess.check_output", return_value="a" * 40), patch.dict(os.environ, {
                 "CI_CONFIG": json.dumps(ci), "GITHUB_WORKSPACE": directory_name,
                 "RUNNER_TEMP": directory_name, "GH_READ_TOKEN": "must-not-leak",
+                "GITHUB_REPOSITORY": "SNodeC/fixture",
             }):
-                exec(script("cpp", "Build ordered source dependencies, test and stage caller"), {})
+                with patch("platform.freedesktop_os_release", return_value={"ID": "debian", "VERSION_ID": "13"}):
+                    exec(script("cpp", "Build ordered source dependencies, test and stage caller"), {})
                 commands = [call.args[0] for call in run.call_args_list]
                 self.assertFalse(any(c[0] == "ctest" for c in commands))
                 self.assertIn("-DTEXT=a value;echo not executed", commands[0])
@@ -207,6 +226,8 @@ enable_testing()
 add_test(NAME first_success COMMAND consumer)
 install(TARGETS consumer DESTINATION bin)
 """)
+            git(caller, "init", "--initial-branch=caller/default")
+            commit(caller)
             ci = json.loads(prepare(caller, {"deps": ["depone@source", "deptwo@source"]})["config"])
             requests, commands = [], []
             actual_run = subprocess.run
@@ -220,18 +241,23 @@ install(TARGETS consumer DESTINATION bin)
                 return io.BytesIO(json.dumps(data).encode())
 
             def run(args, **kwargs):
-                commands.append((list(args), dict(kwargs["env"])))
-                self.assertNotIn("GH_READ_TOKEN", kwargs["env"])
+                commands.append((list(args), dict(kwargs.get("env", os.environ))))
+                self.assertNotIn("GH_READ_TOKEN", kwargs.get("env", os.environ))
                 if args[0] == "git" and "remote" in args:
                     args[-1] = str(root / Path(args[2]).name)
+                if args[0] == "chown":
+                    return subprocess.CompletedProcess(args, 0)
+                if args[0] == "runuser":
+                    args = args[args.index("ctest"):]
                 return actual_run(args, **kwargs)
 
             with patch.dict(os.environ, {"CI_CONFIG": json.dumps(ci),
                                          "GITHUB_WORKSPACE": str(caller), "RUNNER_TEMP": str(root),
-                                         "GH_READ_TOKEN": "read-only-fixture"}), \
+                                         "GH_READ_TOKEN": "read-only-fixture", "GITHUB_REPOSITORY": "SNodeC/consumer"}), \
                     patch("urllib.request.urlopen", side_effect=response), \
                     patch("subprocess.run", side_effect=run):
-                exec(script("cpp", "Build ordered source dependencies, test and stage caller"), {})
+                with patch("platform.freedesktop_os_release", return_value={"ID": "debian", "VERSION_ID": "13"}):
+                    exec(script("cpp", "Build ordered source dependencies, test and stage caller"), {})
             stage = root / "snodec/stage/caller/bin/consumer"
             self.assertTrue(stage.is_file())
             self.assertEqual(subprocess.run([stage]).returncode, 0)
@@ -246,12 +272,12 @@ install(TARGETS consumer DESTINATION bin)
             self.assertEqual([Path(cmd[2]).name for cmd, _ in configurations], ["depone", "deptwo", "caller"])
             self.assertIn(str(root / "snodec/stage/depone/lib"), configurations[1][1]["LD_LIBRARY_PATH"])
             self.assertIn(str(root / "snodec/stage/deptwo/lib"), configurations[2][1]["LD_LIBRARY_PATH"])
-            tests = [cmd for cmd, _ in commands if cmd[0] == "ctest"]
+            tests = [cmd for cmd, _ in commands if "ctest" in cmd]
             self.assertEqual(len(tests), 1)
             self.assertIn("--output-on-failure", tests[0])
 
     def test_whitespace_initial_push_and_pr_base(self):
-        code = script("cpp", "Check whitespace against PR base or previous commit")
+        code = script("hygiene", "Check whitespace against PR base or previous commit")
         with tempfile.TemporaryDirectory() as directory_name:
             path = Path(directory_name)
             git(path, "init", "--initial-branch=fixture/default")
@@ -270,3 +296,223 @@ install(TARGETS consumer DESTINATION bin)
             commit(path)
             self.assertEqual(check(), 0)
             self.assertNotEqual(check(initial), 0)
+
+
+class PhaseTwoBoundaryTests(unittest.TestCase):
+    def test_python_manifest_and_native_commands(self):
+        ci = {"profile": "python", "native_build": ["python", "tools/build.py"],
+              "smoke": {system: ["dist/program", "--smoke-test"] for system in ("Linux", "Windows", "macOS")},
+              "artifact_globs": ["dist/*.zip", "dist/*.tar.gz"]}
+        with tempfile.TemporaryDirectory() as name:
+            output = prepare(Path(name), ci)
+            config = json.loads(output["config"])
+            self.assertEqual(output["profile"], "python")
+            self.assertEqual(output["artifact_paths"], "dist/*.zip\ndist/*.tar.gz")
+            with patch("subprocess.run") as run, patch.dict(os.environ, {
+                "CI_CONFIG": output["config"], "RUNNER_OS": "Windows",
+            }):
+                exec(script("python", "Install development dependencies"), {})
+                exec(script("python", "Build native package"), {})
+                exec(script("python", "Native packaged launch"), {})
+            self.assertEqual([call.args[0] for call in run.call_args_list], [
+                ["python", "-m", "pip", "install", "-e", ".[dev]"],
+                ci["native_build"], ci["smoke"]["Windows"],
+            ])
+            self.assertEqual(config["python_version"], "3.12")
+            for change in ({"smoke": {}}, {"python_version": "2.7"}, {"pip": "remote-package"},
+                           {"native_build": "python build.py"}, {"artifact_globs": ["bad\npath"]}):
+                with self.subTest(change=change), self.assertRaises(ValueError):
+                    prepare(Path(name), ci | change)
+        job = WORKFLOW["jobs"]["python"]
+        self.assertEqual(job["strategy"]["matrix"]["os"], ["ubuntu-24.04", "windows-2025", "macos-15"])
+        self.assertEqual(job["strategy"]["fail-fast"], "false")
+        self.assertIn('not audio_device', script("python", "Tests independent of physical audio devices"))
+
+    def test_changed_file_hygiene_collects_all_failures(self):
+        code = script("hygiene", "Check changed source formatting and documentation links")
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            git(root, "init", "--initial-branch=hygiene/from-api")
+            (root / "old.md").write_text("[legacy](missing-old.md)\n")
+            commit(root)
+            (root / ".clang-format").write_text("BasedOnStyle: LLVM\n")
+            (root / ".cmake-format.py").write_text("")
+            (root / "changed.cpp").write_text("int main() {return 0;}\n")
+            (root / "CMakeLists.txt").write_text("project( test)\n")
+            (root / "new.md").write_text("[external](https://example.invalid) [missing](missing-new.md)\n```\n[code](ignored.md)\n```\n")
+            commit(root)
+            actual_run = subprocess.run
+            tools = []
+
+            def run(args, **kwargs):
+                if args[0] in ("clang-format", "cmake-format"):
+                    tools.append(args[0])
+                    return subprocess.CompletedProcess(args, 1)
+                return actual_run(args, **kwargs)
+
+            with directory(root), patch.dict(os.environ, {"PR_BASE": ""}), patch("subprocess.run", side_effect=run):
+                with self.assertRaises(SystemExit) as error:
+                    exec(code, {})
+            self.assertEqual(set(tools), {"clang-format", "cmake-format"})
+            self.assertIn("missing-new.md", str(error.exception))
+            self.assertNotIn("missing-old.md", str(error.exception))
+            self.assertNotIn("ignored.md", str(error.exception))
+
+    def test_real_sdk_export_download_relocation_and_consumer(self):
+        import hashlib
+        import platform
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            source = root / "depone"
+            sha = dependency(source, "depone", first=True)
+            producer = root / "producer"
+            prefix = producer / "snodec/stage/caller"
+            subprocess.run(["cmake", "-S", source, "-B", root / "producer-build", "-G", "Ninja",
+                            "-DCMAKE_INSTALL_PREFIX=" + str(prefix)], check=True)
+            subprocess.run(["cmake", "--build", root / "producer-build"], check=True)
+            subprocess.run(["cmake", "--install", root / "producer-build"], check=True)
+            target = "debian-13-" + platform.machine()
+            identity = {"repository": "SNodeC/depone", "source_commit": sha, "target": target, "dependencies": {}}
+            (prefix / ".snodec-sdk.json").write_text(json.dumps(identity))
+            output = root / "sdk-output"
+            with patch.dict(os.environ, {"RUNNER_TEMP": str(producer), "GITHUB_OUTPUT": str(output)}):
+                exec(script("cpp", "Export tested development SDK"), {})
+            archive = producer / output.read_text().strip().split("=", 1)[1]
+            data = archive.read_bytes()
+            # Remove the original prefix: imported CMake targets must really relocate.
+            import shutil
+            shutil.rmtree(producer / "snodec")
+            caller = root / "caller"
+            caller.mkdir()
+            git(caller, "init", "--initial-branch=sdk/consumer")
+            (caller / "main.cpp").write_text('#include "depone.h"\nint main(){return depone() == 41 ? 0 : 1;}\n')
+            (caller / "CMakeLists.txt").write_text('''cmake_minimum_required(VERSION 3.20)
+project(consumer LANGUAGES CXX)
+find_package(depone CONFIG REQUIRED)
+add_executable(consumer main.cpp)
+target_link_libraries(consumer PRIVATE depone::depone)
+enable_testing()
+add_test(NAME first_success COMMAND consumer)
+install(TARGETS consumer DESTINATION bin)
+''')
+            commit(caller)
+            ci = prepare(caller, {"deps": ["depone@dev"], "env": {"TIMING_POLICY": "report"}})["config"]
+            actual_run = subprocess.run
+            commands = []
+            digest = "sha256:" + hashlib.sha256(data).hexdigest()
+
+            def response(request, **kwargs):
+                if isinstance(request, str):
+                    return io.BytesIO(data)
+                self.assertTrue(request.full_url.endswith("/releases/tags/dev"))
+                return io.BytesIO(json.dumps({"assets": [{"name": archive.name,
+                    "browser_download_url": "https://example.invalid/sdk", "digest": digest}]}).encode())
+
+            def run(args, **kwargs):
+                commands.append(list(args))
+                if "env" in kwargs:
+                    self.assertEqual(kwargs["env"]["TIMING_POLICY"], "report")
+                    self.assertNotIn("GH_READ_TOKEN", kwargs["env"])
+                if args[0] == "chown":
+                    return subprocess.CompletedProcess(args, 0)
+                if args[0] == "runuser":
+                    args = args[args.index("ctest"):]
+                return actual_run(args, **kwargs)
+
+            env = {"CI_CONFIG": ci, "GITHUB_WORKSPACE": str(caller), "RUNNER_TEMP": str(root / "consumer-run"),
+                   "GITHUB_REPOSITORY": "SNodeC/consumer", "GH_READ_TOKEN": "no-leak"}
+            code = script("cpp", "Build ordered source dependencies, test and stage caller")
+            with patch.dict(os.environ, env), patch("platform.freedesktop_os_release", return_value={"ID": "debian", "VERSION_ID": "13"}), \
+                    patch("urllib.request.urlopen", side_effect=response), patch("subprocess.run", side_effect=run):
+                exec(code, {})
+            self.assertFalse(any(cmd[0] == "git" and "fetch" in cmd for cmd in commands))
+            self.assertEqual(subprocess.run([root / "consumer-run/snodec/stage/caller/bin/consumer"]).returncode, 0)
+            caller_identity = json.loads((root / "consumer-run/snodec/stage/caller/.snodec-sdk.json").read_text())
+            self.assertEqual(caller_identity["dependencies"], {"depone": sha})
+            digest = "sha256:incorrect"
+            env["RUNNER_TEMP"] = str(root / "bad-digest")
+            with patch.dict(os.environ, env), patch("platform.freedesktop_os_release", return_value={"ID": "debian", "VERSION_ID": "13"}), \
+                    patch("urllib.request.urlopen", side_effect=response), self.assertRaisesRegex(ValueError, "digest"):
+                exec(code, {})
+
+            for index, change in enumerate(({"repository": "SNodeC/wrong"}, {"target": "wrong-target"},
+                                            {"source_commit": "not-a-commit"}, {"dependencies": {"missing": sha}})):
+                with self.subTest(change=change):
+                    import tarfile
+                    metadata = json.dumps(identity | change).encode()
+                    buffer = io.BytesIO()
+                    with tarfile.open(fileobj=buffer, mode="w") as contents:
+                        member = tarfile.TarInfo(".snodec-sdk.json")
+                        member.size = len(metadata)
+                        contents.addfile(member, io.BytesIO(metadata))
+                    data = subprocess.check_output(["zstd", "-q", "-c"], input=buffer.getvalue())
+                    digest = "sha256:" + hashlib.sha256(data).hexdigest()
+                    env["RUNNER_TEMP"] = str(root / ("invalid-identity-" + str(index)))
+                    with patch.dict(os.environ, env), patch("platform.freedesktop_os_release", return_value={"ID": "debian", "VERSION_ID": "13"}), \
+                            patch("urllib.request.urlopen", side_effect=response), self.assertRaises(ValueError):
+                        exec(code, {})
+
+    def test_sdk_publisher_is_default_branch_only_and_never_versions_products(self):
+        from urllib.error import HTTPError
+        publisher = yaml.load((ROOT / ".github/workflows/publish-dev.yml").read_text(), Loader=yaml.BaseLoader)
+        job = publisher["jobs"]["publish"]
+        self.assertIn("github.event.repository.default_branch", job["if"])
+        self.assertEqual(publisher["permissions"], {"contents": "write"})
+        self.assertFalse(any("checkout" in step.get("uses", "") for step in job["steps"]))
+        code = next(step["run"] for step in job["steps"] if step.get("name") == "Publish current default-branch SDK only")
+        sha = "a" * 40
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            (root / "sdk").mkdir()
+            stage = root / "stage"
+            stage.mkdir()
+            (stage / ".snodec-sdk.json").write_text(json.dumps({"repository": "SNodeC/fixture", "source_commit": sha}))
+            archive = root / "sdk/fixture-dev-debian-13-x86_64.tar.zst"
+            subprocess.run(["tar", "--zstd", "-cf", archive, "-C", stage, "."], check=True)
+            actual_run = subprocess.run
+            for current, existing in (("b" * 40, False), (sha, False), (sha, True)):
+                calls, commands = [], []
+                temporary = root / ("run-" + current[:1] + str(existing))
+                temporary.mkdir()
+
+                def response(request, **kwargs):
+                    path = request.full_url.removeprefix("https://api.github.com/")
+                    data = json.loads(request.data) if request.data else None
+                    calls.append((path, request.method, data))
+                    if path.endswith("/fixture"):
+                        result = {"default_branch": "arbitrary/default"}
+                    elif "/commits/" in path:
+                        self.assertTrue(path.endswith("arbitrary%2Fdefault"))
+                        result = {"sha": current}
+                    elif path.endswith("/releases/tags/dev"):
+                        if not existing:
+                            raise HTTPError(request.full_url, 404, "not found", {}, None)
+                        result = {"prerelease": True}
+                    else:
+                        result = {}
+                    return io.BytesIO(json.dumps(result).encode())
+
+                def run(args, **kwargs):
+                    commands.append([str(arg) for arg in args])
+                    if args[0] == "gh":
+                        return subprocess.CompletedProcess(args, 0)
+                    return actual_run(args, **kwargs)
+
+                with directory(root), patch.dict(os.environ, {"GITHUB_REPOSITORY": "SNodeC/fixture",
+                    "GITHUB_SHA": sha, "GH_TOKEN": "write-fixture", "RUNNER_TEMP": str(temporary)}), \
+                        patch("urllib.request.urlopen", side_effect=response), patch("subprocess.run", side_effect=run):
+                    exec(code, {})
+                if current != sha:
+                    self.assertEqual(commands, [])
+                    self.assertTrue(all(method == "GET" for _, method, _ in calls))
+                else:
+                    self.assertIn(["gh", "release", "upload", "dev", "sdk/" + archive.name,
+                                   "--clobber", "--repo", "SNodeC/fixture"], commands)
+                    writes = [(path, data) for path, method, data in calls if method != "GET"]
+                    self.assertTrue(all(path.endswith(("/releases", "/git/refs/tags/dev")) for path, _ in writes))
+                    if not existing:
+                        release = next(data for path, data in writes if path.endswith("/releases"))
+                        self.assertEqual(release["tag_name"], "dev")
+                        self.assertTrue(release["prerelease"])
+                        self.assertEqual(release["make_latest"], "false")
+                    self.assertEqual(writes[-1][1], {"sha": sha, "force": True})

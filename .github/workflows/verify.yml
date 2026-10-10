@@ -5,12 +5,14 @@ permissions:
   contents: read
 jobs:
   prepare:
-    name: Read C++ manifest
+    name: Read build manifest
     runs-on: ubuntu-latest
     outputs:
+      profile: ${{ steps.manifest.outputs.profile }}
       config: ${{ steps.manifest.outputs.config }}
       container: ${{ steps.manifest.outputs.container }}
       options: ${{ steps.manifest.outputs.options }}
+      artifact_paths: ${{ steps.manifest.outputs.artifact_paths }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -33,44 +35,75 @@ jobs:
           manifest = yaml.safe_load(Path(".snodec/repo.yml").read_text())
           if not isinstance(manifest, dict) or not isinstance(manifest.get("ci"), dict):
               raise ValueError("manifest must contain a ci mapping")
-          defaults = {
+          cpp = {
               "profile": "cpp", "container": "gcc:15.3.0-trixie", "apt": [], "deps": [],
               "cmake_options": [], "ctest": True, "ctest_args": ["--output-on-failure"],
-              "ipv6": False, "runtime_dirs": False,
+              "ipv6": False, "runtime_dirs": False, "parallel": 2, "sdk": False, "env": {}, "ctest_launcher": [],
           }
+          python = {
+              "profile": "python", "python_version": "3.12", "pip": ".[dev]",
+              "native_build": [], "smoke": {}, "artifact_globs": [],
+          }
+          profile = manifest["ci"].get("profile", "cpp")
+          if profile not in ("cpp", "python"):
+              raise ValueError("only cpp and python profiles are supported")
+          defaults = cpp if profile == "cpp" else python
           if manifest["ci"].keys() - defaults.keys():
               raise ValueError("unsupported ci fields")
           config = defaults | manifest["ci"]
-          if config["profile"] != "cpp":
-              raise ValueError("only the cpp profile is supported")
+          if profile == "python":
+              if not isinstance(config["python_version"], str) or not re.fullmatch(r"3[.][0-9]+", config["python_version"]):
+                  raise ValueError("python_version must specify Python 3")
+              if not isinstance(config["pip"], str) or not config["pip"].startswith("."):
+                  raise ValueError("pip must specify the local project")
+              if not isinstance(config["smoke"], dict) or set(config["smoke"]) != {"Linux", "Windows", "macOS"}:
+                  raise ValueError("smoke must contain commands for all three native platforms")
+              for key, values in {"native_build": config["native_build"], "artifact_globs": config["artifact_globs"], **config["smoke"]}.items():
+                  if not isinstance(values, list) or not values or any(not isinstance(v, str) or not v or any(c in v for c in "\r\n\0") for v in values):
+                      raise ValueError(key + " must be a non-empty argument list")
+              config["container"] = cpp["container"]
           if not isinstance(config["container"], str) or not re.fullmatch(
               r"[A-Za-z0-9][A-Za-z0-9._/:@-]*", config["container"]
           ):
               raise ValueError("container must be an image reference")
-          for key in ("ctest", "ipv6", "runtime_dirs"):
+          for key in ("ctest", "ipv6", "runtime_dirs", "sdk") if profile == "cpp" else ():
               if type(config[key]) is not bool:
                   raise ValueError(key + " must be a boolean")
-          for key in ("apt", "deps", "cmake_options", "ctest_args"):
+          if profile == "cpp" and (not isinstance(config["env"], dict) or any(
+              not isinstance(key, str) or not re.fullmatch(r"[A-Z][A-Z0-9_]*", key) or key.startswith(("GITHUB_", "RUNNER_", "GH_"))
+              or not isinstance(value, str) or any(c in value for c in "\r\n\0")
+              for key, value in config["env"].items()
+          )):
+              raise ValueError("env must contain non-reserved single-line environment values")
+          if profile == "cpp" and (type(config["parallel"]) is not int or not 1 <= config["parallel"] <= 32):
+              raise ValueError("parallel must be between 1 and 32")
+          for key in ("apt", "deps", "cmake_options", "ctest_args", "ctest_launcher") if profile == "cpp" else ():
               if not isinstance(config[key], list) or any(
                   not isinstance(item, str) or not item or any(c in item for c in "\r\n\0")
                   for item in config[key]
               ):
                   raise ValueError(key + " must be a list of single-line arguments")
-          if any(not re.fullmatch(r"[a-z0-9][a-z0-9+.-]*(?::[a-z0-9]+)?", p) for p in config["apt"]):
+          if profile == "cpp" and any(not re.fullmatch(r"[a-z0-9][a-z0-9+.-]*(?::[a-z0-9]+)?", p) for p in config["apt"]):
               raise ValueError("apt must contain package names, not options")
-          if any(not re.fullmatch(r"[A-Za-z0-9_.-]+@source", d) for d in config["deps"]):
-              raise ValueError("deps supports only SNodeC repository names with @source")
-          if len(config["deps"]) != len(set(config["deps"])):
+          if profile == "cpp" and any(not re.fullmatch(r"[A-Za-z0-9_.-]+@(source|dev)", d) for d in config["deps"]):
+              raise ValueError("deps supports SNodeC repository names with @source or @dev")
+          if profile == "cpp" and len(config["deps"]) != len(set(config["deps"])):
               raise ValueError("deps must be unique and ordered")
-          options = "--cap-add=NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0" if config["ipv6"] else ""
+          options = "--cap-add=NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0" if config.get("ipv6") else ""
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write("profile=" + profile + "\n")
               output.write("config=" + json.dumps(config, separators=(",", ":")) + "\n")
               output.write("container=" + config["container"] + "\n")
               output.write("options=" + options + "\n")
+              if profile == "python":
+                  output.write("artifact_paths<<artifact_paths_end\n" + "\n".join(config["artifact_globs"]) + "\nartifact_paths_end\n")
 
   cpp:
     name: snodec / cpp
     needs: prepare
+    if: ${{ needs.prepare.outputs.profile == 'cpp' }}
+    outputs:
+      sdk: ${{ steps.sdk.outputs.filename }}
     runs-on: ubuntu-latest
     container:
       image: ${{ needs.prepare.outputs.container }}
@@ -91,7 +124,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends cmake ninja-build pkg-config git ca-certificates \
-            libssl-dev libmagic-dev libbluetooth-dev nlohmann-json3-dev iproute2 python3
+            libssl-dev libmagic-dev libbluetooth-dev nlohmann-json3-dev iproute2 python3 zstd
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Install extra packages and prepare runtime
         shell: python3 {0}
@@ -102,13 +135,14 @@ jobs:
           import subprocess
 
           config = json.loads(os.environ["CI_CONFIG"])
+          try:
+              grp.getgrnam("snodec")
+          except KeyError:
+              subprocess.run(["groupadd", "--system", "snodec"], check=True)
+          subprocess.run(["useradd", "--create-home", "--gid", "snodec", "snodec"], check=True)
           if config["apt"]:
               subprocess.run(["apt-get", "install", "-y", "--no-install-recommends", *config["apt"]], check=True)
           if config["runtime_dirs"]:
-              try:
-                  grp.getgrnam("snodec")
-              except KeyError:
-                  subprocess.run(["groupadd", "--system", "snodec"], check=True)
               subprocess.run(["install", "-d", "-m", "0770", "-g", "snodec",
                               "/etc/snode.c", "/var/log/snode.c", "/var/run/snode.c"], check=True)
           if config["ipv6"]:
@@ -134,6 +168,10 @@ jobs:
           from pathlib import Path
           import shlex
           import subprocess
+          import platform
+          import tarfile
+          import hashlib
+          import re
           from urllib.parse import quote
           from urllib.request import Request, urlopen
 
@@ -142,8 +180,12 @@ jobs:
           workspace = Path(os.environ["GITHUB_WORKSPACE"])
           temporary = Path(os.environ["RUNNER_TEMP"]) / "snodec"
           temporary.mkdir(parents=True, exist_ok=True)
+          distro = platform.freedesktop_os_release()
+          target = distro["ID"] + "-" + distro["VERSION_ID"] + "-" + platform.machine()
+          revisions = {}
           prefixes = []
           build_env = os.environ.copy()
+          build_env.update(config["env"])
 
           def run(*args):
               args = [str(arg) for arg in args]
@@ -164,29 +206,111 @@ jobs:
                   *options, "-DCMAKE_INSTALL_PREFIX=" + str(prefix),
                   "-DCMAKE_PREFIX_PATH=" + ";".join(reversed(prefixes)),
                   "-DCMAKE_INSTALL_LIBDIR=lib")
-              run("cmake", "--build", directory, "--parallel", os.cpu_count() or 2)
+              run("cmake", "--build", directory, "--parallel", config["parallel"])
               if test:
-                  run("ctest", "--test-dir", directory, *config["ctest_args"])
+                  run("chown", "-R", "snodec:snodec", directory)
+                  run("runuser", "-u", "snodec", "--", "env",
+                      "LD_LIBRARY_PATH=" + build_env.get("LD_LIBRARY_PATH", ""),
+                      *config["ctest_launcher"], "ctest", "--test-dir", directory, *config["ctest_args"], "--no-tests=error")
               run("cmake", "--install", directory)
+              stage(prefix)
+
+          def stage(prefix):
               prefixes.append(str(prefix))
               build_env["CMAKE_PREFIX_PATH"] = os.pathsep.join(reversed(prefixes))
-              libraries = [str(Path(p) / lib) for p in reversed(prefixes) for lib in ("lib", "lib64")]
+              libraries = [str(Path(p) / lib) for p in reversed(prefixes) for lib in ("lib", "lib64", "lib/snode.c/web/http", "lib64/snode.c/web/http")]
               build_env["LD_LIBRARY_PATH"] = os.pathsep.join(libraries)
 
           for dependency in config["deps"]:
-              name = dependency.removesuffix("@source")
+              name, mode = dependency.split("@")
               repository = "repos/SNodeC/" + quote(name, safe="")
-              branch = api(repository)["default_branch"]
-              sha = api(repository + "/commits/" + quote(branch, safe=""))["sha"]
-              print(f"Dependency {name}: default branch {branch!r}, commit {sha}", flush=True)
-              source = temporary / "source" / name
-              run("git", "init", source)
-              run("git", "-C", source, "remote", "add", "origin", f"https://github.com/SNodeC/{name}.git")
-              run("git", "-C", source, "fetch", "--depth", "1", "origin", sha)
-              run("git", "-C", source, "checkout", "--detach", "FETCH_HEAD")
-              run("git", "-C", source, "submodule", "update", "--init", "--recursive")
-              build(source, name, ["-DCMAKE_BUILD_TYPE=Release", "-DBUILD_TESTING=OFF"])
+              if mode == "dev":
+                  release = api(repository + "/releases/tags/dev")
+                  filename = name.lower().replace(".", "") + "-dev-" + target + ".tar.zst"
+                  asset = next(a for a in release["assets"] if a["name"] == filename)
+                  archive = temporary / filename
+                  with urlopen(asset["browser_download_url"], timeout=60) as response:
+                      archive.write_bytes(response.read())
+                  if asset.get("digest") != "sha256:" + hashlib.sha256(archive.read_bytes()).hexdigest():
+                      raise ValueError("SDK download digest mismatch")
+                  unpacked = temporary / (filename + ".tar")
+                  run("zstd", "-d", archive, "-o", unpacked)
+                  prefix = temporary / "stage" / name
+                  with tarfile.open(unpacked) as contents:
+                      contents.extractall(prefix, filter="data")
+                  identity = json.loads((prefix / ".snodec-sdk.json").read_text())
+                  if identity["repository"] != "SNodeC/" + name or identity["target"] != target:
+                      raise ValueError("SDK identity or target mismatch")
+                  if any(revisions.get(dep) != commit for dep, commit in identity["dependencies"].items()):
+                      raise ValueError("SDK dependency revisions differ; publish consumers after dependencies")
+                  sha = identity["source_commit"]
+                  if not re.fullmatch("[a-f0-9]{40}", sha):
+                      raise ValueError("SDK source commit is invalid")
+                  stage(prefix)
+                  print(f"Dependency {name}: tested development SDK {sha}", flush=True)
+              else:
+                  branch = api(repository)["default_branch"]
+                  sha = api(repository + "/commits/" + quote(branch, safe=""))["sha"]
+                  print(f"Dependency {name}: default branch {branch!r}, commit {sha}", flush=True)
+                  source = temporary / "source" / name
+                  run("git", "init", source)
+                  run("git", "-C", source, "remote", "add", "origin", f"https://github.com/SNodeC/{name}.git")
+                  run("git", "-C", source, "fetch", "--depth", "1", "origin", sha)
+                  run("git", "-C", source, "checkout", "--detach", "FETCH_HEAD")
+                  run("git", "-C", source, "submodule", "update", "--init", "--recursive")
+                  build(source, name, ["-DCMAKE_BUILD_TYPE=Debug", "-DBUILD_TESTING=OFF"])
+              revisions[name] = sha
           build(workspace, "caller", config["cmake_options"], test=config["ctest"])
+          prefix = temporary / "stage" / "caller"
+          prefix.mkdir(parents=True, exist_ok=True)
+          identity = {
+              "repository": os.environ["GITHUB_REPOSITORY"], "target": target,
+              "source_commit": subprocess.check_output(["git", "-C", workspace, "rev-parse", "HEAD"], text=True).strip(),
+              "dependencies": revisions,
+          }
+          (prefix / ".snodec-sdk.json").write_text(json.dumps(identity, sort_keys=True) + "\n")
+      - name: Export tested development SDK
+        id: sdk
+        if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && fromJSON(needs.prepare.outputs.config).sdk }}
+        shell: python3 {0}
+        run: |
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          prefix = Path(os.environ["RUNNER_TEMP"]) / "snodec/stage/caller"
+          identity = json.loads((prefix / ".snodec-sdk.json").read_text())
+          project = identity["repository"].split("/")[1].lower().replace(".", "")
+          filename = project + "-dev-" + identity["target"] + ".tar.zst"
+          destination = Path(os.environ["RUNNER_TEMP"]) / filename
+          subprocess.run(["tar", "--zstd", "-cf", destination, "-C", prefix, "."], check=True)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write("filename=" + filename + "\n")
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: ${{ steps.sdk.outputs.filename != '' }}
+        with:
+          name: development-sdk
+          path: ${{ runner.temp }}/${{ steps.sdk.outputs.filename }}
+          if-no-files-found: error
+          retention-days: 7
+
+  hygiene:
+    name: snodec / hygiene
+    needs: prepare
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ needs.prepare.outputs.container }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git ca-certificates python3 clang-format cmake-format
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Check whitespace against PR base or previous commit
         if: ${{ always() && !cancelled() }}
         env:
@@ -200,3 +324,106 @@ jobs:
             base="$(git hash-object -t tree /dev/null)"
           fi
           git diff --check "$base" HEAD
+      - name: Check changed source formatting and documentation links
+        if: ${{ always() && !cancelled() }}
+        shell: python3 {0}
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+          from urllib.parse import unquote, urlsplit
+
+          base = os.environ.get("PR_BASE") or subprocess.run(
+              ["git", "rev-parse", "HEAD^"], capture_output=True, text=True).stdout.strip()
+          if not base:
+              base = subprocess.check_output(["git", "hash-object", "-t", "tree", "/dev/null"], text=True).strip()
+          files = subprocess.check_output(
+              ["git", "diff", "--name-only", "--diff-filter=ACMR", "-z", base, "HEAD"]
+          ).decode().split("\0")
+          failures = []
+          for filename in filter(None, files):
+              path = Path(filename)
+              if not path.is_file():
+                  continue
+              if path.suffix in (".cpp", ".h", ".hpp", ".cc", ".c") and Path(".clang-format").exists():
+                  if subprocess.run(["clang-format", "--dry-run", "--Werror", filename]).returncode:
+                      failures.append(filename + ": clang-format")
+              if (path.name == "CMakeLists.txt" or path.suffix == ".cmake") and Path(".cmake-format.py").exists():
+                  if subprocess.run(["cmake-format", "--check", filename]).returncode:
+                      failures.append(filename + ": cmake-format")
+              if path.suffix.lower() == ".md":
+                  prose = re.sub(r"```.*?```|~~~.*?~~~", "", path.read_text(), flags=re.S)
+                  links = re.findall(r"!?(?:\[[^\]]*\])\(([^ )]+)", prose)
+                  links += re.findall(r"^\[[^\]]+\]:\s*(\S+)", prose, flags=re.M)
+                  for link in links:
+                      target = urlsplit(link.strip("<>"))
+                      if target.scheme or target.netloc or not target.path:
+                          continue
+                      local = Path(unquote(target.path))
+                      local = local if local.is_absolute() else path.parent / local
+                      if not local.exists():
+                          failures.append(filename + ": missing link " + link)
+          if failures:
+              raise SystemExit("\n".join(failures))
+
+  python:
+    name: snodec / python (${{ matrix.os }})
+    needs: prepare
+    if: ${{ needs.prepare.outputs.profile == 'python' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    runs-on: ${{ matrix.os }}
+    env:
+      CI_CONFIG: ${{ needs.prepare.outputs.config }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ fromJSON(needs.prepare.outputs.config).python_version }}
+      - name: Install development dependencies
+        shell: python
+        run: |
+          import json
+          import os
+          import subprocess
+          subprocess.run(["python", "-m", "pip", "install", "-e", json.loads(os.environ["CI_CONFIG"])["pip"]], check=True)
+      - name: Linux desktop dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0 libxcb-cursor0 libxkbcommon-x11-0 libpulse0
+      - name: Tests independent of physical audio devices
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m pytest -q -m "not audio_device"
+      - name: Build native package
+        id: package
+        if: ${{ always() && !cancelled() }}
+        shell: python
+        run: |
+          import json
+          import os
+          import subprocess
+          subprocess.run(json.loads(os.environ["CI_CONFIG"])["native_build"], check=True)
+      - name: Native packaged launch
+        if: ${{ always() && !cancelled() && steps.package.outcome == 'success' }}
+        env:
+          QT_QPA_PLATFORM: offscreen
+        shell: python
+        run: |
+          import json
+          import os
+          import subprocess
+          subprocess.run(json.loads(os.environ["CI_CONFIG"])["smoke"][os.environ["RUNNER_OS"]], check=True)
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: ${{ always() && !cancelled() && steps.package.outcome == 'success' }}
+        with:
+          name: ${{ github.event.repository.name }}-${{ runner.os }}-${{ runner.arch }}
+          path: ${{ needs.prepare.outputs.artifact_paths }}
+          if-no-files-found: error
