@@ -4,7 +4,7 @@ This is the editorial contract for **snode.c, mqttsuite, AISuite and CodexUI onl
 
 ## Authority and preservation
 
-Identity comes from `catalog.yml`; colors and glyphs come from `brand/tokens.yml` and `brand/glyphs/`. Build behavior stays in each repository's existing manifest and workflows. Existing README prose, examples, commands, prerequisites, warnings, qualifications and licensing statements remain in the README itself. Existing banners and figures stay byte-identical. Do not import artwork from SNode.C-Landingpages.
+Identity comes from `catalog.yml`; colors and glyphs come from `brand/tokens.yml` and `brand/glyphs/`. Build behavior stays in each repository's existing manifest and workflows. Retain useful project information, complete examples, commands, prerequisites, safety warnings and material qualifications in the README. Prose and links are not immutable: rewrite the presentation and remove redundant passages and their links when they add no information. Existing banners and figures stay byte-identical. Do not import artwork from SNode.C-Landingpages.
 
 Header chips are presentation assets derived from the authoritative accent pairs and kind glyphs, not new logos. Each scoped repository stores light/dark chips beside its existing media. Both variants have a 240×32 canvas, a 24×24 glyph, a 1.5-unit `currentColor` stroke and the checked text/background pair; readable area/kind text is also their alternative text. Banners are not recolored.
 
@@ -12,8 +12,8 @@ Header chips are presentation assets derived from the authoritative accent pairs
 
 1. `header`: original banner, project title, area/kind chip with light/dark variants.
 2. `status`: CI · Release · Packages · Licence, omitting inapplicable badges. Workflow existence is not a promise of automatic push/PR testing. Packages links the existing signed distribution, not an invented publication count. Licence appears only for an existing file.
-3. Repository-authored pitch, including its existing product and consumer links.
-4. `menu`: **Start · Install · Build · Use · Configure · Architecture · API · Contribute**; retain only available destinations, using the original repository blue-gray SVG block-button style at a consistent 108×24 size, with meaningful link titles and image alternative text. Preserve the same ordinary Markdown links in a collapsed “Text navigation” fallback so navigation never depends on figures alone.
+3. Repository-authored pitch and relevant product/consumer relationships; remove redundant links.
+4. `menu`: **Start · Install · Build · Use · Configure · Architecture · API · Contribute**; retain only available destinations, using the original repository blue-gray SVG block-button style at a consistent 108×24 size, with meaningful link titles and image alternative text. The menu contains only linked buttons: no “Text navigation” dropdown or duplicate plain-link row.
 5. Kind core, in the order below; text remains repository-authored.
 6. Repository-specific sections, including all existing complete examples and project-specific guides.
 7. `ecosystem`: organization and direct project relationships.
@@ -26,13 +26,13 @@ Use paired `<!-- snodec:begin NAME -->` / `<!-- snodec:end NAME -->` markers for
 - **product:** Quick start · First success · Capabilities · Architecture · Documentation · Platforms and packages · Releases.
 - **app:** What you see · Install · First run · Configuration · Build from source · Platforms.
 
-Old section destinations remain usable when headings move or change level; preserve an explicit anchor where renaming requires it. A `docs/index.md` routes to existing guides without moving or duplicating their contents. Existing guide URLs stay valid. Keep one physical source line per prose paragraph.
+Old section destinations remain usable when headings move or change level; preserve an explicit anchor where renaming requires it. A `docs/index.md` routes to existing guides without moving or duplicating their contents. Do not break links to guides that remain in use. Keep one physical source line per prose paragraph.
 
 Preservation takes precedence over the original three-screen aspiration: complete inline examples are not moved out of a README merely to shorten it. No placeholder section, unsupported platform promise, unverified release number or invented maintainer contact may be introduced. Existing repository-specific README policies still apply.
 
 ## Secondary navigation buttons
 
-Existing “Go further:” callouts use one short SVG button per existing destination, retaining order, full descriptive alternative text and substantive explanations. Remove the navigation prefixes, not their content or links. Append a right arrow to each secondary label; keep multiple buttons in one paragraph so they wrap naturally on narrow screens. Existing back buttons keep their left arrows. Labels retain Arial 13 px / weight 600 and baseline 16. Arrows are drawn inside each button SVG with one filled 9×4 shape (`M0 1.25H5.5V0L9 2L5.5 4V2.75H0Z`), a 1.5 px shaft and vertical centre y=12; back arrows mirror that same shape. The shape replaces font arrows, rather than adding a second renderer, and preserves their measured ink bounds and existing button dimensions. Main-menu labels remain arrow-free at their existing 108×24 size and wrap naturally; do not force the menu into a single unbroken browser-width line. Ordinary text links do not gain arrows.
+For retained “Go further:” destinations, use one short SVG button per link, with descriptive alternative text and necessary explanations. Remove the navigation prefixes; redundant callouts and their links may be removed. Append a right arrow to each secondary label; keep multiple buttons in one paragraph so they wrap naturally on narrow screens. Existing back buttons keep their left arrows. Labels retain Arial 13 px / weight 600 and baseline 16. Arrows are drawn inside each button SVG with one filled 9×4 shape (`M0 1.25H5.5V0L9 2L5.5 4V2.75H0Z`), a 1.5 px shaft and vertical centre y=12; back arrows mirror that same shape. The shape replaces font arrows, rather than adding a second renderer, and preserves their measured ink bounds and existing button dimensions. Main-menu labels remain arrow-free at their existing 108×24 size and wrap naturally; do not force the menu into a single unbroken browser-width line. Ordinary text links do not gain arrows.
 
 ## Common navigation semantics and depth
 
@@ -40,7 +40,7 @@ Labels and order alone are insufficient: each standard menu item must perform th
 
 | Menu label | README entry | Responsibility |
 | --- | --- | --- |
-| Start | Quick start | A short ordered route through Install, Use and Configure; no repeated package/source instructions. |
+| Start | Quick start | A short project-specific route through Install, Use and Configure; Install delegates to Build when needed, with no repeated route table or procedure. |
 | Install | Install | Available installation routes, requirements and installation steps; source-only projects must not imply binary releases. |
 | Build | Build from source | Compile this repository, select build options and verify the result; link to prerequisites and the detailed source guide. |
 | Use | First success (product) / First run (app) | Reach a working result, with complete retained examples, expected results and boundaries. |
@@ -50,3 +50,7 @@ Labels and order alone are insufficient: each standard menu item must perform th
 | Contribute | Contributing | Project-specific reporting/contribution guidance and existing community defaults. |
 
 Products keep their mandatory product headings; the app keeps its mandatory app headings. Semantic symmetry does not require renaming every kind-specific heading or imposing identical headings on topic guides. Quick start remains a short route, Install contains installation decisions, Build contains compilation decisions, and Use contains execution; these must not be aliases for the same content. When installation instructions move out of Build, retain their commands, prefix/privilege caveats and prerequisites in the README exactly once. Preserve old anchors when headings change, and preserve all banners, figures, commands, warnings and qualifications.
+
+## Installation presentation
+
+Install begins with **Choose your route.**, followed by one compact **Route / How to install** table containing only available routes. Packaged projects list signed packages before source installation; source-only projects say so without empty package rows. Link the current package matrix instead of repeating a platform inventory; retain dependency behavior and availability qualifications without a second package pitch or duplicate route-link line. Prerequisites and **Install the build** follow where commands are already documented inline; preserve all commands and prefix/privilege caveats. Build owns compilation and verification; Install routes to it without repeating the procedure. Runtime/deployment warnings belong in Configuration and retain their safety meaning, not necessarily their wording. Repository-specific routes differ, but their responsibility and entry depth do not.
