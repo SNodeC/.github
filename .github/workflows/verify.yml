@@ -38,7 +38,7 @@ jobs:
           cpp = {
               "profile": "cpp", "container": "gcc:15.3.0-trixie", "apt": [], "deps": [],
               "cmake_options": [], "ctest": True, "ctest_args": ["--output-on-failure"],
-              "ipv6": False, "runtime_dirs": False, "parallel": 2, "sdk": False, "env": {}, "ctest_launcher": [],
+              "ipv6": False, "runtime_dirs": False, "parallel": 2, "env": {}, "ctest_launcher": [],
           }
           python = {
               "profile": "python", "python_version": "3.12", "pip": ".[dev]",
@@ -66,7 +66,7 @@ jobs:
               r"[A-Za-z0-9][A-Za-z0-9._/:@-]*", config["container"]
           ):
               raise ValueError("container must be an image reference")
-          for key in ("ctest", "ipv6", "runtime_dirs", "sdk") if profile == "cpp" else ():
+          for key in ("ctest", "ipv6", "runtime_dirs") if profile == "cpp" else ():
               if type(config[key]) is not bool:
                   raise ValueError(key + " must be a boolean")
           if profile == "cpp" and (not isinstance(config["env"], dict) or any(
@@ -85,8 +85,8 @@ jobs:
                   raise ValueError(key + " must be a list of single-line arguments")
           if profile == "cpp" and any(not re.fullmatch(r"[a-z0-9][a-z0-9+.-]*(?::[a-z0-9]+)?", p) for p in config["apt"]):
               raise ValueError("apt must contain package names, not options")
-          if profile == "cpp" and any(not re.fullmatch(r"[A-Za-z0-9_.-]+@(source|dev)", d) for d in config["deps"]):
-              raise ValueError("deps supports SNodeC repository names with @source or @dev")
+          if profile == "cpp" and any(not re.fullmatch(r"[A-Za-z0-9_.-]+@source", d) for d in config["deps"]):
+              raise ValueError("deps supports SNodeC repository names with @source")
           if profile == "cpp" and len(config["deps"]) != len({d.split("@")[0] for d in config["deps"]}):
               raise ValueError("deps must be unique and ordered")
           options = "--cap-add=NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0" if config.get("ipv6") else ""
@@ -102,8 +102,6 @@ jobs:
     name: snodec / cpp
     needs: prepare
     if: ${{ needs.prepare.outputs.profile == 'cpp' }}
-    outputs:
-      sdk: ${{ steps.sdk.outputs.filename }}
     runs-on: ubuntu-latest
     container:
       image: ${{ needs.prepare.outputs.container }}
@@ -124,7 +122,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends cmake ninja-build pkg-config git ca-certificates \
-            libssl-dev libmagic-dev libbluetooth-dev nlohmann-json3-dev iproute2 python3 zstd
+            libssl-dev libmagic-dev libbluetooth-dev nlohmann-json3-dev iproute2 python3
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Install extra packages and prepare runtime
         shell: python3 {0}
@@ -168,10 +166,6 @@ jobs:
           from pathlib import Path
           import shlex
           import subprocess
-          import platform
-          import tarfile
-          import hashlib
-          import re
           from urllib.parse import quote
           from urllib.request import Request, urlopen
 
@@ -180,9 +174,6 @@ jobs:
           workspace = Path(os.environ["GITHUB_WORKSPACE"])
           temporary = Path(os.environ["RUNNER_TEMP"]) / "snodec"
           temporary.mkdir(parents=True, exist_ok=True)
-          distro = platform.freedesktop_os_release()
-          target = distro["ID"] + "-" + distro["VERSION_ID"] + "-" + platform.machine()
-          revisions = {}
           prefixes = []
           build_env = os.environ.copy()
           build_env.update(config["env"])
@@ -222,78 +213,19 @@ jobs:
               build_env["LD_LIBRARY_PATH"] = os.pathsep.join(libraries)
 
           for dependency in config["deps"]:
-              name, mode = dependency.split("@")
+              name = dependency.removesuffix("@source")
               repository = "repos/SNodeC/" + quote(name, safe="")
-              if mode == "dev":
-                  release = api(repository + "/releases/tags/dev")
-                  filename = name.lower().replace(".", "") + "-dev-" + target + ".tar.zst"
-                  asset = next(a for a in release["assets"] if a["name"] == filename)
-                  archive = temporary / filename
-                  with urlopen(asset["browser_download_url"], timeout=60) as response:
-                      archive.write_bytes(response.read())
-                  if asset.get("digest") != "sha256:" + hashlib.sha256(archive.read_bytes()).hexdigest():
-                      raise ValueError("SDK download digest mismatch")
-                  unpacked = temporary / (filename + ".tar")
-                  run("zstd", "-d", archive, "-o", unpacked)
-                  prefix = temporary / "stage" / name
-                  with tarfile.open(unpacked) as contents:
-                      contents.extractall(prefix, filter="data")
-                  identity = json.loads((prefix / ".snodec-sdk.json").read_text())
-                  if identity["repository"] != "SNodeC/" + name or identity["target"] != target:
-                      raise ValueError("SDK identity or target mismatch")
-                  if any(revisions.get(dep) != commit for dep, commit in identity["dependencies"].items()):
-                      raise ValueError("SDK dependency revisions differ; publish consumers after dependencies")
-                  sha = identity["source_commit"]
-                  if not re.fullmatch("[a-f0-9]{40}", sha):
-                      raise ValueError("SDK source commit is invalid")
-                  stage(prefix)
-                  print(f"Dependency {name}: tested development SDK {sha}", flush=True)
-              else:
-                  branch = api(repository)["default_branch"]
-                  sha = api(repository + "/commits/" + quote(branch, safe=""))["sha"]
-                  print(f"Dependency {name}: default branch {branch!r}, commit {sha}", flush=True)
-                  source = temporary / "source" / name
-                  run("git", "init", source)
-                  run("git", "-C", source, "remote", "add", "origin", f"https://github.com/SNodeC/{name}.git")
-                  run("git", "-C", source, "fetch", "--depth", "1", "origin", sha)
-                  run("git", "-C", source, "checkout", "--detach", "FETCH_HEAD")
-                  run("git", "-C", source, "submodule", "update", "--init", "--recursive")
-                  build(source, name, ["-DCMAKE_BUILD_TYPE=Debug", "-DBUILD_TESTING=OFF"])
-              revisions[name] = sha
+              branch = api(repository)["default_branch"]
+              sha = api(repository + "/commits/" + quote(branch, safe=""))["sha"]
+              print(f"Dependency {name}: default branch {branch!r}, commit {sha}", flush=True)
+              source = temporary / "source" / name
+              run("git", "init", source)
+              run("git", "-C", source, "remote", "add", "origin", f"https://github.com/SNodeC/{name}.git")
+              run("git", "-C", source, "fetch", "--depth", "1", "origin", sha)
+              run("git", "-C", source, "checkout", "--detach", "FETCH_HEAD")
+              run("git", "-C", source, "submodule", "update", "--init", "--recursive")
+              build(source, name, ["-DCMAKE_BUILD_TYPE=Debug", "-DBUILD_TESTING=OFF"])
           build(workspace, "caller", config["cmake_options"], test=config["ctest"])
-          prefix = temporary / "stage" / "caller"
-          prefix.mkdir(parents=True, exist_ok=True)
-          identity = {
-              "repository": os.environ["GITHUB_REPOSITORY"], "target": target,
-              "source_commit": subprocess.check_output(["git", "-C", workspace, "rev-parse", "HEAD"], text=True).strip(),
-              "dependencies": revisions,
-          }
-          (prefix / ".snodec-sdk.json").write_text(json.dumps(identity, sort_keys=True) + "\n")
-      - name: Export tested development SDK
-        id: sdk
-        if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && fromJSON(needs.prepare.outputs.config).sdk }}
-        shell: python3 {0}
-        run: |
-          import json
-          import os
-          from pathlib import Path
-          import subprocess
-
-          prefix = Path(os.environ["RUNNER_TEMP"]) / "snodec/stage/caller"
-          identity = json.loads((prefix / ".snodec-sdk.json").read_text())
-          project = identity["repository"].split("/")[1].lower().replace(".", "")
-          filename = project + "-dev-" + identity["target"] + ".tar.zst"
-          destination = Path(os.environ["RUNNER_TEMP"]) / filename
-          subprocess.run(["tar", "--zstd", "-cf", destination, "-C", prefix, "."], check=True)
-          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
-              output.write("filename=" + filename + "\n")
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        if: ${{ steps.sdk.outputs.filename != '' }}
-        with:
-          name: development-sdk
-          path: ${{ runner.temp }}/${{ steps.sdk.outputs.filename }}
-          if-no-files-found: error
-          retention-days: 7
 
   hygiene:
     name: snodec / hygiene

@@ -66,15 +66,11 @@ CTest arguments and optional `ctest_launcher` are argument lists, not shell
 fragments. `parallel` controls build workers. Non-secret `env` values reach
 builds and tests; reserved GitHub/runner/token variables are rejected.
 
-Ordered dependencies accept `<repository>@source` (API-resolved default branch,
-exact commit, Debug build with `BUILD_TESTING=OFF`) or `<repository>@dev` (tested
-SDK for the same distribution/version/architecture). Both stage installs and
-supply `CMAKE_PREFIX_PATH` and `LD_LIBRARY_PATH`. SDK downloads verify the GitHub
-asset SHA-256 digest, use safe tar extraction, check repository/target/commit
-identity, and reject inconsistent dependency revisions. There is no source
-fallback when an SDK is absent or stale. Dependency updates must publish in
-order: snode.c, then AISuite, then CodexUI. mqttsuite depends only on snode.c.
-The read token is removed before executing any build code.
+Ordered dependencies accept only `<repository>@source`: resolve the default
+branch via the GitHub API, fetch its exact commit, then build and stage the
+install in dependency order. The staged installs provide `CMAKE_PREFIX_PATH`
+and `LD_LIBRARY_PATH` to later builds. The read token is removed before
+executing build code. No dependency binaries are downloaded or published.
 
 The caller configures with Ninja, builds, runs CTest as an unprivileged `snodec`
 user when enabled (`--no-tests=error`), then installs into a staging prefix.
@@ -102,33 +98,21 @@ local file links. It neither invents a style where none exists nor performs
 unreliable external-URL probes. Failures are collected rather than stopping at
 the first file. This job still runs when compilation/tests fail.
 
-### Development SDK publication
-
-`sdk: true` exports a staged install after successful default-branch C++ tests.
-The product's separate `x-sdk` job calls `publish-dev.yml`, with the only
-`contents: write` grant. It waits for all shared Verify jobs; AISuite also waits
-for `x-protocol`. The publisher never checks out or executes product code. It
-checks the current API-resolved default-branch HEAD, rejects superseded runs and
-mismatched artifact identities, and creates/updates only the unsigned rolling
-`dev` prerelease/tag. Asset names are `<project>-dev-<distro>-<version>-<arch>.tar.zst`.
-Stable version tags, secrets and package workflows are untouched.
-
 ### Coordinated rollout
 
 Merge the control workflow change first. The maintainer then publishes the
 reviewed shared-workflow commit by moving the existing `v1.0` tag in
 **SNodeC/.github**. Callers and the canonical template use `@v1.0`; no new
 `v1` tag is created. The maintainer explicitly approved moving this existing tag.
-Merge snode.c next and wait for green default-branch CI plus its `dev` SDK.
-Then merge mqttsuite and AISuite; wait for AISuite's green CI/protocol check and
-SDK before CodexUI. AutoTalk can follow the control workflow independently.
-Caller PRs must not merge while `v1.0` lacks the shared workflows or SDK dependencies are
-missing. No duplicate old/native build jobs remain after their migration.
+Merge snode.c next and require green default-branch Verify. Consumers build
+their ordered dependencies from source, with no release-asset prerequisites.
+AutoTalk can follow the control workflow independently. No duplicate old/native
+build jobs remain after migration.
 
 Tests execute the actual inline workflow scripts, including ordered source
-builds, a real SDK export/download/relocation/CTest/install consumer, invalid
-SDK identities/digests, Python commands, hygiene aggregation and publication
-boundaries. Local boundary tests additionally require **zstd** and tar.
+builds and a real CMake/CTest/staged-install consumer, Python commands and
+hygiene aggregation. Boundary tests also assert that binary dependency modes,
+publication options and publisher workflows are absent or rejected.
 
 Repository README frames are **Phase 4**, not Phase 2. Package/release/site,
 figure, ecosystem and org-sync lanes remain separate later phases.
