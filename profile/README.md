@@ -7,8 +7,8 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 
 ## Start here
 
-- **Build networked programs:** [SNode.C](https://github.com/SNodeC/snode.c)
-- **Run MQTT infrastructure:** [MQTTSuite](https://github.com/SNodeC/mqttsuite)
+- **Build networked programs:** [SNode.C](https://github.com/SNodeC/snode.c#project-overview)
+- **Run MQTT infrastructure:** [MQTTSuite](https://github.com/SNodeC/mqttsuite#project-overview)
 - **Learn:** [Book companion](https://github.com/SNodeC/SNode.C-Book-Companion) and [examples](#learn)
 - **Install:** [Packages](https://github.com/SNodeC/Packages)
 
@@ -18,20 +18,20 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 
 | Repository | Purpose | CI | Latest release |
 | --- | --- | --- | --- |
-| [snode.c](https://github.com/SNodeC/snode.c) · product | Event-driven C++ networking framework for embedded and IoT systems | [![CI](https://github.com/SNodeC/snode.c/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/snode.c/actions/workflows/ci.yml) | [v2.0.0](https://github.com/SNodeC/snode.c/releases/tag/v2.0.0) |
+| [snode.c](https://github.com/SNodeC/snode.c#project-overview) · product | Event-driven C++ networking framework for embedded and IoT systems | [![CI](https://github.com/SNodeC/snode.c/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/snode.c/actions/workflows/ci.yml) | [v2.0.0](https://github.com/SNodeC/snode.c/releases/tag/v2.0.0) |
 
 ## Suites
 
 | Repository | Purpose | CI | Latest release |
 | --- | --- | --- | --- |
-| [mqttsuite](https://github.com/SNodeC/mqttsuite) · product | MQTT broker, bridge, integrator, store and CLI built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) | [![CI](https://github.com/SNodeC/mqttsuite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/mqttsuite/actions/workflows/ci.yml) | [v1.0.2](https://github.com/SNodeC/mqttsuite/releases/tag/v1.0.2) |
-| [AISuite](https://github.com/SNodeC/AISuite) · product | Typed AI provider middleware and bridge built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) | [![CI](https://github.com/SNodeC/AISuite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/AISuite/actions/workflows/ci.yml) |  |
+| [mqttsuite](https://github.com/SNodeC/mqttsuite#project-overview) · product | MQTT broker, bridge, integrator, store and CLI built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/mqttsuite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/mqttsuite/actions/workflows/ci.yml) | [v1.0.2](https://github.com/SNodeC/mqttsuite/releases/tag/v1.0.2) |
+| [AISuite](https://github.com/SNodeC/AISuite#project-overview) · product | Typed AI provider middleware and bridge built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/AISuite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/AISuite/actions/workflows/ci.yml) |  |
 
 ## Applications
 
 | Repository | Purpose | CI | Latest release |
 | --- | --- | --- | --- |
-| [CodexUI](https://github.com/SNodeC/CodexUI) · app | Native Qt UI for Codex built on the AISuite frontend SDK<br>Depends on: [AISuite](https://github.com/SNodeC/AISuite), [snode.c](https://github.com/SNodeC/snode.c) | [![CI](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml) |  |
+| [CodexUI](https://github.com/SNodeC/CodexUI#project-overview) · app | Native Qt UI for Codex built on the AISuite frontend SDK<br>Depends on: [AISuite](https://github.com/SNodeC/AISuite#project-overview), [snode.c](https://github.com/SNodeC/snode.c#project-overview) | [![CI](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SNodeC/CodexUI/actions/workflows/ci.yml) |  |
 | [AutoTalk](https://github.com/SNodeC/AutoTalk) · app | Qt desktop app for timed PDF presentations with narration<br>_Standalone tool, not built on SNode.C_ | [![CI](https://github.com/SNodeC/AutoTalk/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SNodeC/AutoTalk/actions/workflows/ci.yml) |  |
 | [GpsdOsmViewer](https://github.com/SNodeC/GpsdOsmViewer) · app | Android app showing gpsd positions on OpenStreetMap<br>_Standalone tool, not built on SNode.C_ |  |  |
 
@@ -39,23 +39,23 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 
 | Repository | Purpose | CI | Latest release |
 | --- | --- | --- | --- |
-| [SNode.C-Book-Companion](https://github.com/SNodeC/SNode.C-Book-Companion) · learning | Examples, exercises and solutions for the book Layered Network Programming with SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
+| [SNode.C-Book-Companion](https://github.com/SNodeC/SNode.C-Book-Companion) · learning | Examples, exercises and solutions for the book Layered Network Programming with SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
 | [talks](https://github.com/SNodeC/talks) · learning | Talks and slides about SNode.C |  |  |
-| [echo](https://github.com/SNodeC/echo) · example | TCP echo server and client demonstrating SNode.C socket contexts<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
-| [websocket-echo](https://github.com/SNodeC/websocket-echo) · example | WebSocket echo server, client and browser demo built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
-| [tiktaktoe](https://github.com/SNodeC/tiktaktoe) · example | Browser tic-tac-toe game with a SNode.C WebSocket subprotocol<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
-| [ServerClient](https://github.com/SNodeC/ServerClient) · example | Interactive chat server and client built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
-| [MiniGateway](https://github.com/SNodeC/MiniGateway) · example | Simulated measurement gateway with HTTP, server-sent events and MQTT<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
-| [INJA-Templatebuilder](https://github.com/SNodeC/INJA-Templatebuilder) · example | Web interface for rendering Inja templates with JSON data through SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
+| [echo](https://github.com/SNodeC/echo) · example | TCP echo server and client demonstrating SNode.C socket contexts<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| [websocket-echo](https://github.com/SNodeC/websocket-echo) · example | WebSocket echo server, client and browser demo built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| [tiktaktoe](https://github.com/SNodeC/tiktaktoe) · example | Browser tic-tac-toe game with a SNode.C WebSocket subprotocol<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| [ServerClient](https://github.com/SNodeC/ServerClient) · example | Interactive chat server and client built on SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| [MiniGateway](https://github.com/SNodeC/MiniGateway) · example | Simulated measurement gateway with HTTP, server-sent events and MQTT<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| [INJA-Templatebuilder](https://github.com/SNodeC/INJA-Templatebuilder) · example | Web interface for rendering Inja templates with JSON data through SNode.C<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
 
 ## Community projects
 
 | Repository | Purpose | CI | Latest release |
 | --- | --- | --- | --- |
-| [IM510-Project](https://github.com/SNodeC/IM510-Project) · community | Course forum web application with users, topics, threads and posts<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
-| [snodec-forum-webapp](https://github.com/SNodeC/snodec-forum-webapp) · community | SNode.C forum web application with a MariaDB backend<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
-| [SnodeCWebForum](https://github.com/SNodeC/SnodeCWebForum) · community | SNode.C web forum with users, topics, posts and comments<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
-| [simple-form-snodec](https://github.com/SNodeC/simple-form-snodec) · community | Vue frontend and SNode.C REST backend for a discussion forum<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c) |  |  |
+| [IM510-Project](https://github.com/SNodeC/IM510-Project) · community | Course forum web application with users, topics, threads and posts<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| [snodec-forum-webapp](https://github.com/SNodeC/snodec-forum-webapp) · community | SNode.C forum web application with a MariaDB backend<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| [SnodeCWebForum](https://github.com/SNodeC/SnodeCWebForum) · community | SNode.C web forum with users, topics, posts and comments<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
+| [simple-form-snodec](https://github.com/SNodeC/simple-form-snodec) · community | Vue frontend and SNode.C REST backend for a discussion forum<br>Depends on: [snode.c](https://github.com/SNodeC/snode.c#project-overview) |  |  |
 | [IOTApplicationDesigner](https://github.com/SNodeC/IOTApplicationDesigner) · community | Visual editor for IoT topics and mappings with import and export |  |  |
 | [leiches-masterproject](https://github.com/SNodeC/leiches-masterproject) · community | HTTP and WebSocket backend and web frontend for Philips Hue control |  |  |
 | [mqtt-open-hue](https://github.com/SNodeC/mqtt-open-hue) · community | Headless C++ gateway connecting a Philips Hue Bridge with MQTT |  |  |

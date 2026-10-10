@@ -84,8 +84,8 @@ def text(value):
     return re.sub(r"([\\|\[\]*_`])", r"\\\1", value)
 
 
-def repo_url(name):
-    return f"https://github.com/SNodeC/{quote(name, safe='')}"
+def repo_url(name, fragment=""):
+    return f"https://github.com/SNodeC/{quote(name, safe='')}" + (f"#{quote(fragment, safe='')}" if fragment else "")
 
 
 def render_profile(catalog, metadata):
@@ -104,8 +104,8 @@ def render_profile(catalog, metadata):
         "",
         "## Start here",
         "",
-        f"- **Build networked programs:** [SNode.C]({repo_url('snode.c')})",
-        f"- **Run MQTT infrastructure:** [MQTTSuite]({repo_url('mqttsuite')})",
+        f"- **Build networked programs:** [SNode.C]({repo_url('snode.c', metadata.get('snode.c', {}).get('readme_anchor', ''))})",
+        f"- **Run MQTT infrastructure:** [MQTTSuite]({repo_url('mqttsuite', metadata.get('mqttsuite', {}).get('readme_anchor', ''))})",
         f"- **Learn:** [Book companion]({repo_url('SNode.C-Book-Companion')}) and [examples](#learn)",
         f"- **Install:** [Packages]({repo_url('Packages')})",
         "\n" + " · ".join(f"[{title}](#{title.lower().replace(' & ', '--').replace(' ', '-')})" for area, title in AREAS.items() if area != "forks") + "\n",
@@ -117,7 +117,7 @@ def render_profile(catalog, metadata):
         for entry in entries:
             name = entry["name"]
             info = metadata.get(name, {})
-            purpose = text(entry["summary"]) + ("<br>Depends on: " + ", ".join(f"[{text(dep)}]({repo_url(dep)})" for dep in entry["depends_on"]) if entry["depends_on"] else "")
+            purpose = text(entry["summary"]) + ("<br>Depends on: " + ", ".join(f"[{text(dep)}]({repo_url(dep, metadata.get(dep, {}).get('readme_anchor', ''))})" for dep in entry["depends_on"]) if entry["depends_on"] else "")
             if "note" in entry:
                 purpose += f"<br>_{text(entry['note'])}_"
             if forks:
@@ -137,7 +137,7 @@ def render_profile(catalog, metadata):
                 latest = f"[{text(tag)}]({repo_url(name)}/releases/tag/{quote(tag, safe='')})"
                 if release["prerelease"]:
                     latest += " (pre-release)"
-            result.append(f"| [{text(name)}]({repo_url(name)}) · {entry['kind']} | {purpose} | {badge} | {latest} |")
+            result.append(f"| [{text(name)}]({repo_url(name, info.get('readme_anchor', ''))}) · {entry['kind']} | {purpose} | {badge} | {latest} |")
         return result + [""]
 
     for area, title in AREAS.items():

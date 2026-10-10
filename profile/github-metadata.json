@@ -5,6 +5,7 @@
   },
   "AISuite": {
     "default_branch": "master",
+    "readme_anchor": "project-overview",
     "source_commit": "2ca800516b45eba7f5fb2c055adebfe7c53ee51f",
     "workflow": ".github/workflows/ci.yml"
   },
@@ -20,6 +21,7 @@
   },
   "CodexUI": {
     "default_branch": "master",
+    "readme_anchor": "project-overview",
     "source_commit": "292d45a616daabc32a58fc4742dfb82657d0d107",
     "workflow": ".github/workflows/ci.yml"
   },
@@ -109,6 +111,7 @@
   },
   "mqttsuite": {
     "default_branch": "master",
+    "readme_anchor": "project-overview",
     "release": {
       "prerelease": false,
       "tag": "v1.0.2"
@@ -126,6 +129,7 @@
   },
   "snode.c": {
     "default_branch": "master",
+    "readme_anchor": "project-overview",
     "release": {
       "prerelease": false,
       "tag": "v2.0.0"

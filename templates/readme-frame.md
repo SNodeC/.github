@@ -13,7 +13,7 @@ Header chips are presentation assets derived from the authoritative accent pairs
 1. `header`: original banner, project title, area/kind chip with light/dark variants.
 2. `status`: CI · Release · Packages · Licence, omitting inapplicable badges. Workflow existence is not a promise of automatic push/PR testing. Packages links the existing signed distribution, not an invented publication count. Licence appears only for an existing file.
 3. Repository-authored pitch, including its existing product and consumer links.
-4. `menu`: **Start · Install · Build · Use · Configure · Architecture · API · Contribute**; retain only available destinations, using ordinary Markdown links.
+4. `menu`: **Start · Install · Build · Use · Configure · Architecture · API · Contribute**; retain only available destinations, using the original repository blue-gray SVG block-button style at a consistent 108×24 size, with meaningful link titles and image alternative text. Preserve the same ordinary Markdown links in a collapsed “Text navigation” fallback so navigation never depends on figures alone.
 5. Kind core, in the order below; text remains repository-authored.
 6. Repository-specific sections, including all existing complete examples and project-specific guides.
 7. `ecosystem`: organization and direct project relationships.

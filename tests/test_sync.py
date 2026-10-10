@@ -134,9 +134,26 @@ class ProfileTests(unittest.TestCase):
             self.assertIn(f" · {entry['kind']} |", row)
             self.assertEqual("Depends on:" in row, bool(entry["depends_on"]))
             for dep in entry["depends_on"]:
-                self.assertIn(f"[{dep}](https://github.com/SNodeC/{dep})", row)
+                self.assertIn(f"[{dep}](https://github.com/SNodeC/{dep}" + (f"#{self.metadata[dep]['readme_anchor']}" if self.metadata[dep].get("readme_anchor") else "") + ")", row)
         self.assertIn("[v2.0.0]", self.profile)
         self.assertIn("[v1.0.2]", self.profile)
+
+    def test_repository_navigation_uses_verified_banner_anchors_only(self):
+        for name in ("snode.c", "mqttsuite", "AISuite", "CodexUI"):
+            with self.subTest(name=name):
+                self.assertEqual(self.metadata[name]["readme_anchor"], "project-overview")
+                destinations = re.findall(r"\]\((https://github.com/SNodeC/" + re.escape(name) + r"(?:#[^)]*)?)\)", self.profile)
+                self.assertTrue(destinations)
+                self.assertEqual(set(destinations), {f"https://github.com/SNodeC/{name}#project-overview"})
+                self.assertNotIn(f"{name}#project-overview/actions/", self.profile)
+                self.assertNotIn(f"{name}#project-overview/releases/", self.profile)
+        self.assertIn("[Packages](https://github.com/SNodeC/Packages)", self.profile)
+        self.metadata["AISuite"].pop("readme_anchor")
+        result = render_profile(self.catalog, self.metadata)
+        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite) · product", result)
+        self.metadata["AISuite"]["readme_anchor"] = "banner/with space"
+        result = render_profile(self.catalog, self.metadata)
+        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite#banner%2Fwith%20space)", result)
 
     def test_notes_and_footer(self):
         self.assertEqual(self.profile.count("Standalone tool, not built on SNode.C"), 2)
