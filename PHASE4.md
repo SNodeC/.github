@@ -21,7 +21,7 @@ The existing deterministic profile renderer now exposes area navigation, kinds a
 
 Existing headings are retained or mapped to explicit legacy anchors. Guide files and original media are not moved. The approved secondary-link presentation update rewrites only navigation callouts; existing back-button arrow glyphs translate up 1 px without resizing. Banners, diagrams, examples and substantive guide content remain preserved. New documentation indexes route to the existing pages rather than copying instructions. New light/dark header chips derive from the existing tokens and kind glyphs; these are not replacement banners. The menu uses the original blue-gray SVG block-button style, with 108×24 sizing, accessible titles/alternative text and buttons-only navigation. The root README and docs index share identical destinations and button order.
 
-## Verification boundaries
+## Earlier verification (before the direct-build-guide migration)
 
 The control repository's catalog check, all 31 unit/boundary tests and deterministic profile drift check passed locally. Additional presentation checks passed for authored content preservation, exact fenced-example equality, legacy anchors, local files/fragments, original documentation/media preservation apart from the approved callout and arrow translations and authoritative chip colors/glyphs. GitHub-rendered Markdown HTML was inspected in local Chrome previews at 1280px and 390px, in light and dark themes; these are layout previews with a local stylesheet, not a claim of exact live GitHub CSS. Do not interpret Markdown checks as product build qualification or as complete native/browser UI qualification.
 
@@ -61,3 +61,9 @@ The latest owner instruction permits rewriting prose and deleting redundant pass
 ## Organization menu buttons
 
 The profile renderer replaces the six-area plain-link row with linked SVG buttons in the same arrow-free 108×24 blue-gray style as the repository menus. Short visible labels (Community, Infrastructure) keep the fixed width; full area names remain link titles and image alternative text. Area order and section destinations still derive from `AREAS`, not a second navigation registry. Assets use paths relative to the profile so branch previews can display them before merge. There is no duplicate text-navigation row or dropdown. The change replaces one production-source line with one (net zero); regression assertions verify generated links, asset availability, style and contrast.
+
+## Direct build guides and route-label punctuation
+
+The latest approved structure supersedes the intermediate README build sections described above: Install remains a concise chooser; Build and every source-install link enter the build guide directly. Remove all four README Build from source sections. SNode.C and MQTTSuite reuse their existing complete source guides. AISuite and CodexUI move prerequisites, configure/build commands and install commands/caveats into `docs/build.md`; CodexUI's browser build steps also move there, and `web/README.md` retains deployment/verification rather than a duplicate source-build procedure. First-use examples and qualification warnings remain in the READMEs.
+
+Install route labels now use a bold colon, not the rejected long dash; Quick start uses the same colon separator convention. Main-menu SVGs, route availability, runtime warnings, banners and figures remain unchanged. Documentation only: production source +0/-0 and repository test source +0/-0. Moved commands must be verified across the README and its build guide, not by requiring every former build block to remain in the README.
