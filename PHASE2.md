@@ -42,7 +42,8 @@ CMake builds; only network/privileged boundaries are mocked there.
 Default-branch green runs and actual GitHub development publication cannot be
 claimed before merging the coordinated PRs. Windows/macOS native packaging and
 CodexUI browser qualification must be confirmed by their GitHub jobs. PRs remain
-draft where these prerequisites or qualification failures are outstanding.
+draft where these prerequisites or shared-workflow/SDK prerequisites are outstanding. App test fixes were
+explicitly deferred by the maintainer, not silently skipped.
 
 ## Merge order
 
@@ -51,8 +52,9 @@ draft where these prerequisites or qualification failures are outstanding.
 2. Merge snode.c; require green default-branch Verify and a published `dev` SDK.
 3. Merge mqttsuite and AISuite; require green Verify, AISuite protocol validation
    and published SDKs. Stale/missing SDKs fail closed rather than rebuild silently.
-4. Merge CodexUI after its prerequisites and qualification are green; AutoTalk
-   depends only on the shared workflow release.
+4. CodexUI follows its SDK prerequisites; AutoTalk depends only on the shared
+   workflow release. The maintainer explicitly deferred their existing test
+   defects to later work; tests and failure gates remain enabled.
 5. Phase 2 gate: snode.c and mqttsuite are green on their API-reported default
    branches. Phase 3 package migration and Phase 4 README alignment are not started.
 
@@ -73,10 +75,26 @@ draft where these prerequisites or qualification failures are outstanding.
   no UI test or implementation is weakened here. Native production build passes.
   The preserved web job was structurally compared with its baseline: equal
   except replacing AISuite's hard-coded branch with its default-branch checkout.
-- AutoTalk Linux/Windows/macOS qualification is not yet claimed green. The
+- AutoTalk Linux native package build and packaged smoke launch pass locally.
+  The full pytest run hangs in prepared-playback qualification; Linux/Windows/macOS
+  full qualification is not claimed green. The
   shared matrix preserves the existing jobs; these must pass after release of
   the shared workflow. Local Linux qualification uses Python 3.12 and an
   isolated container, not the user's desktop or audio services.
 
 Logs remain in the implementation workspace's `evidence/` directory; they are
 not committed build artifacts or substituted for GitHub default-branch gates.
+
+## Explicitly deferred work
+
+The maintainer requested on 2026-10-10: defer CodexUI and AutoTalk test fixes.
+Their tests remain enabled with unchanged correctness gates. Local investigation
+was stopped; no application implementation or audio-test skip was added. The
+control, snode.c, mqttsuite and AISuite verification results above are unaffected.
+
+Coordinated PRs: [control #2](https://github.com/SNodeC/.github/pull/2),
+[snode.c #266](https://github.com/SNodeC/snode.c/pull/266),
+[mqttsuite #31](https://github.com/SNodeC/mqttsuite/pull/31),
+[AISuite #60](https://github.com/SNodeC/AISuite/pull/60),
+[CodexUI #76](https://github.com/SNodeC/CodexUI/pull/76),
+[AutoTalk #6](https://github.com/SNodeC/AutoTalk/pull/6).
