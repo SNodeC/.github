@@ -108,7 +108,7 @@ def render_profile(catalog, metadata):
         f"- **Run MQTT infrastructure:** [MQTTSuite]({repo_url('mqttsuite')})",
         f"- **Learn:** [Book companion]({repo_url('SNode.C-Book-Companion')}) and [examples](#learn)",
         f"- **Install:** [Packages]({repo_url('Packages')})",
-        "",
+        "\n" + " · ".join(f"[{title}](#{title.lower().replace(' & ', '--').replace(' ', '-')})" for area, title in AREAS.items() if area != "forks") + "\n",
     ]
 
     def table(entries, forks=False):
@@ -117,7 +117,7 @@ def render_profile(catalog, metadata):
         for entry in entries:
             name = entry["name"]
             info = metadata.get(name, {})
-            purpose = text(entry["summary"])
+            purpose = text(entry["summary"]) + ("<br>Depends on: " + ", ".join(f"[{text(dep)}]({repo_url(dep)})" for dep in entry["depends_on"]) if entry["depends_on"] else "")
             if "note" in entry:
                 purpose += f"<br>_{text(entry['note'])}_"
             if forks:
@@ -137,7 +137,7 @@ def render_profile(catalog, metadata):
                 latest = f"[{text(tag)}]({repo_url(name)}/releases/tag/{quote(tag, safe='')})"
                 if release["prerelease"]:
                     latest += " (pre-release)"
-            result.append(f"| [{text(name)}]({repo_url(name)}) | {purpose} | {badge} | {latest} |")
+            result.append(f"| [{text(name)}]({repo_url(name)}) · {entry['kind']} | {purpose} | {badge} | {latest} |")
         return result + [""]
 
     for area, title in AREAS.items():

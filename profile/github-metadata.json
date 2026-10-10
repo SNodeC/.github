@@ -5,13 +5,13 @@
   },
   "AISuite": {
     "default_branch": "master",
-    "source_commit": "4f936b61a9200df1c08b276e745e67c549736dd8",
+    "source_commit": "2ca800516b45eba7f5fb2c055adebfe7c53ee51f",
     "workflow": ".github/workflows/ci.yml"
   },
   "AutoTalk": {
     "default_branch": "main",
-    "source_commit": "e6e13a0f894e2ca586de83a2ad1a51eb714435f1",
-    "workflow": ".github/workflows/native-builds.yml"
+    "source_commit": "36ab5fb80b029e6ecaf292353c0b6ff9f9ca6671",
+    "workflow": ".github/workflows/ci.yml"
   },
   "CLI11": {
     "default_branch": "main",
@@ -20,7 +20,7 @@
   },
   "CodexUI": {
     "default_branch": "master",
-    "source_commit": "00802e4cb42c1564b0c62753a97c6492670ac56c",
+    "source_commit": "292d45a616daabc32a58fc4742dfb82657d0d107",
     "workflow": ".github/workflows/ci.yml"
   },
   "DistributionPackages": {
@@ -113,8 +113,8 @@
       "prerelease": false,
       "tag": "v1.0.2"
     },
-    "source_commit": "9a1d02794d9371e82a7a1883d6e93646df01787a",
-    "workflow": ".github/workflows/packages.yml"
+    "source_commit": "af349df3a418a046796c80debe1a960e5243793d",
+    "workflow": ".github/workflows/ci.yml"
   },
   "mqttsuite-doc": {
     "default_branch": "main",
@@ -130,8 +130,8 @@
       "prerelease": false,
       "tag": "v2.0.0"
     },
-    "source_commit": "c17b9aee773efa763f0fe092e626b07e76350b8b",
-    "workflow": ".github/workflows/packages.yml"
+    "source_commit": "692c914dd8bcfa2cc070cfb589f5b645185efad5",
+    "workflow": ".github/workflows/ci.yml"
   },
   "snode.c-doc": {
     "default_branch": "main",

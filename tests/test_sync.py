@@ -103,6 +103,8 @@ class ProfileTests(unittest.TestCase):
         for name in ("snode.c", "mqttsuite", "SNode.C-Book-Companion", "Packages"):
             self.assertIn("https://github.com/SNodeC/" + name, self.profile)
         self.assertIn('alt="SNode.C mark"', self.profile)
+        self.assertIn("[Framework](#framework)", self.profile)
+        self.assertIn("[Distribution & infrastructure](#distribution--infrastructure)", self.profile)
         self.assertNotRegex(self.profile, r"\b\d+ (?:projects|repositories)\b")
         self.assertNotIn("2026-10-10", self.profile)
 
@@ -127,6 +129,12 @@ class ProfileTests(unittest.TestCase):
             row = next(line for line in self.profile.splitlines() if line.startswith(f"| [{name}]("))
             self.assertEqual("[![CI]" in row, "workflow" in self.metadata[name])
             self.assertEqual("/releases/tag/" in row, "release" in self.metadata[name])
+        for entry in self.catalog:
+            row = next(line for line in self.profile.splitlines() if line.startswith(f"| [{entry['name']}]("))
+            self.assertIn(f" · {entry['kind']} |", row)
+            self.assertEqual("Depends on:" in row, bool(entry["depends_on"]))
+            for dep in entry["depends_on"]:
+                self.assertIn(f"[{dep}](https://github.com/SNodeC/{dep})", row)
         self.assertIn("[v2.0.0]", self.profile)
         self.assertIn("[v1.0.2]", self.profile)
 
