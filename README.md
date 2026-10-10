@@ -116,12 +116,13 @@ Stable version tags, secrets and package workflows are untouched.
 ### Coordinated rollout
 
 Merge the control workflow change first. The maintainer then publishes the
-reviewed shared-workflow version and moving `v1` alias in **SNodeC/.github**.
-The existing `v1.0` does not substitute for `@v1`, and predates these extensions.
+reviewed shared-workflow commit by moving the existing `v1.0` tag in
+**SNodeC/.github**. Callers and the canonical template use `@v1.0`; no new
+`v1` tag is created. The maintainer explicitly approved moving this existing tag.
 Merge snode.c next and wait for green default-branch CI plus its `dev` SDK.
 Then merge mqttsuite and AISuite; wait for AISuite's green CI/protocol check and
 SDK before CodexUI. AutoTalk can follow the control workflow independently.
-Caller PRs must not merge while `v1` or their development SDK dependencies are
+Caller PRs must not merge while `v1.0` lacks the shared workflows or SDK dependencies are
 missing. No duplicate old/native build jobs remain after their migration.
 
 Tests execute the actual inline workflow scripts, including ordered source

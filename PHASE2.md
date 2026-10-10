@@ -47,8 +47,9 @@ explicitly deferred by the maintainer, not silently skipped.
 
 ## Merge order
 
-1. Merge the control PR; maintainer publishes its reviewed version and moving
-   `v1` in **SNodeC/.github**. No tag is created by this implementation task.
+1. Merge the control PR and tag-reference follow-up; move the existing `v1.0`
+   tag to that reviewed control commit, as explicitly approved by the maintainer.
+   Callers use `@v1.0`; no `v1` tag is created and no `Book-*` tag is changed.
 2. Merge snode.c; require green default-branch Verify and a published `dev` SDK.
 3. Merge mqttsuite and AISuite; require green Verify, AISuite protocol validation
    and published SDKs. Stale/missing SDKs fail closed rather than rebuild silently.
@@ -98,3 +99,11 @@ Coordinated PRs: [control #2](https://github.com/SNodeC/.github/pull/2),
 [AISuite #60](https://github.com/SNodeC/AISuite/pull/60),
 [CodexUI #76](https://github.com/SNodeC/CodexUI/pull/76),
 [AutoTalk #6](https://github.com/SNodeC/AutoTalk/pull/6).
+
+## Workflow tag decision
+
+The maintainer explicitly requested moving the already existing tag in
+SNodeC/.github rather than creating `v1`. The API inventory contains only
+`v1.0`; it becomes the workflow reference in the canonical template and all
+five callers. This changes only the control-workflow design tag, never any
+product version or `Book-*` tag.
