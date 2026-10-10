@@ -29,3 +29,7 @@ Use paired `<!-- snodec:begin NAME -->` / `<!-- snodec:end NAME -->` markers for
 Old section destinations remain usable when headings move or change level; preserve an explicit anchor where renaming requires it. A `docs/index.md` routes to existing guides without moving or duplicating their contents. Existing guide URLs stay valid. Keep one physical source line per prose paragraph.
 
 Preservation takes precedence over the original three-screen aspiration: complete inline examples are not moved out of a README merely to shorten it. No placeholder section, unsupported platform promise, unverified release number or invented maintainer contact may be introduced. Existing repository-specific README policies still apply.
+
+## Secondary navigation buttons
+
+Existing “Go further:” callouts use one short SVG button per existing destination, retaining order, full descriptive alternative text and substantive explanations. Remove the navigation prefixes, not their content or links. Append a right arrow to each secondary label; keep multiple buttons in one paragraph so they wrap naturally on narrow screens. Existing back buttons keep their left arrows. At the existing Arial 13 px / weight 600 typography, arrow glyphs use baseline 15 within a 24 px canvas, while labels keep baseline 16; placement changes must not resize the arrows or buttons. Main-menu buttons without arrows remain unchanged.
