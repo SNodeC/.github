@@ -137,7 +137,7 @@ def render_profile(catalog, metadata):
                 latest = f"[{text(tag)}]({repo_url(name)}/releases/tag/{quote(tag, safe='')})"
                 if release["prerelease"]:
                     latest += " (pre-release)"
-            result.append(f"| [{'<wbr>'.join(text(name[i:i+4]) for i in range(0, len(name), 4))}]({repo_url(name, info.get('readme_anchor', ''))})<br>{'<wbr>'.join(entry['kind'][i:i+4] for i in range(0, len(entry['kind']), 4))} | {purpose} | {badge + '<br>' if badge else ''}{latest} |")
+            result.append(f"| [{'&#8203;'.join(text(name[i:i+4]) for i in range(0, len(name), 4))}]({repo_url(name, info.get('readme_anchor', ''))})<br>{'&#8203;'.join(entry['kind'][i:i+4] for i in range(0, len(entry['kind']), 4))} | {purpose} | {badge + '<br>' if badge else ''}{latest} |")
         return result + [""]
 
     for area, title in AREAS.items():
