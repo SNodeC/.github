@@ -26,7 +26,7 @@ No plan fact required correction. The owner-approved additions encode the Packag
 
 ## Local verification — measured
 
-43 tests passed, no skips, through `python3 -m unittest discover -s tests -v`. This includes the existing catalog/profile and reusable-workflow tests, plus plan chains, invalid inputs, generated links/assets, exact button order, exclusions, root guards, actual-H1 lists, deterministic regeneration, write-free checks, preserved body/commands/historic anchors, semantic Install links, future generated projects and protected state bytes.
+44 tests passed, no skips, through `python3 -m unittest discover -s tests -v`. This includes the existing catalog/profile and reusable-workflow tests, plus plan chains, invalid inputs, generated links/assets, exact button order, responsive source/fallback assets, preserved desktop geometry/bytes, exclusions, root guards, actual-H1 lists, deterministic regeneration, write-free checks, preserved body/commands/historic anchors, semantic Install links, future generated projects and protected state bytes.
 
 Catalog check, profile drift check, control menu drift check, isolated committed-fixture drift check and `git diff --check` passed. The final diff leaves the control root README, catalog, workflow files, licences and tags unchanged. No other repository was edited.
 
@@ -34,9 +34,11 @@ Catalog check, profile drift check, control menu drift check, isolated committed
 
 ## Native GitHub verification — measured
 
-The committed Packages hierarchy is a **rendering fixture**, not real package/status data. The screenshots use native github.com blob previews at branch commit `14dc0516cfa7f7e349c3442e59e16fa5b9d86c5a`; the fixture files are unchanged by the follow-up correction. Chrome viewport widths were 1920 and 390 CSS pixels; device scale factor 1. Light/dark preferences were emulated and GitHub's standard theme attributes selected accordingly. No custom page CSS or Markdown renderer was used.
+The committed Packages hierarchy is a **rendering fixture**, not real package/status data. The screenshots use native github.com blob previews at branch commit `9ee182e` with the approved compact extension. The screenshots supersede the fixed-banner captures; fixture content remains unchanged outside generated headers/assets. Chrome viewport widths were 1920 and 390 CSS pixels; device scale factor 1. Light/dark preferences were emulated and GitHub's standard theme attributes selected accordingly. No custom page CSS or Markdown renderer was used.
 
-[DOM geometry and image-load measurements](metrics.json) cover all twelve captures. At desktop width the Markdown article is 1012px wide: Up is left; Repository is left of Organization on the right; all buttons share the same Y position. GitHub retained `align="right"` and computed `float:right`. It retained `clear="all"` and computed `clear:both`; every H1 is below all buttons. Source order is Up, Organization, Repository. No broken images were observed. The theme-specific picture sources were retained.
+[DOM geometry and image-load measurements](metrics.json) cover 24 native captures: the twelve requested desktop/phone/theme views plus the same pages/themes at 640 and 641px to verify the breakpoint. Loaded GitHub typography was checked before capture; captures wait for GitHub styles and decoded images. Incomplete styles and a transient full-page capture/layout mismatch were discarded; final viewport captures have [pixel-checked banner bounds](screenshot-geometry.json) matching DOM geometry within 1px in all 24 views. At desktop width the Markdown article is 1012px wide: Up is left; Repository is left of Organization on the right; all buttons share the same Y position. GitHub retained `align="right"` and computed `float:right`. It retained `clear="all"` and computed `clear:both`; every H1 is below all buttons. Source order is Up, Organization, Repository. No broken images were observed. The theme-specific picture sources were retained.
+
+The native `<picture>` media and sources survive GitHub rendering. At 390 and 640px the browser loads the 480×72 compact SVG; at 641 and 1920px it loads the 1280×56 fallback. Both themes behave identically. [Desktop banner hashes](desktop-banners.json) record byte-identical comparisons for all 29 desktop banners across all five repositories against the pre-extension renderer.
 
 At 390px viewport width, the article is 309px: Up occupies the first line; Organization and Repository stack at the right on subsequent lines. This is the explicitly accepted native narrow-screen behavior, not a mobile workaround. GitHub contributes 20px left padding to the right-floated image boxes; their SVG contents remain 160×28.
 
@@ -46,11 +48,13 @@ At 390px viewport width, the article is 309px: Up occupies the first line; Organ
 | Section page | [Screenshot](docs__installation__debian.md-1920-light.png) | [Screenshot](docs__installation__debian.md-1920-dark.png) | [Screenshot](docs__installation__debian.md-390-light.png) | [Screenshot](docs__installation__debian.md-390-dark.png) |
 | Code README | [Screenshot](keys__README.md-1920-light.png) | [Screenshot](keys__README.md-1920-dark.png) | [Screenshot](keys__README.md-390-light.png) | [Screenshot](keys__README.md-390-dark.png) |
 
-### Contract-bound/native limitations
+### Approved responsive correction and remaining scope
 
-The prescribed 1280×56 banner scales to 309×13.52 on phone. Its 25px source name becomes approximately 6px at that width; legibility is poor. No alternate banner or CSS workaround was introduced because the geometry is binding.
+The owner explicitly approved extending the fixed-banner design before Step 2. The shared renderer now emits a compact 480×72 SVG as well as the unchanged desktop SVG. It uses the same graphic, colors and type sizes, with the repository name and section on separate lines at x=84. The graphic remains 44px high, centered at (46, 36). No new renderer, CSS, JavaScript, theme variants or consumer-specific policy was added.
 
-The authored banner is an unlinked identity `<img>`, not repository navigation. GitHub automatically wraps it in a link to its own SVG blob; this native image-view affordance cannot be suppressed by the prescribed markup. The measurements record that wrapper rather than incorrectly claiming the rendered parent is a paragraph.
+At the tested 390px viewport, the compact banner renders at 309×46.34px. Its 25px source name renders at approximately 16.09px and its 23px section label at approximately 14.81px, instead of the old name's approximately 6px. Visual inspection confirms the substantial readability improvement in both themes. These effective sizes are calculated from measured geometry and SVG type sizes, not DOM measurements of glyph outlines.
+
+The authored banner remains pure identity. With this `<picture>` markup, GitHub retains the banner inside the picture without an automatic image link; no closest-link URL is recorded in any of the 24 captures. No repository-navigation link was introduced.
 
 Visual inspection supports the requested desktop layout and readable buttons in both themes, but does not establish professional quality for the still-unmigrated full consumer documentation system.
 
@@ -58,6 +62,6 @@ Visual inspection supports the requested desktop layout and readable buttons in 
 
 At the owner's explicit request, the control CI workflow (`ci.yml`, GitHub workflow ID `380610177`) was disabled through the API and verified as `disabled_manually`, with no active control runs. Reusable Verify remains unchanged. No workflow definitions, triggers, package pipeline, secrets, signing, tags or branch names were changed; no CI was dispatched or rerun.
 
-[Change accounting](accounting.json) separates production Python, tests, documentation/evidence and SVG assets; binary screenshots are counted separately. Production growth was explicitly approved (350–500 lines estimated). The existing profile menu geometry was reshaped rather than introducing another profile renderer. This prepares the single implementation for the explicitly staged consumer migration, not a second live implementation.
+[Change accounting](accounting.json) separates production Python, tests, documentation/evidence and SVG assets; binary screenshots are counted separately. Production growth was explicitly approved (350–500 lines estimated); the responsive extension adds only four net production lines through the existing renderer. The existing profile menu geometry was reshaped rather than introducing another profile renderer. This prepares the single implementation for the explicitly staged consumer migration, not a second live implementation.
 
 Stop at PR handoff. The owner merges Step 1 and moves the existing `v1.0` tag before separately authorizing Step 2.

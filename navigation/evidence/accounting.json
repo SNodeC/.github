@@ -2,30 +2,39 @@
   "baseline": "dbad6b59a6fb6af1d61486a78eebfc67452a5ccf",
   "groups": {
     "production_python": {
-      "added": 360,
+      "added": 364,
       "removed": 2,
-      "net": 358,
+      "net": 362,
       "files": 3
     },
     "tests": {
-      "added": 232,
+      "added": 263,
       "removed": 2,
-      "net": 230,
+      "net": 261,
       "files": 2
     },
     "documentation_and_evidence": {
-      "added": 4387,
+      "added": 6311,
       "removed": 6,
-      "net": 4381,
-      "files": 34
+      "net": 6305,
+      "files": 36
     },
     "svg_assets": {
-      "added": 445,
+      "added": 450,
       "removed": 30,
-      "net": 415,
-      "files": 33
+      "net": 420,
+      "files": 38
     }
   },
+  "responsive_extension": {
+    "baseline": "10e1c7ad796c24321b93019d36091c3410c6fcec",
+    "production_added": 15,
+    "production_removed": 11,
+    "production_net": 4,
+    "tests_added": 32,
+    "tests_removed": 1,
+    "tests_net": 31
+  },
   "binary_screenshots": 12,
-  "binary_bytes": 1211714
+  "binary_bytes": 1310551
 }
