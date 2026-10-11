@@ -10,7 +10,7 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 - **Build networked programs:** [SNode.C](https://github.com/SNodeC/snode.c#project-overview)
 - **Run MQTT infrastructure:** [MQTTSuite](https://github.com/SNodeC/mqttsuite#project-overview)
 - **Learn:** [Book companion](https://github.com/SNodeC/SNode.C-Book-Companion) and [examples](#learn)
-- **Install:** [Packages](https://github.com/SNodeC/Packages)
+- **Install signed packages:** [Packages](https://github.com/SNodeC/Packages) · snode.c · mqttsuite
 
 <p>
 <a href="#framework" title="Framework"><img src="media/menu/framework-108.svg" alt="Framework" width="108" height="24"></a>
@@ -76,7 +76,7 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 | [Dist&#8203;ribu&#8203;tion&#8203;Pack&#8203;ages](https://github.com/SNodeC/DistributionPackages)<br>infr&#8203;a | Build recipes, release CI and signing for distribution packages | [![CI](https://github.com/SNodeC/DistributionPackages/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/SNodeC/DistributionPackages/actions/workflows/release.yml)<br>— |
 
 <details>
-<summary>Upstream forks — kept for future work</summary>
+<summary>Upstream forks</summary>
 
 | Repository | Purpose | Status |
 | --- | --- | --- |
