@@ -21,4 +21,4 @@ amber. The remaining areas use teal, coral, slate and neutral grey respectively.
 
 Glyphs share a 24×24 view box and 1.5-unit stroke; their color is `currentColor`.
 The organization mark is copied unchanged from SNode.C, not redrawn or recolored.
-Its source commit and path are recorded in [EVIDENCE.md](../EVIDENCE.md).
+Its source commit and path are recorded in [historical evidence](../history/EVIDENCE.md).

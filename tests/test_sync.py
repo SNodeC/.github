@@ -161,7 +161,7 @@ class ProfileTests(unittest.TestCase):
         for entry in self.catalog:
             name = entry["name"]
             row = next(line for line in self.profile.replace("&#8203;", "").splitlines() if line.startswith(f"| [{name}]("))
-            self.assertEqual("[![CI]" in row, "workflow" in self.metadata[name])
+            self.assertEqual("[![CI]" in row, "workflow" in self.metadata[name] and entry["status"] != "retired")
             self.assertEqual("/releases/tag/" in row, "release" in self.metadata[name])
         for entry in self.catalog:
             row = next(line for line in self.profile.replace("&#8203;", "").splitlines() if line.startswith(f"| [{entry['name']}]("))
@@ -196,11 +196,11 @@ class ProfileTests(unittest.TestCase):
             name = entry["name"]
             row = next(line for line in self.profile.replace("&#8203;", "").splitlines() if line.startswith(f"| [{name}]("))
             info = self.metadata[name]
-            self.assertEqual("[![CI]" in row, bool(info.get("workflow")))
+            self.assertEqual("[![CI]" in row, bool(info.get("workflow")) and entry["status"] != "retired")
             self.assertEqual("/releases/tag/" in row, bool(info.get("release")))
             if not info.get("release"):
                 self.assertTrue(row.endswith("— |"))
-            if info.get("workflow") and info.get("release"):
+            if info.get("workflow") and info.get("release") and entry["status"] != "retired":
                 self.assertIn(")<br>[", row)
 
     def test_identity_soft_breaks_preserve_names_and_short_runs(self):

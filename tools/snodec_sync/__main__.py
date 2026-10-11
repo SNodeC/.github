@@ -126,7 +126,7 @@ def render_profile(catalog, metadata):
                 purpose += f"<br>_{entry['status'].title()}_"
             workflow = info.get("workflow")
             badge = ""
-            if workflow:
+            if workflow and entry["status"] != "retired":
                 url = f"{repo_url(name)}/actions/workflows/{quote(Path(workflow).name, safe='')}"
                 default = quote(info["default_branch"], safe="")
                 badge = f"[![CI]({url}/badge.svg?branch={default})]({url})"
@@ -165,7 +165,7 @@ def render_profile(catalog, metadata):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["check", "profile", "page-headers"])
+    parser.add_argument("command", choices=["check", "profile", "page-headers", "docs-audit"])
     parser.add_argument("--repo", type=Path)
     parser.add_argument("--check", action="store_true", help="report header/asset drift without writing")
     parser.add_argument("--catalog", type=Path, default=ROOT / "catalog.yml")
@@ -173,6 +173,14 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, default=ROOT / "profile/README.md")
     args = parser.parse_args(argv)
     try:
+        if args.command == "docs-audit":
+            if args.repo is None:
+                raise ValueError("docs-audit requires --repo <checkout>")
+            sys.path.insert(0, str(ROOT / "tools"))
+            from snodec_sync.docs_audit import docs_audit
+            violations = docs_audit(args.repo)
+            print("\n".join(violations) if violations else "docs-audit: 0 violations")
+            return int(bool(violations))
         if args.command == "page-headers":
             if args.repo is None:
                 raise ValueError("page-headers requires --repo <checkout>")

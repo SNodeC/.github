@@ -374,6 +374,7 @@ CodexUI:
     docs/guides: Guides
     docs/architecture: Architecture
     docs/architecture/remediation: Remediation
+    docs/architecture/remediation/findings-ledger: Findings ledger
     docs/architecture/reviews: Reviews
     docs/web: Web UI
     docs/qualification: Qualification
@@ -434,13 +435,13 @@ CodexUI:
     up: docs/architecture/README.md
     up_label: Architecture
     intro: 'The Qt architecture remediation: findings ledger and working prompt.'
-  - old: docs/architecture/qt-remediation-findings-ledger.md
-    new: docs/architecture/remediation/findings-ledger.md
+  - old: docs/architecture/remediation/findings-ledger.md
+    new: docs/architecture/remediation/findings-ledger/current-repair-plan.md
     kind: doc
-    title: Qt architecture remediation findings ledger
-    label: Remediation
-    up: docs/architecture/remediation/README.md
-    up_label: Remediation
+    title: Qt architecture remediation findings ledger — current repair plan
+    label: Findings ledger
+    up: docs/architecture/remediation/findings-ledger/README.md
+    up_label: Findings ledger
   - old: docs/architecture/qt-remediation-thread-prompt.md
     new: docs/architecture/remediation/thread-prompt.md
     kind: doc
@@ -658,6 +659,74 @@ CodexUI:
     label: Web UI
     up: README.md
     up_label: CodexUI
+  - old: docs/codex-0.162.1-migration-inventory.md
+    new: docs/records/codex-0.162.1-migration-inventory.md
+    kind: doc
+    title: Codex 0.162.1 migration inventory
+    label: Records
+    up: docs/records/README.md
+    up_label: Records
+  - old: docs/codex-0.162.1-migration-results.md
+    new: docs/records/codex-0.162.1-migration-results.md
+    kind: doc
+    title: Codex 0.162.1 local migration results
+    label: Records
+    up: docs/records/README.md
+    up_label: Records
+  - old: null
+    new: docs/architecture/remediation/findings-ledger/README.md
+    kind: section
+    title: Findings ledger
+    label: Findings ledger
+    up: docs/architecture/remediation/README.md
+    up_label: Remediation
+    intro: The preserved remediation findings, repair plan and historical checkpoints,
+      split into readable parts.
+  - old: null
+    new: docs/architecture/remediation/findings-ledger/historical-record.md
+    kind: doc
+    title: Historical remediation and S1–S4 checkpoints
+    label: Findings ledger
+    up: docs/architecture/remediation/findings-ledger/README.md
+    up_label: Findings ledger
+    intro: Preserved findings-ledger material; the Step 2 split supplies the complete
+      original text.
+  - old: null
+    new: docs/architecture/remediation/findings-ledger/s5-shared-foundations.md
+    kind: doc
+    title: S5 shared foundations and live conversation gates
+    label: Findings ledger
+    up: docs/architecture/remediation/findings-ledger/README.md
+    up_label: Findings ledger
+    intro: Preserved findings-ledger material; the Step 2 split supplies the complete
+      original text.
+  - old: null
+    new: docs/architecture/remediation/findings-ledger/s5-middle-region-audit.md
+    kind: doc
+    title: S5 middle-region audit and MR-9 evidence
+    label: Findings ledger
+    up: docs/architecture/remediation/findings-ledger/README.md
+    up_label: Findings ledger
+    intro: Preserved findings-ledger material; the Step 2 split supplies the complete
+      original text.
+  - old: null
+    new: docs/architecture/remediation/findings-ledger/s5-resumed-worktree.md
+    kind: doc
+    title: S5 resumed-worktree and final S3 checkpoints
+    label: Findings ledger
+    up: docs/architecture/remediation/findings-ledger/README.md
+    up_label: Findings ledger
+    intro: Preserved findings-ledger material; the Step 2 split supplies the complete
+      original text.
+  - old: null
+    new: docs/architecture/remediation/findings-ledger/findings-and-crosswalk.md
+    kind: doc
+    title: Consolidated findings and external-review crosswalk
+    label: Findings ledger
+    up: docs/architecture/remediation/findings-ledger/README.md
+    up_label: Findings ledger
+    intro: Preserved findings-ledger material; the Step 2 split supplies the complete
+      original text.
 Packages:
   display: Packages
   source: DistributionPackages/site
@@ -794,13 +863,7 @@ Packages:
     up: docs/README.md
     up_label: Documentation
     deleted: true
-  - old: docs/status.md
-    new: docs/status.md
-    kind: doc
-    title: (generated)
-    label: Package status
-    up: status/README.md
-    up_label: Package status
+
   - old: docs/troubleshooting.md
     new: docs/troubleshooting.md
     kind: doc
@@ -865,3 +928,33 @@ menu_labels:
   Grouping & lifecycle: Groups/lifecycle
   Browser frontend: Browser
   Selected packages: Selected
+
+DistributionPackages:
+  display: DistributionPackages
+  source: DistributionPackages
+  sections:
+    docs: Documentation
+  media: []
+  pages:
+  - old: null
+    new: docs/README.md
+    kind: section
+    title: DistributionPackages documentation
+    intro: Setup and maintenance of package publication.
+    label: Documentation
+    up: README.md
+    up_label: Distribution
+  - old: docs/maintainers.md
+    new: docs/maintainers.md
+    kind: doc
+    title: Maintainer operations
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+  - old: docs/setup.md
+    new: docs/setup.md
+    kind: doc
+    title: Publisher setup
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation

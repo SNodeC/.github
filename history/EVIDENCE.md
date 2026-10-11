@@ -5,7 +5,7 @@ Phase 1 task. No repository was reclassified from GitHub's `fork` flag: course
 projects remain community snapshots; only the six designated upstream forks use
 the fork kind. Their `upstream` values come from the GitHub API `parent.full_name`.
 
-The checked-in [metadata snapshot](profile/github-metadata.json) records source
+The checked-in [metadata snapshot](../profile/github-metadata.json) records source
 commits and default branches from `GET /repos/SNodeC/{name}` and
 `GET /repos/SNodeC/{name}/commits/{default_branch}`. Existing workflow paths
 were cross-checked against each commit's recursive Git tree and

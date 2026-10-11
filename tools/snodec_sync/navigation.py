@@ -25,14 +25,21 @@ def validate_plan(plan):
             if not isinstance(config, dict) or any(not isinstance(k, str) or not isinstance(v, str) or not v.strip() for k, v in config.items()):
                 raise ValueError('menu_labels requires nonempty text labels')
             continue
+        for entry in config.get('exempt', []):
+            if (not isinstance(entry, dict) or set(entry) != {'path', 'reason'}
+                    or not isinstance(entry['path'], str) or not entry['path']
+                    or PurePosixPath(entry['path']).is_absolute() or '..' in PurePosixPath(entry['path']).parts
+                    or not isinstance(entry['reason'], str) or '\n' in entry['reason'] or '\r' in entry['reason']
+                    or not entry['reason'].lower().startswith(('vendored', 'third-party', 'generated test fixture'))):
+                raise ValueError(f'{name}: exempt requires a safe path glob and one-line vendored/third-party/generated test fixture reason')
         active = {}
         for page in config['pages']:
             for field in ('old', 'new', 'up'):
                 path = page[field]
                 if path is not None and (PurePosixPath(path).is_absolute() or '..' in PurePosixPath(path).parts):
                     raise ValueError(f'{name}: unsafe {field}: {path}')
-            if len(page['up_label']) > 14 or not page['up_label'].strip():
-                raise ValueError(f'{name}: Up label exceeds 14 characters: {page["up_label"]}')
+            if len(page['up_label']) > 15 or not page['up_label'].strip():
+                raise ValueError(f'{name}: Up label exceeds 15 characters: {page["up_label"]}')
             if page.get('deleted'):
                 continue
             if page['new'] in active:
@@ -62,7 +69,8 @@ def _config(repo):
         match = re.search(r'SNodeC/([^/]+?)(?:\.git)?\s*$', result.stdout)
         name = match[1] if match else checkout.name
         name = next((key for key, value in plan.items()
-                     if value['source'].split('/')[0] == name), name)
+                     if '/' in value['source'] and value['source'].split('/')[0] == name
+                     and checkout.name == value['source'].split('/')[-1]), name)
     if name == '.github':
         config = {'display': 'SNodeC', 'pages': [], 'sections': {}}
     elif name in plan:
@@ -154,7 +162,7 @@ def _header_button(label, title, icon, color, theme):
 
 
 def _banner(name, display, label, color, compact=False):
-    mark = ET.parse(ROOT / f'brand/navigation/marks/{name}.svg').getroot()
+    mark = ET.parse(ROOT / f'brand/navigation/marks/{"Packages" if name == "DistributionPackages" else name}.svg').getroot()
     x, y, width, height = map(float, mark.attrib['viewBox'].split())
     scale = 44 / height
     graphic = ''.join(ET.tostring(child, encoding='unicode') for child in mark)

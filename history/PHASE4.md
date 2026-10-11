@@ -4,7 +4,7 @@
 
 Only the organization profile and the existing README collections of **snode.c, mqttsuite, AISuite and CodexUI** change. All other repository READMEs remain untouched. This stage changes no CI caller, build manifest, package pipeline, secret, license file or tag. It does not merge or release anything automatically.
 
-The governing invariant is **shared structure without loss of project-specific content**. The [frame contract](templates/readme-frame.md) applies only to the four selected repositories. Catalog identity, existing documentation and brand tokens remain their respective authorities; no new sync service or second build policy is introduced.
+The governing invariant is **shared structure without loss of project-specific content**. The [frame contract](../templates/readme-frame.md) applies only to the four selected repositories. Catalog identity, existing documentation and brand tokens remain their respective authorities; no new sync service or second build policy is introduced.
 
 ## Organization
 
