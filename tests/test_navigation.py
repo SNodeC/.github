@@ -61,8 +61,8 @@ class NavigationTests(unittest.TestCase):
     def test_plan_chains_and_label_limit(self):
         validate_plan(self.plan)
         invalid = copy.deepcopy(self.plan)
-        invalid['snode.c']['pages'][0]['up_label'] = 'A' * 15
-        with self.assertRaisesRegex(ValueError, '14'):
+        invalid['snode.c']['pages'][0]['up_label'] = 'A' * 16
+        with self.assertRaisesRegex(ValueError, '15'):
             validate_plan(invalid)
         invalid = copy.deepcopy(self.plan)
         invalid['snode.c']['pages'][0]['up'] = 'docs/README.md'
@@ -187,7 +187,7 @@ class NavigationTests(unittest.TestCase):
                             self.assertGreaterEqual(contrast(text.attrib['fill'], background), 4.5)
                     self.assertEqual(svg.findall(NS + 'text')[0].text, config['display'])
                     self.assertEqual(svg.findall(NS + 'text')[1].attrib['fill'], accent['dark']['text'])
-                    mark = ET.parse(ROOT / f'brand/navigation/marks/{name}.svg').getroot()
+                    mark = ET.parse(ROOT / f'brand/navigation/marks/{"Packages" if name == "DistributionPackages" else name}.svg').getroot()
                     for node in mark.iter(NS + 'path'):
                         self.assertTrue(any(p.attrib.get('d') == node.attrib.get('d') for p in svg.iter(NS + 'path')))
                 else:
@@ -240,7 +240,7 @@ class NavigationTests(unittest.TestCase):
                 self.assertGreaterEqual(float(texts[0].attrib['font-size']) * 309 / 480, 16)
                 self.assertEqual([p.attrib['d'] for p in mobile.iter(NS + 'path')],
                                  [p.attrib['d'] for p in desktop.iter(NS + 'path')])
-                golden = ROOT / 'navigation/preview/Packages/docs/media/nav' / desktop_path.name
+                golden = ROOT / 'tests/fixtures/navigation' / desktop_path.name
                 if name == 'Packages':
                     self.assertEqual(desktop_path.read_bytes(), golden.read_bytes())
             self.assertEqual(page_headers(repo, check=True), [])

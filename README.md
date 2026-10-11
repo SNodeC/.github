@@ -1,8 +1,16 @@
 # SNodeC control repository
 
-Phase 1 establishes the organization catalog, generated profile, accessible brand
-tokens and the reusable C++ Verify workflow. It does **not** enroll repositories,
-rewrite their READMEs, change the package pipeline or create release tags.
+This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and `docs-audit` keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point. Historical rollout descriptions below do not authorize moving existing tags.
+
+## Documentation
+
+- [Navigation generator and documentation audit](navigation/README.md)
+- [Navigation plan review](navigation/PLAN.md)
+- [Brand tokens and glyphs](brand/README.md)
+- [Navigation assets and provenance](brand/navigation/README.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security](SECURITY.md)
+- [Historical records](history/README.md)
 
 ## Local checks
 
@@ -122,6 +130,6 @@ publication options and publisher workflows are absent or rejected.
 Repository README frames are **Phase 4**, not Phase 2. Package/release/site,
 figure, ecosystem and org-sync lanes remain separate later phases.
 
-See [Phase 2 evidence and rollout](PHASE2.md), [Phase 1 evidence](EVIDENCE.md),
+See [Phase 2 evidence and rollout](history/PHASE2.md), [Phase 1 evidence](history/EVIDENCE.md),
 [brand values](brand/README.md), [contributing](CONTRIBUTING.md) and
 [security](SECURITY.md).

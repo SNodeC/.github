@@ -99,7 +99,7 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 | [SNod&#8203;e.C-&#8203;Land&#8203;ingp&#8203;ages](https://github.com/SNodeC/SNode.C-Landingpages)<br>infr&#8203;a | Shared landing-page and technical-figure sources<br>_Retiring_ | [![CI](https://github.com/SNodeC/SNode.C-Landingpages/actions/workflows/publish-mqtt-figures.yml/badge.svg?branch=main)](https://github.com/SNodeC/SNode.C-Landingpages/actions/workflows/publish-mqtt-figures.yml)<br>— |
 | [snod&#8203;e.c-&#8203;doc](https://github.com/SNodeC/snode.c-doc)<br>infr&#8203;a | Published Doxygen reference for SNode.C<br>_Retiring_ | — |
 | [mqtt&#8203;suit&#8203;e-do&#8203;c](https://github.com/SNodeC/mqttsuite-doc)<br>infr&#8203;a | Published Doxygen reference for MQTTSuite<br>_Retiring_ | — |
-| [Open&#8203;WRT](https://github.com/SNodeC/OpenWRT)<br>infr&#8203;a | Retired predecessor of the distribution package pipeline<br>_Retired_ | [![CI](https://github.com/SNodeC/OpenWRT/actions/workflows/openwrt.yml/badge.svg?branch=main)](https://github.com/SNodeC/OpenWRT/actions/workflows/openwrt.yml)<br>[debian-upgrade-fixtures](https://github.com/SNodeC/OpenWRT/releases/tag/debian-upgrade-fixtures) (pre-release) |
+| [Open&#8203;WRT](https://github.com/SNodeC/OpenWRT)<br>infr&#8203;a | Retired predecessor of the distribution package pipeline<br>_Retired_ | [debian-upgrade-fixtures](https://github.com/SNodeC/OpenWRT/releases/tag/debian-upgrade-fixtures) (pre-release) |
 
 </details>
 

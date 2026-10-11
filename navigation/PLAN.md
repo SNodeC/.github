@@ -272,3 +272,18 @@ The approved size rule requires shorter visible labels for these currently refer
 ## Owner-approved responsive banner extension
 
 Before Step 2, preserve the 1280×56 desktop banner unchanged and add a 480×72 compact variant. Native `<picture>` selects it at viewport widths up to 640px. Keep the repository graphic and accent; place name and section label on two lines. Header buttons, page paths, section hierarchy, introductions and Up chains are unchanged. This explicitly supersedes the original fixed-banner-only limitation, not the rest of the approved plan.
+
+
+## Cleanup Step 1 proposals — 2026-10-12
+
+`plan.yml` remains authoritative. These additions are proposed for owner review; no consumer is moved, split, generated or published by Step 1.
+
+- **CodexUI Records:** move both Codex 0.162.1 migration inventory/results documents to `docs/records/`, with Records banners and ↑ Records.
+- **CodexUI Findings ledger:** make `docs/architecture/remediation/findings-ledger/README.md` a section with ↑ Remediation. Its six content parts have Findings ledger banners and ↑ Findings ledger: `current-repair-plan.md`, `historical-record.md`, `s5-shared-foundations.md`, `s5-middle-region-audit.md`, `s5-resumed-worktree.md`, and `findings-and-crosswalk.md`.
+- The original S5 `##` section measures **203,152 bytes**, so whole-`##` splits alone cannot satisfy the 100 KB ceiling. The proposal splits that oversized section at existing `###` boundaries, preserving all text. The other boundaries are existing `##` sections. Allow room for generated headers in every part; the largest proposed raw content part is the 95,194-byte current repair plan.
+- **DistributionPackages:** add `docs/README.md`, `docs/maintainers.md` and `docs/setup.md`, with Documentation banners, the existing Packages gear and infrastructure accent. The root Up button uses the short visible label **Distribution**, pointing directly to DistributionPackages' root; this proposed label fits the unchanged 160 px button. Both desktop and compact banners identify **DistributionPackages** in full. `site/` continues to use the separate Packages policy.
+- **Packages:** remove the `docs/status.md` declaration; `docs-audit` flags the legacy file until its Step 2 deletion. `status/README.md` remains the sole status entry page.
+- **AISuite/CodexUI media notes:** keep the existing excluded declarations. They get no header, must be reachable from `docs/README.md`, and receive the same link/anchor audit.
+- **Audit scope clarification approved by the owner:** the unplanned-page check applies only to header-enrolled repositories. AutoTalk and Book remain unenrolled; their tracked Markdown still receives reachability and link/anchor checks. No exemptions are added.
+
+The Findings ledger parent label is 15 characters, so the existing label guard now accepts up to 15 rather than 14; button size, typography and renderer are unchanged. Longer labels remain rejected. The proposed paths, titles, boundaries and short Distribution label are review decisions for this PR, not an automatic content migration.
