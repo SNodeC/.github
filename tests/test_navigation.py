@@ -18,6 +18,7 @@ from tests.test_sync import contrast
 class NavigationTests(unittest.TestCase):
     def setUp(self):
         self.plan = yaml.safe_load((ROOT / 'navigation/plan.yml').read_text())
+        self.menu_labels = self.plan.pop('menu_labels', {})
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
 
@@ -46,6 +47,8 @@ class NavigationTests(unittest.TestCase):
                 (menu / 'install.svg').write_text(_menu_svg('Install', 133))
             if page['new'] == 'status/snodec.md':
                 body += '\n<a href="README.md#page-overview"><img src="menu/all-projects.svg" alt="All projects" width="133" height="28"></a>\n'
+                body += '\n<a href="../README.md#install"><img src="../docs/media/menu/install.svg" alt="Install" width="133" height="28"></a>\n'
+                (menu / 'install.svg').write_text(_menu_svg('Install', 133))
                 m = repo / 'status/menu';m.mkdir(exist_ok=True)
                 (m / 'all-projects.svg').write_text(_menu_svg('All projects', 133))
             path.write_text(body)
@@ -145,6 +148,8 @@ class NavigationTests(unittest.TestCase):
         self.assertIn('menu-quick-install.svg', text)
         self.assertIn('alt="Quick install"', text)
         self.assertNotIn('alt="All projects"', (repo / 'status/snodec.md').read_text())
+        self.assertIn('href="../README.md#install"', (repo / 'status/snodec.md').read_text())
+        self.assertIn('alt="Install"', (repo / 'status/snodec.md').read_text())
         for p in repo.rglob('*.md'):
             if p.name == 'README.md' or p.read_text().startswith('# Root'):
                 continue
@@ -208,3 +213,18 @@ class NavigationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'git rm'):
             page_headers(repo)
         self.assertTrue(deleted.exists())
+
+    def test_short_labels_do_not_change_accessible_destination(self):
+        repo = self.fixture('Packages')
+        button = repo / 'docs/media/menu/selected.svg'
+        button.write_text(_menu_svg('Selected packages', 179, 'right'))
+        page = repo / 'docs/installation/debian.md'
+        page.write_text(page.read_text() + '\n<a href="#selected" title="Selected packages"><img src="../media/menu/selected.svg" alt="Selected packages" width="179" height="28"></a>\n')
+        page_headers(repo)
+        svg = ET.parse(button).getroot()
+        self.assertEqual(svg.find(NS + 'text').text, 'Selected')
+        self.assertEqual(svg.find(NS + 'title').text, 'Selected packages')
+        self.assertIn('href="#selected" title="Selected packages"', page.read_text())
+        self.assertIn('alt="Selected packages" width="160"', page.read_text())
+        self.assertEqual(svg.find(NS + 'path').attrib['d'], ARROW)
+        self.assertEqual(page_headers(repo, check=True), [])

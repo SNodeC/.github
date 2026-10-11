@@ -1,0 +1,31 @@
+{
+  "baseline": "dbad6b59a6fb6af1d61486a78eebfc67452a5ccf",
+  "groups": {
+    "production_python": {
+      "added": 360,
+      "removed": 2,
+      "net": 358,
+      "files": 3
+    },
+    "tests": {
+      "added": 232,
+      "removed": 2,
+      "net": 230,
+      "files": 2
+    },
+    "documentation_and_evidence": {
+      "added": 4387,
+      "removed": 6,
+      "net": 4381,
+      "files": 34
+    },
+    "svg_assets": {
+      "added": 445,
+      "removed": 30,
+      "net": 415,
+      "files": 33
+    }
+  },
+  "binary_screenshots": 12,
+  "binary_bytes": 1211714
+}

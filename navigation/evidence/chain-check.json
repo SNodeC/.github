@@ -1,0 +1,27 @@
+[
+  {
+    "repo": "snode.c",
+    "chains": "all terminate at repository root",
+    "labels": "all <=14"
+  },
+  {
+    "repo": "mqttsuite",
+    "chains": "all terminate at repository root",
+    "labels": "all <=14"
+  },
+  {
+    "repo": "AISuite",
+    "chains": "all terminate at repository root",
+    "labels": "all <=14"
+  },
+  {
+    "repo": "CodexUI",
+    "chains": "all terminate at repository root",
+    "labels": "all <=14"
+  },
+  {
+    "repo": "Packages",
+    "chains": "all terminate at repository root",
+    "labels": "all <=14"
+  }
+]

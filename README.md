@@ -125,7 +125,3 @@ figure, ecosystem and org-sync lanes remain separate later phases.
 See [Phase 2 evidence and rollout](PHASE2.md), [Phase 1 evidence](EVIDENCE.md),
 [brand values](brand/README.md), [contributing](CONTRIBUTING.md) and
 [security](SECURITY.md).
-
-## Page navigation (Step 1)
-
-The [approved navigation plan and generator](navigation/README.md) provide page headers, section lists and shared menu assets. `python3 tools/snodec_sync page-headers --repo <checkout> [--check]` runs offline after the approved moves; `render_header(repo, page_path)` is read-only. Consumer migration and package-renderer integration are deliberately deferred until the control PR is merged and the existing `v1.0` tag is moved by the owner. The control CI workflow is manually disabled at the owner's request; its definitions and the reusable Verify workflow are unchanged.

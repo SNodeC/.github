@@ -21,6 +21,10 @@ def slug(label):
 def validate_plan(plan):
     """Validate all declared chains, not just the requested checkout."""
     for name, config in plan.items():
+        if name == 'menu_labels':
+            if not isinstance(config, dict) or any(not isinstance(k, str) or not isinstance(v, str) or not v.strip() for k, v in config.items()):
+                raise ValueError('menu_labels requires nonempty text labels')
+            continue
         active = {}
         for page in config['pages']:
             for field in ('old', 'new', 'up'):
@@ -49,6 +53,7 @@ def validate_plan(plan):
 def _config(repo):
     plan = yaml.safe_load((ROOT / 'navigation/plan.yml').read_text())
     validate_plan(plan)
+    menu_labels = plan.pop('menu_labels', {})
     name = str(repo)
     if name not in plan and name != '.github':
         checkout = Path(repo).resolve()
@@ -68,7 +73,7 @@ def _config(repo):
     entry = next(e for e in catalog if e['name'] == name)
     tokens = yaml.safe_load((ROOT / 'brand/tokens.yml').read_text())
     accent = entry.get('accent', tokens['area_accents'][entry['area']])
-    return name, config, tokens['accents'][accent], tokens['accents']['foundation-blue']
+    return name, config | {'menu_labels': menu_labels}, tokens['accents'][accent], tokens['accents']['foundation-blue']
 
 
 def _page(config, page_path):
@@ -100,16 +105,16 @@ def _header(config, page_path):
     display = config['display']
     nav = _relative('docs/media/nav', page_path)
     escape = lambda text: html.escape(text, quote=True)
-    def button(stem, label, title, href, right=False):
+    def button(stem, title, href, right=False):
         return (f'<a href="{escape(href)}" title="{escape(title)}"><picture>'
                 f'<source media="(prefers-color-scheme: dark)" srcset="{nav}/{stem}-dark.svg">'
                 f'<img {"align=\"right\" " if right else ""}src="{nav}/{stem}-light.svg" '
                 f'alt="{escape(title)}" width="160" height="28"></picture></a>')
     up_fragment = 'project-overview' if page['up'] == 'README.md' else 'page-overview'
-    buttons = [button('up-' + slug(page['up_label']), page['up_label'], 'Up to ' + page['up_label'],
+    buttons = [button('up-' + slug(page['up_label']), 'Up to ' + page['up_label'],
                       _relative(page['up'], page_path) + '#' + up_fragment),
-               button('organization', 'Organization', 'SNodeC organization', 'https://github.com/SNodeC', True),
-               button('repository', 'Repository', display + ' repository',
+               button('organization', 'SNodeC organization', 'https://github.com/SNodeC', True),
+               button('repository', display + ' repository',
                       _relative('README.md', page_path) + '#project-overview', True)]
     return ('<!-- snodec:begin page-header -->\n<a id="page-overview"></a>\n'
             f'<p><img src="{nav}/banner-{slug(page["label"])}.svg" '
@@ -200,6 +205,13 @@ def _section_list(config, path, texts):
     return '<!-- snodec:begin section-pages -->\n' + '\n'.join(entries) + '\n<!-- snodec:end section-pages -->'
 
 
+def _up_link(src, href, path, ancestors):
+    target, _, fragment = href.partition('#')
+    target = posixpath.normpath(posixpath.join(posixpath.dirname(path), target))
+    return PurePosixPath(src).name.startswith('back-') or (
+        target in ancestors and fragment in ('', 'page-overview', 'project-overview', 'readme'))
+
+
 def _menus(checkout, config, texts, outputs):
     declared = {p['new']: p for p in config['pages'] if not p.get('deleted')}
     for path, original in list(texts.items()):
@@ -215,15 +227,13 @@ def _menus(checkout, config, texts, outputs):
             if not image:
                 return tag
             href = re.search(r'href="([^"]+)"', tag)[1]
-            target = posixpath.normpath(posixpath.join(posixpath.dirname(path), href.split('#')[0]))
-            if PurePosixPath(image[1]).name.startswith('back-') or target in ancestors:
+            if _up_link(image[1], href, path, ancestors):
                 return ''
             return tag
         text = re.sub(r'<a\b[^>]*href="[^"]+"[^>]*>\s*<img\b[^>]*>\s*</a>', anchor, original)
         # Markdown image uplinks are likewise buttons, not ordinary prose references.
         text = re.sub(r'\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)',
-                      lambda m: '' if PurePosixPath(m[2]).name.startswith('back-') or
-                      posixpath.normpath(posixpath.join(posixpath.dirname(path), m[3].split('#')[0])) in ancestors else m[0], text)
+                      lambda m: '' if _up_link(m[2], m[3], path, ancestors) else m[0], text)
         for src in re.findall(r'(?:src="|!\[[^\]]*\]\()([^"\s)]+\.svg)', text):
             if src.startswith(('https:', 'http:', '/')):
                 continue
@@ -263,7 +273,7 @@ def _menus(checkout, config, texts, outputs):
             width = 328 if svg.attrib.get('width') in ('274', '328') else 160
             arrow = next(('up' if any('rotate(-90' in n.attrib.get('transform', '') for n in svg.iter()) else 'right'
                           for node in svg.iter(NS + 'path') if node.attrib.get('d') == ARROW), '')
-            outputs[asset] = _menu_svg(label, width, arrow, title)
+            outputs[asset] = _menu_svg(config.get('menu_labels', {}).get(label, label), width, arrow, title)
             text = re.sub(r'(<img\b[^>]*src="' + re.escape(src) + r'"[^>]*\bwidth=")[^"]+("[^>]*>)',
                           lambda m: m[1] + str(width) + m[2], text)
         texts[path] = text
@@ -275,6 +285,8 @@ def page_headers(repo, check=False):
     name, config, accent, org_accent = _config(checkout)
     if name == 'Packages' and checkout.name != 'site' and (checkout / 'site').is_dir():
         checkout = checkout / 'site'
+    if not (checkout / 'README.md').is_file():
+        raise ValueError('Checkout requires its root README.md')
     texts, outputs = {}, {}
     for page in config['pages']:
         if page.get('deleted'):

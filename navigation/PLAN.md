@@ -249,3 +249,22 @@ Generated inventory of all subpages: proposed path, banner text and upward butto
 | all | Links from the private `SNodeC/SNode.C-Book` could not be checked. | Maintainer checks the moved paths listed in this plan manually. |
 
 All labels are within 14 characters: AISuite, Architecture, Catalogs, Codex, CodexUI, Design, Documentation, Examples, Frontend SDK, Guides, Installation, Logging, MQTTSuite, Package status, Packages, Qualification, Records, Remediation, Reviews, SNode.C, Signing keys, Tests, Tools, UI review, Web UI, snodec-control.
+
+## Visible menu labels at 160 px
+
+The approved size rule requires shorter visible labels for these currently referenced menus. Destinations, full tooltips and alternative text remain unchanged; 274px menus become 328px rather than shortening. These presentation overrides are authoritative in `plan.yml`, not a second runtime registry.
+
+| Existing visible label | New visible label |
+|---|---|
+| Native client & server | Client/server |
+| SSE & WebSocket | SSE/WebSocket |
+| Subprotocol source | Subprotocol |
+| Signed packages | Packages |
+| Build from source | From source |
+| Mapping examples | Examples |
+| Mapping schema | Map schema |
+| MQTTStore guide | Store guide |
+| Projection schema | Projection |
+| Grouping & lifecycle | Groups/lifecycle |
+| Browser frontend | Browser |
+| Selected packages | Selected |

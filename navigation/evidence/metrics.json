@@ -1,0 +1,1418 @@
+[
+  {
+    "page": "docs/installation/README.md",
+    "width": 1920,
+    "theme": "light",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/README.md",
+    "article": {
+      "x": 607,
+      "y": 376,
+      "width": 1012,
+      "height": 438.859375,
+      "top": 376,
+      "right": 1619,
+      "bottom": 814.859375,
+      "left": 607
+    },
+    "background": "rgb(255, 255, 255)",
+    "buttons": [
+      {
+        "title": "Up to Documentation",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/README.md#page-overview",
+        "img": {
+          "x": 607,
+          "y": 458.265625,
+          "width": 160,
+          "height": 28,
+          "top": 458.265625,
+          "right": 767,
+          "bottom": 486.265625,
+          "left": 607
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-documentation-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-documentation-light.svg\" alt=\"Up to Documentation\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 1439,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1619,
+          "bottom": 486.265625,
+          "left": 1439
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 1259,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1439,
+          "bottom": 486.265625,
+          "left": 1259
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 767,
+          "y": 469.265625,
+          "width": 0,
+          "height": 22,
+          "top": 469.265625,
+          "right": 767,
+          "bottom": 491.265625,
+          "left": 767
+        }
+      }
+    ],
+    "h1": {
+      "text": "Installation",
+      "box": {
+        "x": 607,
+        "y": 516.265625,
+        "width": 1012,
+        "height": 50.59375,
+        "top": 516.265625,
+        "right": 1619,
+        "bottom": 566.859375,
+        "left": 607
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 607,
+        "y": 392,
+        "width": 1012,
+        "height": 44.265625,
+        "top": 392,
+        "right": 1619,
+        "bottom": 436.265625,
+        "left": 607
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-installation.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-installation"
+    ]
+  },
+  {
+    "page": "docs/installation/README.md",
+    "width": 1920,
+    "theme": "dark",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/README.md",
+    "article": {
+      "x": 607,
+      "y": 376,
+      "width": 1012,
+      "height": 438.859375,
+      "top": 376,
+      "right": 1619,
+      "bottom": 814.859375,
+      "left": 607
+    },
+    "background": "rgb(13, 17, 23)",
+    "buttons": [
+      {
+        "title": "Up to Documentation",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/README.md#page-overview",
+        "img": {
+          "x": 607,
+          "y": 458.265625,
+          "width": 160,
+          "height": 28,
+          "top": 458.265625,
+          "right": 767,
+          "bottom": 486.265625,
+          "left": 607
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-documentation-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-documentation-light.svg\" alt=\"Up to Documentation\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 1439,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1619,
+          "bottom": 486.265625,
+          "left": 1439
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 1259,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1439,
+          "bottom": 486.265625,
+          "left": 1259
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 767,
+          "y": 469.265625,
+          "width": 0,
+          "height": 22,
+          "top": 469.265625,
+          "right": 767,
+          "bottom": 491.265625,
+          "left": 767
+        }
+      }
+    ],
+    "h1": {
+      "text": "Installation",
+      "box": {
+        "x": 607,
+        "y": 516.265625,
+        "width": 1012,
+        "height": 50.59375,
+        "top": 516.265625,
+        "right": 1619,
+        "bottom": 566.859375,
+        "left": 607
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 607,
+        "y": 392,
+        "width": 1012,
+        "height": 44.265625,
+        "top": 392,
+        "right": 1619,
+        "bottom": 436.265625,
+        "left": 607
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-installation.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-installation"
+    ]
+  },
+  {
+    "page": "docs/installation/README.md",
+    "width": 390,
+    "theme": "light",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/README.md",
+    "article": {
+      "x": 33,
+      "y": 492,
+      "width": 309,
+      "height": 492.59375,
+      "top": 492,
+      "right": 342,
+      "bottom": 984.59375,
+      "left": 33
+    },
+    "background": "rgb(255, 255, 255)",
+    "buttons": [
+      {
+        "title": "Up to Documentation",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/README.md#page-overview",
+        "img": {
+          "x": 33,
+          "y": 548,
+          "width": 160,
+          "height": 28,
+          "top": 548,
+          "right": 193,
+          "bottom": 576,
+          "left": 33
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-documentation-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-documentation-light.svg\" alt=\"Up to Documentation\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 162,
+          "y": 582,
+          "width": 180,
+          "height": 28,
+          "top": 582,
+          "right": 342,
+          "bottom": 610,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 162,
+          "y": 610,
+          "width": 180,
+          "height": 28,
+          "top": 610,
+          "right": 342,
+          "bottom": 638,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 193,
+          "y": 559,
+          "width": 0,
+          "height": 22,
+          "top": 559,
+          "right": 193,
+          "bottom": 581,
+          "left": 193
+        }
+      }
+    ],
+    "h1": {
+      "text": "Installation",
+      "box": {
+        "x": 33,
+        "y": 662,
+        "width": 309,
+        "height": 50.59375,
+        "top": 662,
+        "right": 342,
+        "bottom": 712.59375,
+        "left": 33
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 33,
+        "y": 512.484375,
+        "width": 309,
+        "height": 13.515625,
+        "top": 512.484375,
+        "right": 342,
+        "bottom": 526,
+        "left": 33
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-installation.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-installation"
+    ]
+  },
+  {
+    "page": "docs/installation/README.md",
+    "width": 390,
+    "theme": "dark",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/README.md",
+    "article": {
+      "x": 33,
+      "y": 492,
+      "width": 309,
+      "height": 492.59375,
+      "top": 492,
+      "right": 342,
+      "bottom": 984.59375,
+      "left": 33
+    },
+    "background": "rgb(13, 17, 23)",
+    "buttons": [
+      {
+        "title": "Up to Documentation",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/README.md#page-overview",
+        "img": {
+          "x": 33,
+          "y": 548,
+          "width": 160,
+          "height": 28,
+          "top": 548,
+          "right": 193,
+          "bottom": 576,
+          "left": 33
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-documentation-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-documentation-light.svg\" alt=\"Up to Documentation\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 162,
+          "y": 582,
+          "width": 180,
+          "height": 28,
+          "top": 582,
+          "right": 342,
+          "bottom": 610,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 162,
+          "y": 610,
+          "width": 180,
+          "height": 28,
+          "top": 610,
+          "right": 342,
+          "bottom": 638,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 193,
+          "y": 559,
+          "width": 0,
+          "height": 22,
+          "top": 559,
+          "right": 193,
+          "bottom": 581,
+          "left": 193
+        }
+      }
+    ],
+    "h1": {
+      "text": "Installation",
+      "box": {
+        "x": 33,
+        "y": 662,
+        "width": 309,
+        "height": 50.59375,
+        "top": 662,
+        "right": 342,
+        "bottom": 712.59375,
+        "left": 33
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 33,
+        "y": 512.484375,
+        "width": 309,
+        "height": 13.515625,
+        "top": 512.484375,
+        "right": 342,
+        "bottom": 526,
+        "left": 33
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-installation.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-installation"
+    ]
+  },
+  {
+    "page": "docs/installation/debian.md",
+    "width": 1920,
+    "theme": "light",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/debian.md",
+    "article": {
+      "x": 607,
+      "y": 376,
+      "width": 1012,
+      "height": 230.859375,
+      "top": 376,
+      "right": 1619,
+      "bottom": 606.859375,
+      "left": 607
+    },
+    "background": "rgb(255, 255, 255)",
+    "buttons": [
+      {
+        "title": "Up to Installation",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/README.md#page-overview",
+        "img": {
+          "x": 607,
+          "y": 458.265625,
+          "width": 160,
+          "height": 28,
+          "top": 458.265625,
+          "right": 767,
+          "bottom": 486.265625,
+          "left": 607
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-installation-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-installation-light.svg\" alt=\"Up to Installation\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 1439,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1619,
+          "bottom": 486.265625,
+          "left": 1439
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 1259,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1439,
+          "bottom": 486.265625,
+          "left": 1259
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 767,
+          "y": 469.265625,
+          "width": 0,
+          "height": 22,
+          "top": 469.265625,
+          "right": 767,
+          "bottom": 491.265625,
+          "left": 767
+        }
+      }
+    ],
+    "h1": {
+      "text": "Debian",
+      "box": {
+        "x": 607,
+        "y": 516.265625,
+        "width": 1012,
+        "height": 50.59375,
+        "top": 516.265625,
+        "right": 1619,
+        "bottom": 566.859375,
+        "left": 607
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 607,
+        "y": 392,
+        "width": 1012,
+        "height": 44.265625,
+        "top": 392,
+        "right": 1619,
+        "bottom": 436.265625,
+        "left": 607
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-installation.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-debian"
+    ]
+  },
+  {
+    "page": "docs/installation/debian.md",
+    "width": 1920,
+    "theme": "dark",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/debian.md",
+    "article": {
+      "x": 607,
+      "y": 376,
+      "width": 1012,
+      "height": 230.859375,
+      "top": 376,
+      "right": 1619,
+      "bottom": 606.859375,
+      "left": 607
+    },
+    "background": "rgb(13, 17, 23)",
+    "buttons": [
+      {
+        "title": "Up to Installation",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/README.md#page-overview",
+        "img": {
+          "x": 607,
+          "y": 458.265625,
+          "width": 160,
+          "height": 28,
+          "top": 458.265625,
+          "right": 767,
+          "bottom": 486.265625,
+          "left": 607
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-installation-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-installation-light.svg\" alt=\"Up to Installation\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 1439,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1619,
+          "bottom": 486.265625,
+          "left": 1439
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 1259,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1439,
+          "bottom": 486.265625,
+          "left": 1259
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 767,
+          "y": 469.265625,
+          "width": 0,
+          "height": 22,
+          "top": 469.265625,
+          "right": 767,
+          "bottom": 491.265625,
+          "left": 767
+        }
+      }
+    ],
+    "h1": {
+      "text": "Debian",
+      "box": {
+        "x": 607,
+        "y": 516.265625,
+        "width": 1012,
+        "height": 50.59375,
+        "top": 516.265625,
+        "right": 1619,
+        "bottom": 566.859375,
+        "left": 607
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 607,
+        "y": 392,
+        "width": 1012,
+        "height": 44.265625,
+        "top": 392,
+        "right": 1619,
+        "bottom": 436.265625,
+        "left": 607
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-installation.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-debian"
+    ]
+  },
+  {
+    "page": "docs/installation/debian.md",
+    "width": 390,
+    "theme": "light",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/debian.md",
+    "article": {
+      "x": 33,
+      "y": 492,
+      "width": 309,
+      "height": 284.59375,
+      "top": 492,
+      "right": 342,
+      "bottom": 776.59375,
+      "left": 33
+    },
+    "background": "rgb(255, 255, 255)",
+    "buttons": [
+      {
+        "title": "Up to Installation",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/README.md#page-overview",
+        "img": {
+          "x": 33,
+          "y": 548,
+          "width": 160,
+          "height": 28,
+          "top": 548,
+          "right": 193,
+          "bottom": 576,
+          "left": 33
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-installation-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-installation-light.svg\" alt=\"Up to Installation\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 162,
+          "y": 582,
+          "width": 180,
+          "height": 28,
+          "top": 582,
+          "right": 342,
+          "bottom": 610,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 162,
+          "y": 610,
+          "width": 180,
+          "height": 28,
+          "top": 610,
+          "right": 342,
+          "bottom": 638,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 193,
+          "y": 559,
+          "width": 0,
+          "height": 22,
+          "top": 559,
+          "right": 193,
+          "bottom": 581,
+          "left": 193
+        }
+      }
+    ],
+    "h1": {
+      "text": "Debian",
+      "box": {
+        "x": 33,
+        "y": 662,
+        "width": 309,
+        "height": 50.59375,
+        "top": 662,
+        "right": 342,
+        "bottom": 712.59375,
+        "left": 33
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 33,
+        "y": 512.484375,
+        "width": 309,
+        "height": 13.515625,
+        "top": 512.484375,
+        "right": 342,
+        "bottom": 526,
+        "left": 33
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-installation.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-debian"
+    ]
+  },
+  {
+    "page": "docs/installation/debian.md",
+    "width": 390,
+    "theme": "dark",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/debian.md",
+    "article": {
+      "x": 33,
+      "y": 492,
+      "width": 309,
+      "height": 284.59375,
+      "top": 492,
+      "right": 342,
+      "bottom": 776.59375,
+      "left": 33
+    },
+    "background": "rgb(13, 17, 23)",
+    "buttons": [
+      {
+        "title": "Up to Installation",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/installation/README.md#page-overview",
+        "img": {
+          "x": 33,
+          "y": 548,
+          "width": 160,
+          "height": 28,
+          "top": 548,
+          "right": 193,
+          "bottom": 576,
+          "left": 33
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-installation-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-installation-light.svg\" alt=\"Up to Installation\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 162,
+          "y": 582,
+          "width": 180,
+          "height": 28,
+          "top": 582,
+          "right": 342,
+          "bottom": 610,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 162,
+          "y": 610,
+          "width": 180,
+          "height": 28,
+          "top": 610,
+          "right": 342,
+          "bottom": 638,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 193,
+          "y": 559,
+          "width": 0,
+          "height": 22,
+          "top": 559,
+          "right": 193,
+          "bottom": 581,
+          "left": 193
+        }
+      }
+    ],
+    "h1": {
+      "text": "Debian",
+      "box": {
+        "x": 33,
+        "y": 662,
+        "width": 309,
+        "height": 50.59375,
+        "top": 662,
+        "right": 342,
+        "bottom": 712.59375,
+        "left": 33
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 33,
+        "y": 512.484375,
+        "width": 309,
+        "height": 13.515625,
+        "top": 512.484375,
+        "right": 342,
+        "bottom": 526,
+        "left": 33
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-installation.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-debian"
+    ]
+  },
+  {
+    "page": "keys/README.md",
+    "width": 1920,
+    "theme": "light",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/keys/README.md",
+    "article": {
+      "x": 607,
+      "y": 376,
+      "width": 1012,
+      "height": 230.859375,
+      "top": 376,
+      "right": 1619,
+      "bottom": 606.859375,
+      "left": 607
+    },
+    "background": "rgb(255, 255, 255)",
+    "buttons": [
+      {
+        "title": "Up to Packages",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 607,
+          "y": 458.265625,
+          "width": 160,
+          "height": 28,
+          "top": 458.265625,
+          "right": 767,
+          "bottom": 486.265625,
+          "left": 607
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-packages-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-packages-light.svg\" alt=\"Up to Packages\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 1439,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1619,
+          "bottom": 486.265625,
+          "left": 1439
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 1259,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1439,
+          "bottom": 486.265625,
+          "left": 1259
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 767,
+          "y": 469.265625,
+          "width": 0,
+          "height": 22,
+          "top": 469.265625,
+          "right": 767,
+          "bottom": 491.265625,
+          "left": 767
+        }
+      }
+    ],
+    "h1": {
+      "text": "Package signing keys",
+      "box": {
+        "x": 607,
+        "y": 516.265625,
+        "width": 1012,
+        "height": 50.59375,
+        "top": 516.265625,
+        "right": 1619,
+        "bottom": 566.859375,
+        "left": 607
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 607,
+        "y": 392,
+        "width": 1012,
+        "height": 44.265625,
+        "top": 392,
+        "right": 1619,
+        "bottom": 436.265625,
+        "left": 607
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-signing-keys.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-package-signing-keys"
+    ]
+  },
+  {
+    "page": "keys/README.md",
+    "width": 1920,
+    "theme": "dark",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/keys/README.md",
+    "article": {
+      "x": 607,
+      "y": 376,
+      "width": 1012,
+      "height": 230.859375,
+      "top": 376,
+      "right": 1619,
+      "bottom": 606.859375,
+      "left": 607
+    },
+    "background": "rgb(13, 17, 23)",
+    "buttons": [
+      {
+        "title": "Up to Packages",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 607,
+          "y": 458.265625,
+          "width": 160,
+          "height": 28,
+          "top": 458.265625,
+          "right": 767,
+          "bottom": 486.265625,
+          "left": 607
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-packages-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-packages-light.svg\" alt=\"Up to Packages\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 1439,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1619,
+          "bottom": 486.265625,
+          "left": 1439
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 1259,
+          "y": 458.265625,
+          "width": 180,
+          "height": 28,
+          "top": 458.265625,
+          "right": 1439,
+          "bottom": 486.265625,
+          "left": 1259
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 767,
+          "y": 469.265625,
+          "width": 0,
+          "height": 22,
+          "top": 469.265625,
+          "right": 767,
+          "bottom": 491.265625,
+          "left": 767
+        }
+      }
+    ],
+    "h1": {
+      "text": "Package signing keys",
+      "box": {
+        "x": 607,
+        "y": 516.265625,
+        "width": 1012,
+        "height": 50.59375,
+        "top": 516.265625,
+        "right": 1619,
+        "bottom": 566.859375,
+        "left": 607
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 607,
+        "y": 392,
+        "width": 1012,
+        "height": 44.265625,
+        "top": 392,
+        "right": 1619,
+        "bottom": 436.265625,
+        "left": 607
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-signing-keys.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-package-signing-keys"
+    ]
+  },
+  {
+    "page": "keys/README.md",
+    "width": 390,
+    "theme": "light",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/keys/README.md",
+    "article": {
+      "x": 33,
+      "y": 492,
+      "width": 309,
+      "height": 324.59375,
+      "top": 492,
+      "right": 342,
+      "bottom": 816.59375,
+      "left": 33
+    },
+    "background": "rgb(255, 255, 255)",
+    "buttons": [
+      {
+        "title": "Up to Packages",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 33,
+          "y": 548,
+          "width": 160,
+          "height": 28,
+          "top": 548,
+          "right": 193,
+          "bottom": 576,
+          "left": 33
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-packages-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-packages-light.svg\" alt=\"Up to Packages\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 162,
+          "y": 582,
+          "width": 180,
+          "height": 28,
+          "top": 582,
+          "right": 342,
+          "bottom": 610,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 162,
+          "y": 610,
+          "width": 180,
+          "height": 28,
+          "top": 610,
+          "right": 342,
+          "bottom": 638,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 193,
+          "y": 559,
+          "width": 0,
+          "height": 22,
+          "top": 559,
+          "right": 193,
+          "bottom": 581,
+          "left": 193
+        }
+      }
+    ],
+    "h1": {
+      "text": "Package signing keys",
+      "box": {
+        "x": 33,
+        "y": 662,
+        "width": 309,
+        "height": 90.59375,
+        "top": 662,
+        "right": 342,
+        "bottom": 752.59375,
+        "left": 33
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 33,
+        "y": 512.484375,
+        "width": 309,
+        "height": 13.515625,
+        "top": 512.484375,
+        "right": 342,
+        "bottom": 526,
+        "left": 33
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-signing-keys.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-package-signing-keys"
+    ]
+  },
+  {
+    "page": "keys/README.md",
+    "width": 390,
+    "theme": "dark",
+    "url": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/keys/README.md",
+    "article": {
+      "x": 33,
+      "y": 492,
+      "width": 309,
+      "height": 324.59375,
+      "top": 492,
+      "right": 342,
+      "bottom": 816.59375,
+      "left": 33
+    },
+    "background": "rgb(13, 17, 23)",
+    "buttons": [
+      {
+        "title": "Up to Packages",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 33,
+          "y": 548,
+          "width": 160,
+          "height": 28,
+          "top": 548,
+          "right": 193,
+          "bottom": 576,
+          "left": 33
+        },
+        "align": null,
+        "float": "none",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-packages-dark.svg\"><img src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/up-packages-light.svg\" alt=\"Up to Packages\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "SNodeC organization",
+        "href": "https://github.com/SNodeC",
+        "img": {
+          "x": 162,
+          "y": 582,
+          "width": 180,
+          "height": 28,
+          "top": 582,
+          "right": 342,
+          "bottom": 610,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/organization-light.svg\" alt=\"SNodeC organization\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      },
+      {
+        "title": "Packages repository",
+        "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/README.md#project-overview",
+        "img": {
+          "x": 162,
+          "y": 610,
+          "width": 180,
+          "height": 28,
+          "top": 610,
+          "right": 342,
+          "bottom": 638,
+          "left": 162
+        },
+        "align": "right",
+        "float": "right",
+        "picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-dark.svg\"><img align=\"right\" src=\"/SNodeC/.github/raw/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/repository-light.svg\" alt=\"Packages repository\" width=\"160\" height=\"28\" style=\"visibility: visible; max-width: 100%;\"></picture>"
+      }
+    ],
+    "clear": [
+      {
+        "attribute": "all",
+        "computed": "both",
+        "box": {
+          "x": 193,
+          "y": 559,
+          "width": 0,
+          "height": 22,
+          "top": 559,
+          "right": 193,
+          "bottom": 581,
+          "left": 193
+        }
+      }
+    ],
+    "h1": {
+      "text": "Package signing keys",
+      "box": {
+        "x": 33,
+        "y": 662,
+        "width": 309,
+        "height": 90.59375,
+        "top": 662,
+        "right": 342,
+        "bottom": 752.59375,
+        "left": 33
+      }
+    },
+    "banner": {
+      "box": {
+        "x": 33,
+        "y": 512.484375,
+        "width": 309,
+        "height": 13.515625,
+        "top": 512.484375,
+        "right": 342,
+        "bottom": 526,
+        "left": 33
+      },
+      "parent": "A",
+      "href": "https://github.com/SNodeC/.github/blob/feat/navigation-plan-and-page-headers/navigation/preview/Packages/docs/media/nav/banner-signing-keys.svg"
+    },
+    "broken": [],
+    "ids": [
+      "user-content-page-overview",
+      "user-content-package-signing-keys"
+    ]
+  }
+]

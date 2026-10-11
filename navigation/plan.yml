@@ -850,3 +850,18 @@ Packages:
   - pages: [status/snodec.md, status/mqttsuite.md]
     label: All projects
     remove: true
+# Visible-label shortening required by the approved 160px menu rule.
+# Destinations, tooltips and alternative text remain unchanged.
+menu_labels:
+  Native client & server: Client/server
+  SSE & WebSocket: SSE/WebSocket
+  Subprotocol source: Subprotocol
+  Signed packages: Packages
+  Build from source: From source
+  Mapping examples: Examples
+  Mapping schema: Map schema
+  MQTTStore guide: Store guide
+  Projection schema: Projection
+  Grouping & lifecycle: Groups/lifecycle
+  Browser frontend: Browser
+  Selected packages: Selected
