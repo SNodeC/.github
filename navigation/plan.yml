@@ -1,0 +1,867 @@
+snode.c:
+  display: SNode.C
+  source: snode.c
+  sections:
+    docs: Documentation
+    docs/guides: Guides
+    docs/logging: Logging
+    docs/design: Design
+  media:
+  - src: docs/readme/media/
+    dst: docs/media/
+  pages:
+  - old: docs/index.md
+    new: docs/README.md
+    kind: doc
+    title: SNode.C documentation
+    label: Documentation
+    up: README.md
+    up_label: SNode.C
+  - old: null
+    new: docs/design/README.md
+    kind: section
+    title: Design
+    label: Design
+    up: docs/README.md
+    up_label: Documentation
+    intro: Design notes on stream shutdown, resource policies and configuration metadata.
+  - old: docs/config-comment-metadata.md
+    new: docs/design/config-comment-metadata.md
+    kind: doc
+    title: Configuration comment metadata
+    label: Design
+    up: docs/design/README.md
+    up_label: Design
+  - old: docs/resource-policy-and-streaming.md
+    new: docs/design/resource-policies-and-streaming.md
+    kind: doc
+    title: Framework resource policies and descriptor streaming
+    label: Design
+    up: docs/design/README.md
+    up_label: Design
+  - old: docs/core-stream-shutdown-lifecycle.md
+    new: docs/design/stream-shutdown-lifecycle.md
+    kind: doc
+    title: Established stream shutdown lifecycle
+    label: Design
+    up: docs/design/README.md
+    up_label: Design
+  - old: null
+    new: docs/guides/README.md
+    kind: section
+    title: Guides
+    label: Guides
+    up: docs/README.md
+    up_label: Documentation
+    intro: Task-oriented guides for building, running and deploying SNode.C applications.
+  - old: docs/readme/install.md
+    new: docs/guides/build-from-source.md
+    kind: doc
+    title: Build and install SNode.C from source
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/readme/capabilities.md
+    new: docs/guides/capabilities.md
+    kind: doc
+    title: SNode.C capability map
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/readme/deployment.md
+    new: docs/guides/deployment.md
+    kind: doc
+    title: Deploy an SNode.C application
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/readme/examples.md
+    new: docs/guides/examples.md
+    kind: doc
+    title: Build something with SNode.C
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: null
+    new: docs/logging/README.md
+    kind: section
+    title: Logging
+    label: Logging
+    up: docs/README.md
+    up_label: Documentation
+    intro: The public logging API and the format of its semantic text output.
+  - old: docs/logging/public-log-api.md
+    new: docs/logging/public-api.md
+    kind: doc
+    title: Public logging API
+    label: Logging
+    up: docs/logging/README.md
+    up_label: Logging
+  - old: docs/logging/semantic-text-output-format.md
+    new: docs/logging/text-output-format.md
+    kind: doc
+    title: Semantic text output format
+    label: Logging
+    up: docs/logging/README.md
+    up_label: Logging
+  - old: examples/echo/README.md
+    new: examples/echo/README.md
+    kind: code
+    title: External SNode.C echo pair
+    label: Examples
+    up: README.md
+    up_label: SNode.C
+  - old: src/apps/README.md
+    new: src/apps/README.md
+    kind: code
+    title: Example application inventory
+    label: Examples
+    up: README.md
+    up_label: SNode.C
+  - old: src/apps/oauth2/authorization_server/vue-frontend-oauth2-auth-server/README.md
+    new: src/apps/oauth2/authorization_server/vue-frontend-oauth2-auth-server/README.md
+    kind: code
+    title: Vue 3 + TypeScript + Vite
+    label: Examples
+    up: src/apps/README.md
+    up_label: Examples
+    excluded: true
+  - old: src/apps/oauth2/client_app/vue-frontend-oauth2-client/README.md
+    new: src/apps/oauth2/client_app/vue-frontend-oauth2-client/README.md
+    kind: code
+    title: Vue 3 + TypeScript + Vite
+    label: Examples
+    up: src/apps/README.md
+    up_label: Examples
+    excluded: true
+  - old: src/express/express-compat-suite/README.md
+    new: src/express/express-compat-suite/README.md
+    kind: code
+    title: Express Compatibility Suite (Node.js/Express v4 vs SNode.C/Express)
+    label: Tests
+    up: README.md
+    up_label: SNode.C
+  - old: src/tools/snodec-control/README.md
+    new: src/tools/snodec-control/README.md
+    kind: code
+    title: snodec-control
+    label: Tools
+    up: README.md
+    up_label: SNode.C
+  - old: src/tools/snodec-control/tests/fixtures/README.md
+    new: src/tools/snodec-control/tests/fixtures/README.md
+    kind: code
+    title: Test fixtures
+    label: Tools
+    up: src/tools/snodec-control/README.md
+    up_label: snodec-control
+  - old: src/tools/snodec-control/tests/manual/smoke-ui-notes.md
+    new: src/tools/snodec-control/tests/manual/smoke-ui-notes.md
+    kind: code
+    title: Manual UI smoke test notes
+    label: Tools
+    up: src/tools/snodec-control/README.md
+    up_label: snodec-control
+  - old: tests/component/net/README.md
+    new: tests/component/net/README.md
+    kind: code
+    title: Legacy Stream Component Test Coverage
+    label: Tests
+    up: README.md
+    up_label: SNode.C
+mqttsuite:
+  display: MQTTSuite
+  source: mqttsuite
+  sections:
+    docs: Documentation
+    docs/guides: Guides
+  media:
+  - src: docs/readme/media/
+    dst: docs/media/
+  - src: docs/images/
+    dst: docs/media/
+  pages:
+  - old: docs/index.md
+    new: docs/README.md
+    kind: doc
+    title: MQTTSuite documentation
+    label: Documentation
+    up: README.md
+    up_label: MQTTSuite
+  - old: null
+    new: docs/guides/README.md
+    kind: section
+    title: Guides
+    label: Guides
+    up: docs/README.md
+    up_label: Documentation
+    intro: Guides for building, deploying, bridging, mapping and storing with MQTTSuite.
+  - old: docs/readme/bridging.md
+    new: docs/guides/bridging.md
+    kind: doc
+    title: Connect two brokers
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/readme/install.md
+    new: docs/guides/build-from-source.md
+    kind: doc
+    title: Build and install MQTTSuite from source
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/readme/deployment.md
+    new: docs/guides/deployment.md
+    kind: doc
+    title: Operate MQTTSuite deliberately
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/readme/mapping.md
+    new: docs/guides/mapping.md
+    kind: doc
+    title: Map messages into the form your application needs
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/readme/storage.md
+    new: docs/guides/storage.md
+    kind: doc
+    title: Persist messages and project useful fields
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/mqttstore-user-guide.md
+    new: docs/mqttstore-user-guide.md
+    kind: doc
+    title: MQTTStore User Guide
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+AISuite:
+  display: AISuite
+  source: AISuite
+  sections:
+    docs: Documentation
+    docs/guides: Guides
+    docs/codex: Codex
+    docs/architecture: Architecture
+    docs/records: Records
+  media: []
+  pages:
+  - old: docs/index.md
+    new: docs/README.md
+    kind: doc
+    title: AISuite documentation
+    label: Documentation
+    up: README.md
+    up_label: AISuite
+  - old: null
+    new: docs/architecture/README.md
+    kind: section
+    title: Architecture
+    label: Architecture
+    up: docs/README.md
+    up_label: Documentation
+    intro: Architecture of the codex bridge and the studies of SNode.C and MQTTSuite it is based on.
+  - old: src/ai/openai/codex/docs/architecture.md
+    new: docs/architecture/codex-bridge.md
+    kind: doc
+    title: codex / codex-bridge Architecture
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: src/ai/openai/codex/docs/mqttsuite-architecture-study.md
+    new: docs/architecture/mqttsuite-study.md
+    kind: doc
+    title: MQTTSuite Architecture Study for codex
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: src/ai/openai/codex/docs/snodec-architecture-study.md
+    new: docs/architecture/snodec-study.md
+    kind: doc
+    title: SNode.C Architecture Study for codex
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: null
+    new: docs/codex/README.md
+    kind: section
+    title: Codex
+    label: Codex
+    up: docs/README.md
+    up_label: Documentation
+    intro: Codex-specific policies and the supported Codex Responses compatibility profile.
+  - old: docs/codex-observer-policy.md
+    new: docs/codex/observer-policy.md
+    kind: doc
+    title: Codex bridge observer policy
+    label: Codex
+    up: docs/codex/README.md
+    up_label: Codex
+  - old: docs/codex-responses-profile.md
+    new: docs/codex/responses-profile.md
+    kind: doc
+    title: 'Codex Responses compatibility profile: 0.154.0'
+    label: Codex
+    up: docs/codex/README.md
+    up_label: Codex
+  - old: null
+    new: docs/guides/README.md
+    kind: section
+    title: Guides
+    label: Guides
+    up: docs/README.md
+    up_label: Documentation
+    intro: Building AISuite and choosing agent runtimes and model providers.
+  - old: docs/agent-providers.md
+    new: docs/guides/agent-providers.md
+    kind: doc
+    title: Agent runtimes and model providers
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/build.md
+    new: docs/guides/build-from-source.md
+    kind: doc
+    title: Build and install AISuite from source
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/media/README.md
+    new: docs/media/README.md
+    kind: doc
+    title: Landing-page assets
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+    excluded: true
+  - old: null
+    new: docs/records/README.md
+    kind: section
+    title: Records
+    label: Records
+    up: docs/README.md
+    up_label: Documentation
+    intro: Implementation and verification records.
+  - old: docs/records/anthropic-verification.md
+    new: docs/records/anthropic-verification.md
+    kind: doc
+    title: Implementation and verification record
+    label: Records
+    up: docs/records/README.md
+    up_label: Records
+  - old: docs/records/observer-verification.md
+    new: docs/records/observer-verification.md
+    kind: doc
+    title: Observer Verification
+    label: Records
+    up: docs/records/README.md
+    up_label: Records
+  - old: packages/codex-frontend/README.md
+    new: packages/codex-frontend/README.md
+    kind: code
+    title: '`@snodec/codex-frontend`'
+    label: Frontend SDK
+    up: README.md
+    up_label: AISuite
+CodexUI:
+  display: CodexUI
+  source: CodexUI
+  sections:
+    docs: Documentation
+    docs/guides: Guides
+    docs/architecture: Architecture
+    docs/architecture/remediation: Remediation
+    docs/architecture/reviews: Reviews
+    docs/web: Web UI
+    docs/qualification: Qualification
+    docs/records: Records
+    docs/ui-review: UI review
+  media:
+  - src: ui-review/screenshots/
+    dst: docs/media/ui-review/
+  pages:
+  - old: docs/index.md
+    new: docs/README.md
+    kind: doc
+    title: Codex(W)UI documentation
+    label: Documentation
+    up: README.md
+    up_label: CodexUI
+  - old: null
+    new: docs/architecture/README.md
+    kind: section
+    title: Architecture
+    label: Architecture
+    up: docs/README.md
+    up_label: Documentation
+    intro: Architecture, internal contracts and design analyses of CodexUI.
+  - old: docs/app-server-protocol/master-data-model.md
+    new: docs/architecture/app-server-data-model.md
+    kind: doc
+    title: Historical Codex app-server protocol and proposed master data model
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: docs/codex-architecture.md
+    new: docs/architecture/overview.md
+    kind: doc
+    title: CodexUI architecture
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: docs/qt-ui-architecture-audit.md
+    new: docs/architecture/qt-ui-audit.md
+    kind: doc
+    title: CodexUI Qt UI architecture and usability audit
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: docs/qt-virtualized-conversation-view.md
+    new: docs/architecture/qt-virtualized-conversation-view.md
+    kind: doc
+    title: Qt virtualized conversation view
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: null
+    new: docs/architecture/remediation/README.md
+    kind: section
+    title: Remediation
+    label: Remediation
+    up: docs/architecture/README.md
+    up_label: Architecture
+    intro: 'The Qt architecture remediation: findings ledger and working prompt.'
+  - old: docs/architecture/qt-remediation-findings-ledger.md
+    new: docs/architecture/remediation/findings-ledger.md
+    kind: doc
+    title: Qt architecture remediation findings ledger
+    label: Remediation
+    up: docs/architecture/remediation/README.md
+    up_label: Remediation
+  - old: docs/architecture/qt-remediation-thread-prompt.md
+    new: docs/architecture/remediation/thread-prompt.md
+    kind: doc
+    title: CodexUI Qt architecture remediation thread prompt
+    label: Remediation
+    up: docs/architecture/remediation/README.md
+    up_label: Remediation
+  - old: null
+    new: docs/architecture/reviews/README.md
+    kind: section
+    title: Reviews
+    label: Reviews
+    up: docs/architecture/README.md
+    up_label: Architecture
+    intro: Historical external architecture reviews; findings refer to their captured revision.
+  - old: docs/architecture/reviews/chatgpt-review.md
+    new: docs/architecture/reviews/chatgpt.md
+    kind: doc
+    title: External architecture review — ChatGPT
+    label: Reviews
+    up: docs/architecture/reviews/README.md
+    up_label: Reviews
+  - old: docs/architecture/reviews/claude-review-a.md
+    new: docs/architecture/reviews/claude-a.md
+    kind: doc
+    title: External architecture review — Claude A
+    label: Reviews
+    up: docs/architecture/reviews/README.md
+    up_label: Reviews
+  - old: docs/architecture/reviews/claude-review-b.md
+    new: docs/architecture/reviews/claude-b.md
+    kind: doc
+    title: External architecture review — Claude B
+    label: Reviews
+    up: docs/architecture/reviews/README.md
+    up_label: Reviews
+  - old: docs/two-thread-shared-node-graph.md
+    new: docs/architecture/shared-node-graph.md
+    kind: doc
+    title: 'Shared node graph: writer, UI and projection readers'
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: docs/architecture/timestamp-presentation.md
+    new: docs/architecture/timestamp-presentation.md
+    kind: doc
+    title: App-server timestamp presentation
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: docs/ui-ux-internal-api.md
+    new: docs/architecture/ui-internal-api.md
+    kind: doc
+    title: Native UI/UX internal API contract
+    label: Architecture
+    up: docs/architecture/README.md
+    up_label: Architecture
+  - old: null
+    new: docs/guides/README.md
+    kind: section
+    title: Guides
+    label: Guides
+    up: docs/README.md
+    up_label: Documentation
+    intro: Building CodexUI and using its native interface.
+  - old: docs/build.md
+    new: docs/guides/build-from-source.md
+    kind: doc
+    title: Build and install Codex(W)UI from source
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/ui-behavior.md
+    new: docs/guides/interaction-guide.md
+    kind: doc
+    title: Interaction guide
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/thread-projects-sections.md
+    new: docs/guides/thread-projects.md
+    kind: doc
+    title: Native thread projects and sections
+    label: Guides
+    up: docs/guides/README.md
+    up_label: Guides
+  - old: docs/media/README.md
+    new: docs/media/README.md
+    kind: doc
+    title: Landing-page assets
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+    excluded: true
+  - old: null
+    new: docs/qualification/README.md
+    kind: section
+    title: Qualification
+    label: Qualification
+    up: docs/README.md
+    up_label: Documentation
+    intro: The native interactive test suite and its recorded execution results.
+  - old: docs/native-ui-ux-qualification-results.md
+    new: docs/qualification/native-results-2026-09-27.md
+    kind: doc
+    title: Native qualification execution record — 2026-09-27
+    label: Qualification
+    up: docs/qualification/README.md
+    up_label: Qualification
+  - old: docs/native-ui-ux-qualification-inventory.md
+    new: docs/qualification/native-test-suite.md
+    kind: doc
+    title: CodexUI canonical interactive Xvfb test suite
+    label: Qualification
+    up: docs/qualification/README.md
+    up_label: Qualification
+  - old: null
+    new: docs/records/README.md
+    kind: section
+    title: Records
+    label: Records
+    up: docs/README.md
+    up_label: Documentation
+    intro: Verification records for individual features.
+  - old: docs/records/thread-projects-verification.md
+    new: docs/records/thread-projects-verification.md
+    kind: doc
+    title: Thread Projects Verification
+    label: Records
+    up: docs/records/README.md
+    up_label: Records
+  - old: docs/records/timestamp-verification.md
+    new: docs/records/timestamp-verification.md
+    kind: doc
+    title: Timestamp Verification
+    label: Records
+    up: docs/records/README.md
+    up_label: Records
+  - old: null
+    new: docs/ui-review/README.md
+    kind: section
+    title: UI review
+    label: UI review
+    up: docs/README.md
+    up_label: Documentation
+    intro: 'UI review material: inventory, state matrix, UX decisions and the code-polish roadmap.'
+  - old: ui-review/CODE-POLISH-ROADMAP.md
+    new: docs/ui-review/code-polish-roadmap.md
+    kind: doc
+    title: CodexUI code-polish roadmap
+    label: UI review
+    up: docs/ui-review/README.md
+    up_label: UI review
+  - old: ui-review/STATE-MATRIX.md
+    new: docs/ui-review/state-matrix.md
+    kind: doc
+    title: CodexUI Current Interaction State Matrix
+    label: UI review
+    up: docs/ui-review/README.md
+    up_label: UI review
+  - old: design/ux-decisions/thread-turn-model.md
+    new: docs/ui-review/thread-turn-model.md
+    kind: doc
+    title: 'CodexUI UX Decision: Threads, Turns, and Prompt Admission'
+    label: UI review
+    up: docs/ui-review/README.md
+    up_label: UI review
+  - old: ui-review/UI-INVENTORY.md
+    new: docs/ui-review/ui-inventory.md
+    kind: doc
+    title: CodexUI Current UI Inventory
+    label: UI review
+    up: docs/ui-review/README.md
+    up_label: UI review
+  - old: ui-review/UX-DESIGN-DECISIONS.md
+    new: docs/ui-review/ux-decisions.md
+    kind: doc
+    title: CodexUI UI/UX Decisions
+    label: UI review
+    up: docs/ui-review/README.md
+    up_label: UI review
+  - old: null
+    new: docs/web/README.md
+    kind: section
+    title: Web UI
+    label: Web UI
+    up: docs/README.md
+    up_label: Documentation
+    intro: The CodexWebUI 1.0 contract, its qualification and the release-candidate process.
+  - old: docs/web-1.0-contract.md
+    new: docs/web/contract-1.0.md
+    kind: doc
+    title: CodexWebUI 1.0 Contract
+    label: Web UI
+    up: docs/web/README.md
+    up_label: Web UI
+  - old: docs/web-qualification.md
+    new: docs/web/qualification.md
+    kind: doc
+    title: CodexWebUI qualification
+    label: Web UI
+    up: docs/web/README.md
+    up_label: Web UI
+  - old: docs/web-release.md
+    new: docs/web/release-process.md
+    kind: doc
+    title: CodexWebUI release-candidate process
+    label: Web UI
+    up: docs/web/README.md
+    up_label: Web UI
+  - old: web/README.md
+    new: web/README.md
+    kind: code
+    title: CodexWUI
+    label: Web UI
+    up: README.md
+    up_label: CodexUI
+Packages:
+  display: Packages
+  source: DistributionPackages/site
+  sections:
+    docs: Documentation
+    docs/installation: Installation
+    docs/catalogs: Catalogs
+    status: Package status
+  media: []
+  pages:
+  - old: null
+    new: docs/README.md
+    kind: section
+    title: Documentation
+    label: Documentation
+    up: README.md
+    up_label: Packages
+    intro: Installation guides, package catalogs, troubleshooting and how publication works.
+  - old: null
+    new: docs/catalogs/README.md
+    kind: section
+    title: Catalogs
+    label: Catalogs
+    up: docs/README.md
+    up_label: Documentation
+    intro: The package catalogs of SNode.C and MQTTSuite.
+  - old: docs/mqttsuite-package-options.md
+    new: docs/catalogs/mqttsuite.md
+    kind: doc
+    title: MQTTSuite package catalog
+    label: Catalogs
+    up: docs/catalogs/README.md
+    up_label: Catalogs
+  - old: docs/snodec-package-options.md
+    new: docs/catalogs/snodec.md
+    kind: doc
+    title: SNode.C package catalog
+    label: Catalogs
+    up: docs/catalogs/README.md
+    up_label: Catalogs
+  - old: null
+    new: docs/installation/README.md
+    kind: section
+    title: Installation
+    label: Installation
+    up: docs/README.md
+    up_label: Documentation
+    intro: Installation guides per distribution and how to select DEB and RPM packages.
+  - old: docs/debian.md
+    new: docs/installation/debian.md
+    kind: doc
+    title: Debian
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+  - old: docs/fedora.md
+    new: docs/installation/fedora.md
+    kind: doc
+    title: Fedora
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+  - old: docs/install-mqttsuite.md
+    new: docs/installation/install-mqttsuite.md
+    kind: doc
+    title: Install MQTTSuite
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+    deleted: true
+  - old: docs/install-snodec.md
+    new: docs/installation/install-snodec.md
+    kind: doc
+    title: Install SNode.C
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+    deleted: true
+  - old: docs/openwrt.md
+    new: docs/installation/openwrt.md
+    kind: doc
+    title: OpenWrt
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+  - old: docs/linux.md
+    new: docs/installation/package-selection.md
+    kind: doc
+    title: DEB and RPM package selection
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+  - old: docs/raspberrypi.md
+    new: docs/installation/raspberry-pi-os.md
+    kind: doc
+    title: Raspberry Pi OS
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+  - old: docs/rocky.md
+    new: docs/installation/rocky-linux.md
+    kind: doc
+    title: Rocky Linux
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+  - old: docs/ubuntu.md
+    new: docs/installation/ubuntu.md
+    kind: doc
+    title: Ubuntu
+    label: Installation
+    up: docs/installation/README.md
+    up_label: Installation
+  - old: docs/maintainers.md
+    new: docs/maintainers.md
+    kind: doc
+    title: Publication and maintenance
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+    deleted: true
+  - old: docs/architecture.md
+    new: docs/publication.md
+    kind: doc
+    title: How publication works
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+  - old: docs/setup.md
+    new: docs/setup.md
+    kind: doc
+    title: Maintainer setup
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+    deleted: true
+  - old: docs/status.md
+    new: docs/status.md
+    kind: doc
+    title: (generated)
+    label: Package status
+    up: status/README.md
+    up_label: Package status
+  - old: docs/troubleshooting.md
+    new: docs/troubleshooting.md
+    kind: doc
+    title: Troubleshooting
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+  - old: keys/README.md
+    new: keys/README.md
+    kind: code
+    title: Package signing keys
+    label: Signing keys
+    up: README.md
+    up_label: Packages
+  - old: status/README.md
+    new: status/README.md
+    kind: doc
+    title: (generated)
+    label: Package status
+    up: README.md
+    up_label: Packages
+  - old: status/mqttsuite.md
+    new: status/mqttsuite.md
+    kind: doc
+    title: (generated)
+    label: Package status
+    up: status/README.md
+    up_label: Package status
+  - old: status/snodec.md
+    new: status/snodec.md
+    kind: doc
+    title: (generated)
+    label: Package status
+    up: status/README.md
+    up_label: Package status
+  menu_changes:
+  - pages:
+    - docs/installation/debian.md
+    - docs/installation/ubuntu.md
+    - docs/installation/fedora.md
+    - docs/installation/rocky-linux.md
+    - docs/installation/raspberry-pi-os.md
+    - docs/installation/openwrt.md
+    label: Install
+    target: '#quick-install'
+    replacement: Quick install
+  - pages: [status/snodec.md, status/mqttsuite.md]
+    label: All projects
+    remove: true
+# Visible-label shortening required by the approved 160px menu rule.
+# Destinations, tooltips and alternative text remain unchanged.
+menu_labels:
+  Native client & server: Client/server
+  SSE & WebSocket: SSE/WebSocket
+  Subprotocol source: Subprotocol
+  Signed packages: Packages
+  Build from source: From source
+  Mapping examples: Examples
+  Mapping schema: Map schema
+  MQTTStore guide: Store guide
+  Projection schema: Projection
+  Grouping & lifecycle: Groups/lifecycle
+  Browser frontend: Browser
+  Selected packages: Selected
