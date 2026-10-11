@@ -100,6 +100,7 @@ class ProfileTests(unittest.TestCase):
         headings = re.findall(r"^## (.+)$", self.profile, re.M)
         self.assertEqual(headings, ["Start here", *list(AREAS.values())[:-1]])
         self.assertIn("[examples](#learn)", self.profile)
+        self.assertIn("**Install signed packages:** [Packages](https://github.com/SNodeC/Packages) · snode.c · mqttsuite", self.profile)
         for name in ("snode.c", "mqttsuite", "SNode.C-Book-Companion", "Packages"):
             self.assertIn("https://github.com/SNodeC/" + name, self.profile)
         self.assertIn('alt="SNode.C mark"', self.profile)
@@ -130,6 +131,17 @@ class ProfileTests(unittest.TestCase):
         self.assertNotRegex(self.profile, r"\b\d+ (?:projects|repositories)\b")
         self.assertNotIn("2026-10-10", self.profile)
 
+    def test_install_scope_follows_catalog(self):
+        catalog = [dict(entry) for entry in self.catalog]
+        next(entry for entry in catalog if entry["name"] == "AISuite")["packaged"] = True
+        next(entry for entry in catalog if entry["name"] == "snode.c")["status"] = "retired"
+        install = next(line for line in render_profile(catalog, self.metadata).splitlines() if "**Install signed packages:**" in line)
+        self.assertTrue(install.endswith("mqttsuite · AISuite"))
+        for entry in catalog:
+            entry["packaged"] = False
+        install = next(line for line in render_profile(catalog, self.metadata).splitlines() if "**Install signed packages:**" in line)
+        self.assertTrue(install.endswith("[Packages](https://github.com/SNodeC/Packages)"))
+
     def test_every_repository_once_and_archived_separately(self):
         for entry in self.catalog:
             self.assertEqual(self.profile.replace("&#8203;", "").count(f"| [{entry['name']}]("), 1)
@@ -139,7 +151,7 @@ class ProfileTests(unittest.TestCase):
             if entry["status"] != "active":
                 self.assertNotIn(row, visible)
                 self.assertIn(row, archive)
-        forks = visible.split("<summary>Upstream forks — kept for future work</summary>")[1]
+        forks = visible.split("<summary>Upstream forks</summary>")[1]
         for entry in self.catalog:
             if entry["kind"] == "fork":
                 self.assertIn(f"| [{entry['name']}](", forks)
