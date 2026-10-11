@@ -108,7 +108,7 @@ def render_profile(catalog, metadata):
         f"- **Run MQTT infrastructure:** [MQTTSuite]({repo_url('mqttsuite', metadata.get('mqttsuite', {}).get('readme_anchor', ''))})",
         f"- **Learn:** [Book companion]({repo_url('SNode.C-Book-Companion')}) and [examples](#learn)",
         "- **Install signed packages:** " + " · ".join([f"[Packages]({repo_url('Packages')})", *(text(entry["name"]) for entry in catalog if entry.get("packaged") and entry["status"] == "active")]),
-        "\n<p>\n" + "\n".join(f'<a href="#{title.lower().replace(" & ", "--").replace(" ", "-")}" title="{html.escape(title)}"><img src="media/menu/{area}-108.svg" alt="{html.escape(title)}" width="108" height="24"></a>' for area, title in AREAS.items() if area != "forks") + "\n</p>\n",
+        "\n<p>\n" + "\n".join(f'<a href="#{title.lower().replace(" & ", "--").replace(" ", "-")}" title="{html.escape(title)}"><img src="media/menu/{area}-108.svg" alt="{html.escape(title)}" width="133" height="28"></a>' for area, title in AREAS.items() if area != "forks") + "\n</p>\n",
     ]
 
     def table(entries, forks=False):
