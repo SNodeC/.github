@@ -92,7 +92,8 @@ class NavigationTests(unittest.TestCase):
                     header = render_header(name, page['new'])
                     self.assertIn(header + '\n\n# ', text)
                     self.assertNotIn('<a href=', header.split('<p>')[1].split('</p>')[0])
-                    self.assertEqual(header.count('<picture>'), 3)
+                    self.assertEqual(header.count('<picture>'), 4)
+                    self.assertEqual(header.count('width="160" height="28"'), 3)
                     self.assertEqual(header.count('align="right"'), 2)
                     self.assertIn('<br clear="all">', header)
                     for target in re.findall(r'(?:href|src|srcset)="([^"]+)"', header):
@@ -213,6 +214,36 @@ class NavigationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'git rm'):
             page_headers(repo)
         self.assertTrue(deleted.exists())
+
+    def test_responsive_banner_keeps_desktop_and_shared_identity(self):
+        for name, config in self.plan.items():
+            repo = self.fixture(name)
+            page_headers(repo)
+            for page in config['pages']:
+                if page.get('deleted') or page.get('excluded'):
+                    continue
+                header = render_header(name, page['new'])
+                banner = header.split('<p>')[1].split('</p>')[0]
+                self.assertIn('<source media="(max-width: 640px)"', banner)
+                self.assertIn('-compact.svg', banner)
+                self.assertNotIn('<a href=', banner)
+            for path in (repo / 'docs/media/nav').glob('banner-*-compact.svg'):
+                mobile = ET.parse(path).getroot()
+                desktop_path = path.with_name(path.name.replace('-compact.svg', '.svg'))
+                desktop = ET.parse(desktop_path).getroot()
+                self.assertEqual(mobile.attrib['viewBox'], '0 0 480 72')
+                self.assertEqual(desktop.attrib['viewBox'], '0 0 1280 56')
+                self.assertEqual(mobile.attrib['aria-label'], desktop.attrib['aria-label'])
+                texts = mobile.findall(NS + 'text')
+                self.assertEqual([t.text for t in texts], [t.text for t in desktop.findall(NS + 'text')])
+                self.assertEqual([(t.attrib['x'], t.attrib['y']) for t in texts], [('84', '32'), ('84', '58')])
+                self.assertGreaterEqual(float(texts[0].attrib['font-size']) * 309 / 480, 16)
+                self.assertEqual([p.attrib['d'] for p in mobile.iter(NS + 'path')],
+                                 [p.attrib['d'] for p in desktop.iter(NS + 'path')])
+                golden = ROOT / 'navigation/preview/Packages/docs/media/nav' / desktop_path.name
+                if name == 'Packages':
+                    self.assertEqual(desktop_path.read_bytes(), golden.read_bytes())
+            self.assertEqual(page_headers(repo, check=True), [])
 
     def test_short_labels_do_not_change_accessible_destination(self):
         repo = self.fixture('Packages')

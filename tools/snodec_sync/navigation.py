@@ -117,8 +117,10 @@ def _header(config, page_path):
                button('repository', display + ' repository',
                       _relative('README.md', page_path) + '#project-overview', True)]
     return ('<!-- snodec:begin page-header -->\n<a id="page-overview"></a>\n'
-            f'<p><img src="{nav}/banner-{slug(page["label"])}.svg" '
-            f'alt="{escape(display + " — " + page["label"])}" width="100%"></p>\n'
+            f'<p><picture><source media="(max-width: 640px)" '
+            f'srcset="{nav}/banner-{slug(page["label"])}-compact.svg">'
+            f'<img src="{nav}/banner-{slug(page["label"])}.svg" '
+            f'alt="{escape(display + " — " + page["label"])}" width="100%"></picture></p>\n'
             '<p>' + ''.join(buttons) + '<br clear="all"></p>\n<!-- snodec:end page-header -->')
 
 
@@ -151,22 +153,23 @@ def _header_button(label, title, icon, color, theme):
                 f'fill="{text}">{html.escape(label)}</text>')
 
 
-def _banner(name, display, label, color):
+def _banner(name, display, label, color, compact=False):
     mark = ET.parse(ROOT / f'brand/navigation/marks/{name}.svg').getroot()
     x, y, width, height = map(float, mark.attrib['viewBox'].split())
     scale = 44 / height
     graphic = ''.join(ET.tostring(child, encoding='unicode') for child in mark)
-    transform = f'translate(46 28) scale({scale:.8f}) translate({-x-width/2:g} {-y-height/2:g})'
-    return _svg(1280, 56, display + ' — ' + label,
+    canvas_width, canvas_height = (480, 72) if compact else (1280, 56)
+    transform = f'translate(46 {canvas_height // 2}) scale({scale:.8f}) translate({-x-width/2:g} {-y-height/2:g})'
+    return _svg(canvas_width, canvas_height, display + ' — ' + label,
                 '<defs><linearGradient id="background" x2="1" y2="1">'
                 '<stop stop-color="#101f35"/><stop offset="1" stop-color="#172f47"/>'
-                '</linearGradient><clipPath id="rounded"><rect width="1280" height="56" rx="10"/>'
+                f'</linearGradient><clipPath id="rounded"><rect width="{canvas_width}" height="{canvas_height}" rx="10"/>'
                 '</clipPath></defs><g clip-path="url(#rounded)">'
-                '<rect width="1280" height="56" fill="url(#background)"/>'
-                f'<rect width="8" height="56" fill="{color}"/></g><g transform="{transform}">{graphic}</g>'
-                f'<text x="84" y="37" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="25" '
+                f'<rect width="{canvas_width}" height="{canvas_height}" fill="url(#background)"/>'
+                f'<rect width="8" height="{canvas_height}" fill="{color}"/></g><g transform="{transform}">{graphic}</g>'
+                f'<text x="84" y="{32 if compact else 37}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="25" '
                 f'font-weight="700" fill="#ffffff">{html.escape(display)}</text>'
-                f'<text x="1244" y="37" text-anchor="end" font-family="Segoe UI,Helvetica,Arial,sans-serif" '
+                f'<text x="{84 if compact else 1244}" y="{58 if compact else 37}" text-anchor="{"start" if compact else "end"}" font-family="Segoe UI,Helvetica,Arial,sans-serif" '
                 f'font-size="23" font-weight="600" fill="{color}">{html.escape(label)}</text>')
 
 
@@ -326,7 +329,8 @@ def page_headers(repo, check=False):
     outputs.update(texts)
     active = [p for p in config['pages'] if not p.get('deleted') and not p.get('excluded')]
     for label in sorted({p['label'] for p in active}):
-        outputs[f'docs/media/nav/banner-{slug(label)}.svg'] = _banner(name, config['display'], label, accent['dark']['text'])
+        for compact in (False, True):
+            outputs[f'docs/media/nav/banner-{slug(label)}{"-compact" if compact else ""}.svg'] = _banner(name, config['display'], label, accent['dark']['text'], compact)
     buttons = [('repository', 'Repository', config['display'] + ' repository', 'repo', accent),
                ('organization', 'Organization', 'SNodeC organization', 'organization', org_accent)]
     buttons += [('up-' + slug(label), label, 'Up to ' + label, 'arrow-up', accent)

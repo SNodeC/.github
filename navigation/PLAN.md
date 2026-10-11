@@ -268,3 +268,7 @@ The approved size rule requires shorter visible labels for these currently refer
 | Grouping & lifecycle | Groups/lifecycle |
 | Browser frontend | Browser |
 | Selected packages | Selected |
+
+## Owner-approved responsive banner extension
+
+Before Step 2, preserve the 1280×56 desktop banner unchanged and add a 480×72 compact variant. Native `<picture>` selects it at viewport widths up to 640px. Keep the repository graphic and accent; place name and section label on two lines. Header buttons, page paths, section hierarchy, introductions and Up chains are unchanged. This explicitly supersedes the original fixed-banner-only limitation, not the rest of the approved plan.
