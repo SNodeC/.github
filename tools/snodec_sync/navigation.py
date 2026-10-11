@@ -30,8 +30,10 @@ def validate_plan(plan):
                     or not isinstance(entry['path'], str) or not entry['path']
                     or PurePosixPath(entry['path']).is_absolute() or '..' in PurePosixPath(entry['path']).parts
                     or not isinstance(entry['reason'], str) or '\n' in entry['reason'] or '\r' in entry['reason']
-                    or not entry['reason'].lower().startswith(('vendored', 'third-party', 'generated test fixture'))):
-                raise ValueError(f'{name}: exempt requires a safe path glob and one-line vendored/third-party/generated test fixture reason')
+                    or not entry['reason'].lower().startswith(('vendored', 'third-party', 'generated test fixture', 'resolves in published packages'))):
+                raise ValueError(f'{name}: exempt requires a safe path glob and approved one-line reason')
+            if entry['reason'].lower().startswith('resolves in published packages') and (name != 'DistributionPackages' or not entry['path'].startswith('site/') or len(PurePosixPath(entry['path']).parts) < 3 or PurePosixPath(entry['path']).parts[1] == 'docs'):
+                raise ValueError('Published-output exemptions are limited to DistributionPackages/site targets')
         active = {}
         for page in config['pages']:
             for field in ('old', 'new', 'up'):
@@ -329,9 +331,11 @@ def page_headers(repo, check=False):
         body = texts[path].rstrip()
         if not page.get('excluded'):
             if path.endswith('/README.md') and posixpath.dirname(path) in config['sections']:
-                listing = _section_list(config, path, texts)
-                pattern = r'<!-- snodec:begin section-pages -->.*?<!-- snodec:end section-pages -->'
-                body = re.sub(pattern, listing, body, flags=re.S) if re.search(pattern, body, re.S) else body + '\n\n' + listing
+                listing = '## Sections\n\n' + _section_list(config, path, texts)
+                pattern = r'(?:## Sections\n\n)?<!-- snodec:begin section-pages -->.*?<!-- snodec:end section-pages -->'
+                body = re.sub(pattern, '', body, flags=re.S).rstrip()
+                prefix, separator, rest = body.partition('\n## ')
+                body = prefix.rstrip() + '\n\n' + listing + ('\n\n## ' + rest if separator else '')
             body = _header(config, path) + '\n\n' + body
         texts[path] = (prefixes[path] + '\n\n' if prefixes[path] else '') + body + '\n'
     outputs.update(texts)

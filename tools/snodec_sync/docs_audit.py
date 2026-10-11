@@ -124,7 +124,8 @@ def docs_audit(repo, plan_path=None):
     plan = yaml.safe_load(Path(plan_path or ROOT / 'navigation/plan.yml').read_text())
     validate_plan(plan)
     config = plan.get(name, {'pages': [], 'sections': {}})
-    exemptions = [entry['path'] for entry in config.get('exempt', [])]
+    exemptions = [entry['path'] for entry in config.get('exempt', []) if not entry['reason'].lower().startswith('resolves in published packages')]
+    refs = set(_git(repo, 'for-each-ref', '--format=%(refname:strip=3)', 'refs/remotes').splitlines())
     excluded = lambda path: '.github' in PurePosixPath(path).parts or 'node_modules' in PurePosixPath(path).parts or any(fnmatch.fnmatchcase(path, glob) for glob in exemptions)
     markdown = sorted(p for p in tracked if p.lower().endswith('.md') and not excluded(p))
     documents = {p: _document((repo / p).read_text()) for p in markdown}
@@ -144,14 +145,14 @@ def docs_audit(repo, plan_path=None):
             if not parts or parts[0] != 'SNodeC' or len(parts) < 2:
                 return None
             if len(parts) >= 3 and parts[2] in ('blob', 'tree'):
-                if len(parts) < 5 or not parts[3]:
+                if len(parts) < 4 or not parts[3] or parts[2] == 'blob' and len(parts) < 5:
                     report('broken-link', source, f'malformed SNodeC URL {href}')
                     return None
                 if parts[1] != name or re.fullmatch(r'[0-9a-fA-F]{40}', parts[3]):
                     return None
                 # A branch name can contain slashes: prefer the longest tracked suffix.
-                candidates = [unquote('/'.join(parts[i:])) for i in range(4, len(parts))]
-                target = next((p for p in candidates if p in tracked or any(t.startswith(p + '/') for t in tracked)), candidates[0])
+                candidates = [unquote('/'.join(parts[i:])) for i in range(4, len(parts))] or ['README.md']
+                target = 'README.md' if parts[2] == 'tree' and '/'.join(parts[3:]) in refs else next((p for p in candidates if p in tracked or any(t.startswith(p + '/') for t in tracked)), candidates[0])
             elif parts[1] == name and len(parts) == 2:
                 target = 'README.md'
             else:
@@ -169,6 +170,8 @@ def docs_audit(repo, plan_path=None):
                 if target not in tracked and not url.fragment:
                     return None
             else:
+                if any(entry['reason'].lower().startswith('resolves in published packages') and (fnmatch.fnmatchcase(target, entry['path']) or fnmatch.fnmatchcase(target + '/', entry['path'])) for entry in config.get('exempt', [])):
+                    return None
                 report('broken-link', source, href)
                 return None
         fragment = unquote(url.fragment)

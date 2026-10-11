@@ -931,6 +931,29 @@ menu_labels:
 
 DistributionPackages:
   display: DistributionPackages
+  exempt:
+  - path: site/install/install.sh
+    reason: Resolves in published Packages.
+  - path: site/status/**
+    reason: Resolves in published Packages.
+  - path: site/keys/*.asc
+    reason: Resolves in published Packages.
+  - path: site/keys/*.pub
+    reason: Resolves in published Packages.
+  - path: site/keys/*.pem
+    reason: Resolves in published Packages.
+  - path: site/debian/**
+    reason: Resolves in published Packages.
+  - path: site/ubuntu/**
+    reason: Resolves in published Packages.
+  - path: site/raspberrypios/**
+    reason: Resolves in published Packages.
+  - path: site/rocky/**
+    reason: Resolves in published Packages.
+  - path: site/fedora/**
+    reason: Resolves in published Packages.
+  - path: site/openwrt/**
+    reason: Resolves in published Packages.
   source: DistributionPackages
   sections:
     docs: Documentation
