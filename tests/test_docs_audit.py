@@ -95,6 +95,34 @@ class DocsAuditTests(unittest.TestCase):
         self.write('extra/note.md', '# Extra')
         self.assertEqual(self.audit(), [])
 
+    def test_remote_slash_branch_root_links_resolve_to_readme(self):
+        self.git('config', 'user.name', 'Audit fixture')
+        self.git('config', 'user.email', 'audit@example.invalid')
+        self.git('-c', 'commit.gpgsign=false', 'commit', '-qm', 'fixture')
+        self.git('update-ref', 'refs/remotes/origin/review/nested/branch', 'HEAD')
+        self.write('README.md', '[review](https://github.com/SNodeC/snode.c/tree/review/nested/branch)')
+        self.assertEqual(self.audit(), [])
+        self.write('README.md', '[missing](https://github.com/SNodeC/snode.c/tree/review/nested/branch/missing)')
+        self.assertTrue(any('broken-link' in e for e in self.audit()))
+
+    def test_published_targets_do_not_exempt_authored_source_pages(self):
+        self.git('remote', 'set-url', 'origin', 'git@github.com:SNodeC/DistributionPackages.git')
+        self.config = {'DistributionPackages': {'pages': [], 'sections': {}, 'exempt': [
+            {'path': 'site/status/**', 'reason': 'Resolves in published Packages.'},
+            {'path': 'site/fedora/**', 'reason': 'Resolves in published Packages.'}]}}
+        self.write('README.md', '[output](site/status/project.md#page-overview)\n[feed](site/fedora/)\n[bad](site/docs/missing.md)')
+        self.write('site/status/authored.md', '[broken](../docs/absent.md)')
+        errors = self.audit()
+        self.assertFalse(any('project.md' in e for e in errors))
+        self.assertTrue(any('site/docs/missing.md' in e for e in errors))
+        self.assertTrue(any('site/status/authored.md: unreachable-page' in e for e in errors))
+        self.assertTrue(any('site/status/authored.md: broken-link' in e for e in errors))
+        for name, path in [('snode.c', 'site/status/**'), ('DistributionPackages', 'docs/status/**'), ('DistributionPackages', 'site/**'), ('DistributionPackages', 'site/docs/**')]:
+            with self.subTest(name=name, path=path):
+                with self.assertRaises(ValueError):
+                    validate_plan({name: {'pages': [], 'sections': {}, 'exempt': [
+                        {'path': path, 'reason': 'Resolves in published Packages.'}]}})
+
     def test_commit_pinned_and_other_repository_links_are_not_head_checks(self):
         self.write('README.md', '[historic](https://github.com/SNodeC/snode.c/blob/'+'a'*40+'/gone.md#old)\n[other](https://github.com/SNodeC/mqttsuite/blob/master/elsewhere.md#unknown)')
         self.assertEqual(self.audit(), [])

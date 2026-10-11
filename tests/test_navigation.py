@@ -73,6 +73,17 @@ class NavigationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'unsafe'):
             validate_plan(invalid)
 
+    def test_sections_block_precedes_authored_sections_and_is_idempotent(self):
+        repo = self.fixture('snode.c')
+        page = repo / 'docs/README.md'
+        page.write_text(page.read_text() + '\n## Authored section\n\nPreserved authored paragraph.\n')
+        page_headers(repo)
+        text = page.read_text()
+        self.assertEqual(text.count('## Sections'), 1)
+        self.assertLess(text.index('## Sections'), text.index('## Authored section'))
+        self.assertIn('Preserved authored paragraph.', text)
+        self.assertEqual(page_headers(repo, check=True), [])
+
     def test_all_generated_links_and_assets_resolve(self):
         for name, config in self.plan.items():
             with self.subTest(repo=name):
