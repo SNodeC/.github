@@ -106,7 +106,7 @@ class ProfileTests(unittest.TestCase):
         self.assertIn('alt="SNode.C mark"', self.profile)
         import xml.etree.ElementTree as ET
         menu = re.search(r"<p>\n(.*?)\n</p>", self.profile, re.S).group(1)
-        buttons = re.findall(r'<a href="#([^"]+)" title="([^"]+)"><img src="([^"]+)" alt="([^"]+)" width="133" height="28"></a>', menu)
+        buttons = re.findall(r'<a href="#([^"]+)" title="([^"]+)"><img src="([^"]+)" alt="([^"]+)" width="160" height="28"></a>', menu)
         self.assertEqual(len(buttons), len(AREAS) - 1)
         self.assertNotIn("<details>", menu)
         self.assertNotIn("[Framework](#framework)", self.profile)
@@ -118,7 +118,7 @@ class ProfileTests(unittest.TestCase):
                 self.assertEqual(alt, label)
                 self.assertEqual(asset, f"media/menu/{area}-108.svg")
                 svg = ET.parse(ROOT / "profile" / asset).getroot()
-                self.assertEqual(svg.attrib["viewBox"], "0 0 133 28")
+                self.assertEqual(svg.attrib["viewBox"], "0 0 160 28")
                 self.assertEqual(svg.find("svg:title", ns).text, area.capitalize())
                 rect, text = svg.find("svg:rect", ns), svg.find("svg:text", ns)
                 self.assertEqual(text.text, area.capitalize())

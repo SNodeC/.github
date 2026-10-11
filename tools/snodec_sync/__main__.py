@@ -108,7 +108,7 @@ def render_profile(catalog, metadata):
         f"- **Run MQTT infrastructure:** [MQTTSuite]({repo_url('mqttsuite', metadata.get('mqttsuite', {}).get('readme_anchor', ''))})",
         f"- **Learn:** [Book companion]({repo_url('SNode.C-Book-Companion')}) and [examples](#learn)",
         "- **Install signed packages:** " + " · ".join([f"[Packages]({repo_url('Packages')})", *(text(entry["name"]) for entry in catalog if entry.get("packaged") and entry["status"] == "active")]),
-        "\n<p>\n" + "\n".join(f'<a href="#{title.lower().replace(" & ", "--").replace(" ", "-")}" title="{html.escape(title)}"><img src="media/menu/{area}-108.svg" alt="{html.escape(title)}" width="133" height="28"></a>' for area, title in AREAS.items() if area != "forks") + "\n</p>\n",
+        "\n<p>\n" + "\n".join(f'<a href="#{title.lower().replace(" & ", "--").replace(" ", "-")}" title="{html.escape(title)}"><img src="media/menu/{area}-108.svg" alt="{html.escape(title)}" width="160" height="28"></a>' for area, title in AREAS.items() if area != "forks") + "\n</p>\n",
     ]
 
     def table(entries, forks=False):
@@ -165,12 +165,23 @@ def render_profile(catalog, metadata):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["check", "profile"])
+    parser.add_argument("command", choices=["check", "profile", "page-headers"])
+    parser.add_argument("--repo", type=Path)
+    parser.add_argument("--check", action="store_true", help="report header/asset drift without writing")
     parser.add_argument("--catalog", type=Path, default=ROOT / "catalog.yml")
     parser.add_argument("--metadata", type=Path, default=ROOT / "profile/github-metadata.json")
     parser.add_argument("--output", type=Path, default=ROOT / "profile/README.md")
     args = parser.parse_args(argv)
     try:
+        if args.command == "page-headers":
+            if args.repo is None:
+                raise ValueError("page-headers requires --repo <checkout>")
+            sys.path.insert(0, str(ROOT / "tools"))
+            from snodec_sync.navigation import page_headers
+            drift = page_headers(args.repo, check=args.check)
+            if args.check and drift:
+                raise ValueError("page-header drift:\n" + "\n".join(drift))
+            return 0
         catalog = yaml.safe_load(args.catalog.read_text(encoding="utf-8"))
         if args.command == "check":
             errors = validate(catalog)
