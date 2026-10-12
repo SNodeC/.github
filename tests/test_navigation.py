@@ -182,5 +182,36 @@ class NavigationTests(unittest.TestCase):
         self.assertNotIn('section-pages', page.read_text())
         self.assertEqual(page_headers(repo, check=True), [])
         asset = repo / 'docs/media/menu/build.svg'
-        asset.write_text(asset.read_text().replace('font-size="16"', 'font-size="12"'))
+        asset.write_text(asset.read_text().replace('font-size="15"', 'font-size="12"'))
         self.assertIn('docs/media/menu/build.svg', page_headers(repo, check=True))
+
+    def test_mobile_sources_intrinsic_sizes_and_shared_font_spec(self):
+        import xml.etree.ElementTree as ET
+        from tools.snodec_sync.navigation import _header_button, FONT
+        header = render_header('snode.c', 'docs/guides/README.md')
+        self.assertLess(header.index('SNodeC organization'), header.index('SNode.C repository'))
+        self.assertEqual(header.count('(max-width: 640px) and (prefers-color-scheme: dark)'), 2)
+        self.assertEqual(header.count('width="160" height="28"'), 1)
+        for width in (36, 160):
+            svg = ET.fromstring(_header_button('Repository', 'Repository', 'repo', '#075985', 'light', width))
+            self.assertEqual((svg.attrib['width'], svg.attrib['height']), (str(width), '28'))
+            text = list(svg.iter('{http://www.w3.org/2000/svg}text'))
+            self.assertEqual(len(text), int(width == 160))
+            if text:
+                self.assertEqual(text[0].attrib['font-size'], '15')
+                self.assertEqual(text[0].attrib['font-weight'], '600')
+                self.assertEqual(text[0].attrib['font-family'], FONT.replace('&quot;', '"'))
+
+    def test_companion_root_organization_is_generated_without_page_enrollment(self):
+        repo = Path(self.temp.name) / 'SNode.C-Book-Companion'
+        repo.mkdir()
+        (repo / 'README.md').write_text('# Companion\n\nPreserved reader text.\n')
+        page_headers(repo)
+        text = (repo / 'README.md').read_text()
+        self.assertIn('snodec:begin organization', text)
+        self.assertNotIn('snodec:begin page-header', text)
+        self.assertIn('Preserved reader text.', text)
+        self.assertLess(text.index('snodec:begin organization'), text.index('# Companion'))
+        self.assertTrue((repo / 'docs/media/nav/organization-light.svg').is_file())
+        self.assertFalse((repo / 'docs/media/nav/repository-light.svg').exists())
+        self.assertEqual(page_headers(repo, check=True), [])

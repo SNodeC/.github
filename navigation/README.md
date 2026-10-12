@@ -36,8 +36,14 @@ The read-only library accepts a catalog name or checkout path. Future PROJECTS-d
 
 The generator replaces marked headers, preserves historic anchors outside the block and generates section lists from actual H1s in plan order. Root READMEs and the profile get no page headers. Banner plus button row stays unchanged: ↑ parent on the left; Organization first in HTML, then Repository, both right-aligned. The Organization button is labelled Organization. Buttons stay 160 px wide. Native wrapping remains unchanged. Structural title menus are arrow-free; onward and route links are ordinary text.
 
-Desktop banners remain 1280×56. At viewport widths up to 640 px, `<picture>` selects the existing 480×72 compact SVG, with the same mark, palette and typography. Phone stacking of Organization above Repository is accepted. No CSS workaround or alternate renderer is introduced. DistributionPackages reuses the authoritative Packages gear and infrastructure accent instead of duplicating its graphic.
+Desktop banners remain 1280×56. At viewport widths up to 640 px, `<picture>` selects the existing 480×72 compact SVG, with the same mark, palette and typography. Below 640 px, child-page Repository and Organization use 36×28 icon-only SVGs; the parent stays 160×28 and the header stays on one row. Desktop and root-only Organization buttons remain full-size. No CSS workaround or alternate renderer is introduced. DistributionPackages reuses the authoritative Packages gear and infrastructure accent instead of duplicating its graphic.
 
 ## Tests and releases
 
 Run `python -m unittest discover -s tests -v` for generator and workflow behavior. Presentation goldens and authored-document drift gates are not maintained. Existing release tags remain unchanged. Verify callers and the template follow `@main` by owner decision; documentation tooling does not require a Verify release.
+
+## Shared visual spec
+
+Navigation and title-menu labels use 15 px / 600 with `-apple-system, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif`; banners use the same stack at their existing sizes. Heroes retain DejaVu Sans. Outline navigation and filled `#203440` title menus remain distinct. Mobile icon selection uses the approved three `<source>` elements plus a fallback `<img>`, with no image width/height on the two child-page right buttons; SVG intrinsic sizes and native GitHub padding are preserved. The snode.c GitHub gate passed at 390 and 1440 px in light/dark modes before rollout.
+
+Root Organization blocks are generated from the same markup and SVG renderer. Book Companion can be generated in its exported public checkout without enrolling its learning pages; copy the generated root README and two Organization assets back to the private source through the existing export allow-list. No private source is published by this tool.
