@@ -916,7 +916,9 @@ Packages:
     remove: true
 # Visible-label shortening required by the approved 160px menu rule.
 # Destinations, tooltips and alternative text remain unchanged.
-menu_labels: {}
+menu_labels:
+  Native Linux build: Native Linux
+  OpenWrt cross-compilation: OpenWrt
 
 DistributionPackages:
   display: DistributionPackages

@@ -1,3 +1,7 @@
+<!-- snodec:begin organization -->
+<p><a href="https://github.com/SNodeC" title="SNodeC organization"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/nav/organization-dark.svg"><img align="right" src="docs/media/nav/organization-light.svg" alt="SNodeC organization" title="SNodeC organization" width="160" height="28"></picture></a><br clear="all"></p>
+<!-- snodec:end organization -->
+
 # SNodeC control repository
 
 This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and optional `docs-audit` command keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.

@@ -10,6 +10,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 NS = '{http://www.w3.org/2000/svg}'
+FONT = '-apple-system, &quot;Segoe UI&quot;, &quot;Noto Sans&quot;, Helvetica, Arial, sans-serif'
 ARROW = 'M0 1.25H5.5V0L9 2L5.5 4V2.75H0Z'
 ET.register_namespace('', NS[1:-1])
 
@@ -75,8 +76,8 @@ def _config(repo):
         name = next((key for key, value in plan.items()
                      if '/' in value['source'] and value['source'].split('/')[0] == name
                      and checkout.name == value['source'].split('/')[-1]), name)
-    if name == '.github':
-        config = {'display': 'SNodeC', 'pages': [], 'sections': {}}
+    if name in ('.github', 'SNode.C-Book-Companion'):
+        config = {'display': 'SNodeC' if name == '.github' else 'SNode.C Book Companion', 'pages': [], 'sections': {}}
     elif name in plan:
         config = plan[name]
     else:
@@ -112,22 +113,35 @@ def _relative(target, page_path):
     return posixpath.relpath(target, posixpath.dirname(page_path) or '.')
 
 
+def _button(nav, stem, title, href, right=False, mobile=False):
+    escape = lambda text: html.escape(text, quote=True)
+    compact = (f'<source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="{nav}/{stem}-icon-dark.svg">'
+               f'<source media="(max-width: 640px)" srcset="{nav}/{stem}-icon-light.svg">') if mobile else ''
+    size = '' if mobile else ' width="160" height="28"'
+    return (f'<a href="{escape(href)}" title="{escape(title)}"><picture>{compact}'
+            f'<source media="(prefers-color-scheme: dark)" srcset="{nav}/{stem}-dark.svg">'
+            f'<img {"align=\"right\" " if right else ""}src="{nav}/{stem}-light.svg" '
+            f'alt="{escape(title)}" title="{escape(title)}"{size}></picture></a>')
+
+
+def _organization():
+    return ('<!-- snodec:begin organization -->\n<p>' +
+            _button('docs/media/nav', 'organization', 'SNodeC organization',
+                    'https://github.com/SNodeC', True) +
+            '<br clear="all"></p>\n<!-- snodec:end organization -->')
+
+
 def _header(config, page_path):
     page = _page(config, page_path)
     display = config['display']
     nav = _relative('docs/media/nav', page_path)
     escape = lambda text: html.escape(text, quote=True)
-    def button(stem, title, href, right=False):
-        return (f'<a href="{escape(href)}" title="{escape(title)}"><picture>'
-                f'<source media="(prefers-color-scheme: dark)" srcset="{nav}/{stem}-dark.svg">'
-                f'<img {"align=\"right\" " if right else ""}src="{nav}/{stem}-light.svg" '
-                f'alt="{escape(title)}" width="160" height="28"></picture></a>')
     up_fragment = 'project-overview' if page['up'] == 'README.md' else 'page-overview'
-    buttons = [button('up-' + slug(page['up_label']), 'Up to ' + page['up_label'],
+    buttons = [_button(nav, 'up-' + slug(page['up_label']), 'Up to ' + page['up_label'],
                       _relative(page['up'], page_path) + '#' + up_fragment),
-               button('organization', 'SNodeC organization', 'https://github.com/SNodeC', True),
-               button('repository', display + ' repository',
-                      _relative('README.md', page_path) + '#project-overview', True)]
+               _button(nav, 'organization', 'SNodeC organization', 'https://github.com/SNodeC', True, True),
+               _button(nav, 'repository', display + ' repository',
+                      _relative('README.md', page_path) + '#project-overview', True, True)]
     return ('<!-- snodec:begin page-header -->\n<a id="page-overview"></a>\n'
             f'<p><picture><source media="(max-width: 640px)" '
             f'srcset="{nav}/banner-{slug(page["label"])}-compact.svg">'
@@ -151,18 +165,18 @@ def _svg(width, height, label, body):
             f'<title>{html.escape(label)}</title>{body}</svg>\n')
 
 
-def _header_button(label, title, icon, color, theme):
+def _header_button(label, title, icon, color, theme, width=160):
     fill, stroke, text = (('#f6f8fa', '#d0d7de', '#1f2328') if theme == 'light'
                           else ('#161b22', '#3d444d', '#e6edf3'))
     original = ET.parse(ROOT / f'brand/navigation/octicons/{icon}.svg').getroot()
     notice = (ROOT / 'brand/navigation/octicons/NOTICE.md').read_text().split('```text\n')[1].split('```')[0]
     shapes = ''.join(ET.tostring(x, encoding='unicode') for x in original if x.tag != NS + 'title')
-    return _svg(160, 28, title,
+    return _svg(width, 28, title,
                 '<!-- ' + notice + ' -->'
-                f'<rect x=".5" y=".5" width="159" height="27" rx="5" fill="{fill}" stroke="{stroke}"/>'
-                f'<g transform="translate(13 6)" fill="{color}">{shapes}</g>'
-                f'<text x="38" y="19" font-family="Arial" font-size="15" font-weight="600" '
-                f'fill="{text}">{html.escape(label)}</text>')
+                f'<rect x=".5" y=".5" width="{width-1}" height="27" rx="5" fill="{fill}" stroke="{stroke}"/>'
+                f'<g transform="translate({(width-16)/2 if width == 36 else 13:g} 6)" fill="{color}">{shapes}</g>' +
+                (f'<text x="38" y="19" font-family="{FONT}" font-size="15" font-weight="600" '
+                 f'fill="{text}">{html.escape(label)}</text>' if width != 36 else ''))
 
 
 def _banner(name, display, label, color, compact=False):
@@ -179,9 +193,9 @@ def _banner(name, display, label, color, compact=False):
                 '</clipPath></defs><g clip-path="url(#rounded)">'
                 f'<rect width="{canvas_width}" height="{canvas_height}" fill="url(#background)"/>'
                 f'<rect width="8" height="{canvas_height}" fill="{color}"/></g><g transform="{transform}">{graphic}</g>'
-                f'<text x="84" y="{32 if compact else 37}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="25" '
+                f'<text x="84" y="{32 if compact else 37}" font-family="{FONT}" font-size="25" '
                 f'font-weight="700" fill="#ffffff">{html.escape(display)}</text>'
-                f'<text x="{84 if compact else 1244}" y="{58 if compact else 37}" text-anchor="{"start" if compact else "end"}" font-family="Segoe UI,Helvetica,Arial,sans-serif" '
+                f'<text x="{84 if compact else 1244}" y="{58 if compact else 37}" text-anchor="{"start" if compact else "end"}" font-family="{FONT}" '
                 f'font-size="23" font-weight="600" fill="{color}">{html.escape(label)}</text>')
 
 
@@ -191,7 +205,7 @@ def _menu_svg(label, width, arrow='', title=None):
              f'transform="translate({width - 17} 12){" rotate(-90 4.5 2)" if arrow == "up" else ""}"/>') if arrow else ''
     return _svg(width, 28, title or label,
                 f'<rect x=".5" y=".5" width="{width-1}" height="27" rx="5" fill="#203440" stroke="#395260"/>'
-                f'<text x="{center:g}" y="19" text-anchor="middle" font-family="Arial" font-size="16" '
+                f'<text x="{center:g}" y="19" text-anchor="middle" font-family="{FONT}" font-size="15" '
                 f'font-weight="600" fill="#ffffff">{html.escape(label)}</text>{shape}')
 
 
@@ -287,7 +301,7 @@ def _menus(checkout, config, texts, outputs):
                         asset, src, label, title = new_asset, new_src, replacement, replacement
             if remove:
                 continue
-            width = 328 if svg.attrib.get('width') in ('274', '328') else 160
+            width = 160
             arrow = next(('up' if any('rotate(-90' in n.attrib.get('transform', '') for n in svg.iter()) else 'right'
                           for node in svg.iter(NS + 'path') if node.attrib.get('d') == ARROW), '')
             outputs[asset] = _menu_svg(config.get('menu_labels', {}).get(label, label), width, arrow, title)
@@ -343,6 +357,16 @@ def page_headers(repo, check=False):
                     body = prefix.rstrip() + '\n\n' + listing + ('\n\n## ' + rest if separator else '')
             body = _header(config, path) + '\n\n' + body
         texts[path] = (prefixes[path] + '\n\n' if prefixes[path] else '') + body + '\n'
+    root_organization = name in ('.github', 'SNode.C-Book-Companion') or 'snodec:begin organization' in texts['README.md']
+    if root_organization:
+        block = _organization()
+        text = texts['README.md']
+        pattern = r'<!-- snodec:begin organization -->.*?<!-- snodec:end organization -->'
+        if re.search(pattern, text, re.S):
+            text = re.sub(pattern, lambda _: block, text, flags=re.S)
+        else:
+            text = re.sub(r'^# ', lambda _: block + '\n\n# ', text, count=1, flags=re.M)
+        texts['README.md'] = text
     outputs.update(texts)
     active = [p for p in config['pages'] if not p.get('deleted') and not p.get('excluded')]
     for label in sorted({p['label'] for p in active}):
@@ -352,10 +376,13 @@ def page_headers(repo, check=False):
                ('organization', 'Organization', 'SNodeC organization', 'organization', org_accent)]
     buttons += [('up-' + slug(label), label, 'Up to ' + label, 'arrow-up', accent)
                 for label in sorted({p['up_label'] for p in active})]
-    if active:
+    buttons = [button for button in buttons if active or button[0] == 'organization']
+    if active or root_organization:
         for stem, label, title, icon, colors in buttons:
             for theme in ('light', 'dark'):
                 outputs[f'docs/media/nav/{stem}-{theme}.svg'] = _header_button(label, title, icon, colors[theme]['text'], theme)
+                if active and stem in ('repository', 'organization'):
+                    outputs[f'docs/media/nav/{stem}-icon-{theme}.svg'] = _header_button(label, title, icon, colors[theme]['text'], theme, 36)
     drift = [path for path, text in sorted(outputs.items())
              if not (checkout / path).is_file() or (checkout / path).read_text() != text]
     if not check:
