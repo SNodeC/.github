@@ -64,7 +64,7 @@ Preparation validates the manifest before selecting the C++ container or native
 Python matrix. The canonical caller uses only `workflow_dispatch`: full
 Verify does not run on ordinary pushes, PRs or version-tag pushes. Heavy
 release builds/tests stay in the existing tag-triggered package pipeline.
-The control repository retains its lightweight catalog/unit/drift checks. Its own `CI` workflow is currently disabled by owner decision; changing its files does not authorize re-enabling it.
+The control repository runs lightweight catalog/unit/drift checks on pushes, pull requests and manual dispatches, as approved by the owner. Workflow enablement remains an owner decision.
 Every checkout uses the exact PR head SHA, otherwise the event
 SHA, with no persisted credentials. C++ includes recursive submodules.
 
