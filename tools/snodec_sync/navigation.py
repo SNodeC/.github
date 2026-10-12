@@ -301,7 +301,7 @@ def _menus(checkout, config, texts, outputs):
                         asset, src, label, title = new_asset, new_src, replacement, replacement
             if remove:
                 continue
-            width = 328 if svg.attrib.get('width') in ('274', '328') else 160
+            width = 160
             arrow = next(('up' if any('rotate(-90' in n.attrib.get('transform', '') for n in svg.iter()) else 'right'
                           for node in svg.iter(NS + 'path') if node.attrib.get('d') == ARROW), '')
             outputs[asset] = _menu_svg(config.get('menu_labels', {}).get(label, label), width, arrow, title)
