@@ -168,11 +168,19 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertEqual((ROOT / "templates/ci.yml").read_text(),
                          "name: CI\non: [workflow_dispatch]\n"
                          "permissions: { contents: read }\njobs:\n  snodec:\n"
-                         "    uses: SNodeC/.github/.github/workflows/verify.yml@v1.0\n"
-                         "    secrets: inherit\n")
+                         "    uses: SNodeC/.github/.github/workflows/verify.yml@37b76768a383ea28c03fd9e7ceda7eecf3007c0a # v1.2\n")
         ci = yaml.load((ROOT / ".github/workflows/ci.yml").read_text(), Loader=yaml.BaseLoader)
         steps = ci["jobs"]["control"]["steps"]
-        for name in ("Unit and workflow boundary tests", "Check generated profile drift"):
+        self.assertEqual(ci["on"], ["push", "pull_request", "workflow_dispatch"])
+        self.assertEqual(ci["jobs"]["control"]["runs-on"], "ubuntu-24.04")
+        self.assertEqual(ci["jobs"]["control"]["timeout-minutes"], "15")
+        for action in ("actions/checkout", "actions/setup-python"):
+            own = next(s["uses"] for s in steps if s.get("uses", "").startswith(action + "@"))
+            shared = next(s["uses"] for s in WORKFLOW["jobs"]["python"]["steps"]
+                          if s.get("uses", "").startswith(action + "@"))
+            self.assertEqual(own, shared)
+        for name in ("Unit and workflow boundary tests", "Check generated profile drift",
+                     "Audit tracked documentation", "Check generated page headers"):
             step = next(s for s in steps if s.get("name") == name)
             self.assertEqual(step["if"], "${{ always() && !cancelled() }}")
         manifest = yaml.safe_load((ROOT / "templates/repo.yml").read_text())
