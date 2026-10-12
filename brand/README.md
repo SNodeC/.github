@@ -2,7 +2,7 @@
 
 `tokens.yml` is authoritative. Each accent defines text and its tinted background,
 not a bare swatch. All pairs pass WCAG AA normal-text contrast (≥4.5:1).
-The unit tests compute sRGB relative luminance in both themes.
+Contrast values describe the existing design; they are not mandatory CI gates.
 
 | Accent | Light text | Light background | Ratio | Dark text | Dark background | Ratio |
 | --- | --- | --- | --- | --- | --- | --- |

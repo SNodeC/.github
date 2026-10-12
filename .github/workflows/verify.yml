@@ -246,15 +246,8 @@ jobs:
           persist-credentials: false
       - run: |
           apt-get update
-          apt-get install -y --no-install-recommends git ca-certificates python3 python3-yaml clang-format cmake-format
+          apt-get install -y --no-install-recommends git ca-certificates python3 clang-format cmake-format
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-      - name: Check out the called workflow tooling
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: ${{ job.workflow_repository }}
-          ref: ${{ job.workflow_sha }}
-          path: .snodec-ci-tools
-          persist-credentials: false
       - name: Check whitespace against PR base or previous commit
         if: ${{ always() && !cancelled() }}
         env:
@@ -267,7 +260,7 @@ jobs:
           else
             base="$(git hash-object -t tree /dev/null)"
           fi
-          git diff --check "$base" HEAD
+          git diff --check "$base" HEAD -- . ":(exclude)*.md" ":(exclude)*.svg" ":(exclude)navigation/**" ":(exclude)brand/**" ":(exclude)docs/**" ":(exclude)profile/**" ":(exclude)site/**"
       - name: Check changed source formatting
         if: ${{ always() && !cancelled() }}
         shell: python3 {0}
@@ -299,9 +292,6 @@ jobs:
           if failures:
               raise SystemExit("\n".join(failures))
 
-      - name: Audit all tracked documentation
-        if: ${{ always() && !cancelled() }}
-        run: python3 .snodec-ci-tools/tools/snodec_sync docs-audit --repo "$GITHUB_WORKSPACE"
 
   python:
     name: snodec / python (${{ matrix.os }})

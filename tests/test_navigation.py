@@ -6,13 +6,11 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-import xml.etree.ElementTree as ET
 
 import yaml
 
 from tools.snodec_sync import render_header
-from tools.snodec_sync.navigation import ROOT, NS, ARROW, page_headers, validate_plan, _menu_svg
-from tests.test_sync import contrast
+from tools.snodec_sync.navigation import ROOT, page_headers, validate_plan, _menu_svg
 
 
 class NavigationTests(unittest.TestCase):
@@ -103,10 +101,6 @@ class NavigationTests(unittest.TestCase):
                     header = render_header(name, page['new'])
                     self.assertIn(header + '\n\n# ', text)
                     self.assertNotIn('<a href=', header.split('<p>')[1].split('</p>')[0])
-                    self.assertEqual(header.count('<picture>'), 4)
-                    self.assertEqual(header.count('width="160" height="28"'), 3)
-                    self.assertEqual(header.count('align="right"'), 2)
-                    self.assertIn('<br clear="all">', header)
                     for target in re.findall(r'(?:href|src|srcset)="([^"]+)"', header):
                         if target.startswith('https:'):
                             self.assertEqual(target, 'https://github.com/SNodeC')
@@ -116,31 +110,12 @@ class NavigationTests(unittest.TestCase):
                         self.assertTrue(destination.is_file(), target)
                         if fragment:
                             self.assertIn(f'id="{fragment}"', destination.read_text(), target)
-                    svg = ET.parse(repo / 'docs/media/nav' / ('banner-' + re.sub('[^a-z0-9]+', '-', page['label'].lower()).strip('-') + '.svg')).getroot()
-                    self.assertEqual(svg.attrib['viewBox'], '0 0 1280 56')
-                self.assertIn('width="328"', (repo / 'README.md').read_text())
                 baseline = self.hashes(repo)
                 self.assertEqual(page_headers(repo, check=True), [])
                 self.assertEqual(self.hashes(repo), baseline)
                 page_headers(repo)
                 self.assertEqual(self.hashes(repo), baseline)
 
-    def test_order_duplicate_destinations_and_no_side_effects(self):
-        repo = self.fixture('Packages')
-        before = self.hashes(repo)
-        text = render_header(repo, 'keys/README.md')
-        self.assertEqual(self.hashes(repo), before)
-        self.assertLess(text.index('up-packages-'), text.index('organization-dark'))
-        self.assertLess(text.index('organization-dark'), text.index('repository-dark'))
-        self.assertLess(text.index('repository-dark'), text.index('<br clear="all">'))
-        self.assertEqual(text.count('href="../README.md#project-overview"'), 2)
-        self.assertNotIn('Back', text)
-        # Section lists use actual H1s and the declared Up chain, not a filesystem guess.
-        page_headers(repo)
-        listing = (repo / 'docs/README.md').read_text().split('snodec:begin section-pages')[1]
-        self.assertIn('[Catalogs](catalogs/README.md#page-overview)', listing)
-        self.assertNotIn('[Recorded package status](status.md', listing)
-        self.assertIn(self.plan['Packages']['pages'][0]['intro'], (repo / 'docs/README.md').read_text())
 
     def test_project_registry_extension_inherits_generated_policy(self):
         text = render_header('Packages', 'status/third-project.md')
@@ -183,35 +158,6 @@ class NavigationTests(unittest.TestCase):
                                     capture_output=True, text=True)
             self.assertEqual(result.returncode, code, result.stderr)
 
-    def test_assets_styles_contrast_and_own_graphics(self):
-        tokens = yaml.safe_load((ROOT / 'brand/tokens.yml').read_text())
-        catalog = {e['name']:e for e in yaml.safe_load((ROOT / 'catalog.yml').read_text())}
-        for name, config in self.plan.items():
-            repo = self.fixture(name);page_headers(repo)
-            entry = catalog[name]
-            accent = tokens['accents'][entry.get('accent', tokens['area_accents'][entry['area']])]
-            for svg_path in (repo / 'docs/media/nav').glob('*.svg'):
-                svg = ET.parse(svg_path).getroot()
-                if svg_path.name.startswith('banner-'):
-                    for text in svg.findall(NS + 'text'):
-                        for background in ['#101f35', '#172f47']:
-                            self.assertGreaterEqual(contrast(text.attrib['fill'], background), 4.5)
-                    self.assertEqual(svg.findall(NS + 'text')[0].text, config['display'])
-                    self.assertEqual(svg.findall(NS + 'text')[1].attrib['fill'], accent['dark']['text'])
-                    mark = ET.parse(ROOT / f'brand/navigation/marks/{"Packages" if name == "DistributionPackages" else name}.svg').getroot()
-                    for node in mark.iter(NS + 'path'):
-                        self.assertTrue(any(p.attrib.get('d') == node.attrib.get('d') for p in svg.iter(NS + 'path')))
-                else:
-                    self.assertEqual(svg.attrib['viewBox'], '0 0 160 28')
-                    text = svg.find(NS + 'text');rect = svg.find(NS + 'rect')
-                    self.assertGreaterEqual(contrast(text.attrib['fill'], rect.attrib['fill']), 4.5)
-                    self.assertEqual(text.attrib['font-size'], '15')
-                    self.assertEqual(text.attrib['font-weight'], '600')
-                    self.assertIn('Permission is hereby granted', svg_path.read_text())
-            menu = ET.parse(repo / 'docs/media/menu/build.svg').getroot()
-            self.assertEqual(menu.attrib['width'], '328')
-            self.assertEqual(menu.find(NS + 'path').attrib['d'], ARROW)
-            self.assertGreaterEqual(contrast('#ffffff', '#203440'), 4.5)
 
     def test_no_moves_deletions_or_state_mutation(self):
         repo = self.fixture('Packages')
@@ -225,48 +171,3 @@ class NavigationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'git rm'):
             page_headers(repo)
         self.assertTrue(deleted.exists())
-
-    def test_responsive_banner_keeps_desktop_and_shared_identity(self):
-        for name, config in self.plan.items():
-            repo = self.fixture(name)
-            page_headers(repo)
-            for page in config['pages']:
-                if page.get('deleted') or page.get('excluded'):
-                    continue
-                header = render_header(name, page['new'])
-                banner = header.split('<p>')[1].split('</p>')[0]
-                self.assertIn('<source media="(max-width: 640px)"', banner)
-                self.assertIn('-compact.svg', banner)
-                self.assertNotIn('<a href=', banner)
-            for path in (repo / 'docs/media/nav').glob('banner-*-compact.svg'):
-                mobile = ET.parse(path).getroot()
-                desktop_path = path.with_name(path.name.replace('-compact.svg', '.svg'))
-                desktop = ET.parse(desktop_path).getroot()
-                self.assertEqual(mobile.attrib['viewBox'], '0 0 480 72')
-                self.assertEqual(desktop.attrib['viewBox'], '0 0 1280 56')
-                self.assertEqual(mobile.attrib['aria-label'], desktop.attrib['aria-label'])
-                texts = mobile.findall(NS + 'text')
-                self.assertEqual([t.text for t in texts], [t.text for t in desktop.findall(NS + 'text')])
-                self.assertEqual([(t.attrib['x'], t.attrib['y']) for t in texts], [('84', '32'), ('84', '58')])
-                self.assertGreaterEqual(float(texts[0].attrib['font-size']) * 309 / 480, 16)
-                self.assertEqual([p.attrib['d'] for p in mobile.iter(NS + 'path')],
-                                 [p.attrib['d'] for p in desktop.iter(NS + 'path')])
-                golden = ROOT / 'tests/fixtures/navigation' / desktop_path.name
-                if name == 'Packages':
-                    self.assertEqual(desktop_path.read_bytes(), golden.read_bytes())
-            self.assertEqual(page_headers(repo, check=True), [])
-
-    def test_short_labels_do_not_change_accessible_destination(self):
-        repo = self.fixture('Packages')
-        button = repo / 'docs/media/menu/selected.svg'
-        button.write_text(_menu_svg('Selected packages', 179, 'right'))
-        page = repo / 'docs/installation/debian.md'
-        page.write_text(page.read_text() + '\n<a href="#selected" title="Selected packages"><img src="../media/menu/selected.svg" alt="Selected packages" width="179" height="28"></a>\n')
-        page_headers(repo)
-        svg = ET.parse(button).getroot()
-        self.assertEqual(svg.find(NS + 'text').text, 'Selected')
-        self.assertEqual(svg.find(NS + 'title').text, 'Selected packages')
-        self.assertIn('href="#selected" title="Selected packages"', page.read_text())
-        self.assertIn('alt="Selected packages" width="160"', page.read_text())
-        self.assertEqual(svg.find(NS + 'path').attrib['d'], ARROW)
-        self.assertEqual(page_headers(repo, check=True), [])

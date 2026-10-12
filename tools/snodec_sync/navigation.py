@@ -25,15 +25,6 @@ def validate_plan(plan):
             if not isinstance(config, dict) or any(not isinstance(k, str) or not isinstance(v, str) or not v.strip() for k, v in config.items()):
                 raise ValueError('menu_labels requires nonempty text labels')
             continue
-        for entry in config.get('exempt', []):
-            if (not isinstance(entry, dict) or set(entry) != {'path', 'reason'}
-                    or not isinstance(entry['path'], str) or not entry['path']
-                    or PurePosixPath(entry['path']).is_absolute() or '..' in PurePosixPath(entry['path']).parts
-                    or not isinstance(entry['reason'], str) or '\n' in entry['reason'] or '\r' in entry['reason']
-                    or not entry['reason'].lower().startswith(('vendored', 'third-party', 'generated test fixture', 'resolves in published packages'))):
-                raise ValueError(f'{name}: exempt requires a safe path glob and approved one-line reason')
-            if entry['reason'].lower().startswith('resolves in published packages') and (name != 'DistributionPackages' or not entry['path'].startswith('site/') or len(PurePosixPath(entry['path']).parts) < 3 or PurePosixPath(entry['path']).parts[1] == 'docs'):
-                raise ValueError('Published-output exemptions are limited to DistributionPackages/site targets')
         active = {}
         for page in config['pages']:
             for field in ('old', 'new', 'up'):

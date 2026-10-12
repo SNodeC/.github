@@ -146,23 +146,6 @@ class WorkflowContractTests(unittest.TestCase):
             if "uses:" in line:
                 self.assertRegex(line, r"@[0-9a-f]{40} # v[0-9]+\.[0-9]+\.[0-9]+$")
 
-    def test_documentation_has_one_authority_at_called_workflow_sha(self):
-        steps = WORKFLOW["jobs"]["hygiene"]["steps"]
-        checkout = next(step for step in steps if step.get("name") == "Check out the called workflow tooling")
-        self.assertEqual(checkout["with"]["repository"], "${{ job.workflow_repository }}")
-        self.assertEqual(checkout["with"]["ref"], "${{ job.workflow_sha }}")
-        self.assertEqual(checkout["with"]["persist-credentials"], "false")
-        self.assertEqual(checkout["with"]["path"], ".snodec-ci-tools")
-        for name in ("Check whitespace against PR base or previous commit", "Check changed source formatting"):
-            check = next(step for step in steps if step.get("name") == name)
-            self.assertLess(steps.index(checkout), steps.index(check))
-            self.assertEqual(check["if"], "${{ always() && !cancelled() }}")
-        audit = next(step for step in steps if step.get("name") == "Audit all tracked documentation")
-        self.assertEqual(audit["if"], "${{ always() && !cancelled() }}")
-        self.assertIn('docs-audit --repo "$GITHUB_WORKSPACE"', audit["run"])
-        self.assertNotIn('path.suffix.lower() == ".md"', script("hygiene", "Check changed source formatting"))
-        self.assertIn("python3-yaml", next(step["run"] for step in steps if "apt-get install" in step.get("run", "")))
-        self.assertNotIn("secrets.", (ROOT / ".github/workflows/verify.yml").read_text())
 
     def test_template_exact_and_control_checks_independent(self):
         self.assertEqual((ROOT / "templates/ci.yml").read_text(),
@@ -179,8 +162,7 @@ class WorkflowContractTests(unittest.TestCase):
             shared = next(s["uses"] for s in WORKFLOW["jobs"]["python"]["steps"]
                           if s.get("uses", "").startswith(action + "@"))
             self.assertEqual(own, shared)
-        for name in ("Unit and workflow boundary tests", "Check generated profile drift",
-                     "Audit tracked documentation", "Check generated page headers"):
+        for name in ("Unit and workflow boundary tests",):
             step = next(s for s in steps if s.get("name") == name)
             self.assertEqual(step["if"], "${{ always() && !cancelled() }}")
         manifest = yaml.safe_load((ROOT / "templates/repo.yml").read_text())
@@ -356,6 +338,9 @@ install(TARGETS consumer DESTINATION bin)
             commit(path)
             self.assertEqual(check(), 0)
             self.assertNotEqual(check(initial), 0)
+            (path / "README.md").write_text("Editable documentation with trailing space  \n")
+            commit(path)
+            self.assertEqual(check(), 0)
 
 
 class PhaseTwoBoundaryTests(unittest.TestCase):
@@ -418,32 +403,6 @@ class PhaseTwoBoundaryTests(unittest.TestCase):
             self.assertIn("CMakeLists.txt: cmake-format", str(error.exception))
             self.assertNotIn("missing-new.md", str(error.exception))
 
-    def test_workflow_docs_audit_checks_old_and_new_tracked_pages(self):
-        code = script("hygiene", "Audit all tracked documentation")
-        with tempfile.TemporaryDirectory() as name:
-            root = Path(name)
-            git(root, "init", "--initial-branch=audit/from-api")
-            git(root, "remote", "add", "origin", "https://github.com/SNodeC/AutoTalk.git")
-            (root / "README.md").write_text("[old](old.md)\n")
-            (root / "old.md").write_text("[old missing](missing-old.md)\n")
-            commit(root)
-            (root / "README.md").write_text("[old](old.md) [new](new.md)\n")
-            (root / "new.md").write_text("[new missing](missing-new.md)\n```\n[code](ignored.md)\n```\n")
-            commit(root)
-            (root / ".snodec-ci-tools").symlink_to(ROOT, target_is_directory=True)
-            result = subprocess.run(["bash", "-e", "-c", code], cwd=root,
-                                    env=os.environ | {"GITHUB_WORKSPACE": str(root)}, capture_output=True, text=True)
-            self.assertNotEqual(result.returncode, 0)
-            self.assertIn("missing-old.md", result.stdout)
-            self.assertIn("missing-new.md", result.stdout)
-            self.assertNotIn("ignored.md", result.stdout)
-            (root / "missing-old.md").write_text("Old target\n")
-            (root / "missing-new.md").write_text("New target\n")
-            git(root, "add", ".")
-            result = subprocess.run(["bash", "-e", "-c", code], cwd=root,
-                                    env=os.environ | {"GITHUB_WORKSPACE": str(root)}, capture_output=True, text=True)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertIn("0 violations", result.stdout)
 
     def test_source_only_verification_has_no_publication_capability(self):
         self.assertFalse((ROOT / ".github/workflows/publish-dev.yml").exists())

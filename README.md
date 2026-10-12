@@ -1,10 +1,10 @@
 # SNodeC control repository
 
-This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and `docs-audit` keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
+This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
 
 ## Documentation
 
-- [Navigation generator and documentation audit](navigation/README.md)
+- [Navigation generator](navigation/README.md)
 - [Navigation plan review](navigation/PLAN.md)
 - [Brand tokens and glyphs](brand/README.md)
 - [Navigation assets and provenance](brand/navigation/README.md)
@@ -64,7 +64,7 @@ Preparation validates the manifest before selecting the C++ container or native
 Python matrix. The canonical caller uses only `workflow_dispatch`: full
 Verify does not run on ordinary pushes, PRs or version-tag pushes. Heavy
 release builds/tests stay in the existing tag-triggered package pipeline.
-The control repository runs lightweight catalog/unit/drift checks on pushes, pull requests and manual dispatches, as approved by the owner. Workflow enablement remains an owner decision.
+The control repository runs catalog and generator unit tests on pushes, pull requests and manual dispatches, as approved by the owner. Workflow enablement remains an owner decision.
 Every checkout uses the exact PR head SHA, otherwise the event
 SHA, with no persisted credentials. C++ includes recursive submodules.
 
@@ -104,7 +104,7 @@ after test failures, without turning a failed test job green.
 
 Whitespace checks run against the PR base or previous push commit (empty tree
 on the initial commit). An independent job also checks changed C/C++ and CMake
-files against existing repository formatting policies. It runs `docs-audit` over all tracked documentation using tooling checked out at the exact called workflow commit. It neither invents a style where none exists nor performs unreliable external-URL probes. Failures are collected rather than stopping at the first file. This job still runs when compilation/tests fail.
+files against existing repository formatting policies. Documentation and presentation assets are not verification gates. It neither invents a style where none exists nor performs unreliable external-URL probes. Failures are collected rather than stopping at the first file. This job still runs when compilation/tests fail.
 
 ### Verify releases and caller pins
 
@@ -120,3 +120,5 @@ publication options and publisher workflows are absent or rejected.
 Repository README frames and generated navigation are governed by the [navigation plan](navigation/README.md). Package/release publication remains a separate responsibility.
 
 Historical rollout and design records live only in [history](history/README.md); they are not current release policy. See also [brand values](brand/README.md), [contributing](CONTRIBUTING.md) and [security](SECURITY.md).
+
+The default branch removes documentation enforcement from Verify. Existing callers remain on immutable `v1.2` until a new release is approved and pinned; no existing tag is moved.
