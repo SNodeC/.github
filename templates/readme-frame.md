@@ -64,3 +64,7 @@ Supporting pages enrolled in `navigation/plan.yml` use the generated `page-heade
 Docs indexes retain the common menu as route maps. Individual L2 guides use the generated page header for return navigation and only relevant local navigation, not another complete README menu or a self-linking Build button. Standard menu targets are available on preview branches; preserve meaningful existing anchors when they still name substantive sections. Do not fabricate compatibility or platform support from version numbers alone.
 
 The generated Repository, Organization and ↑ parent buttons provide return navigation; do not add duplicate Back blocks. User guides and implementation/qualification records occupy separately labelled groups in docs indexes; historical records do not define current product behavior.
+
+## Navigation and tables
+
+Button images belong only in the marked banner navigation / root Organization block and the marked title menu. Below the menu, use ordinary text links, including install routes and further reading. Tables grow by rows: one thing per row; add a project row or a page rather than widening a cell with a growing project list.
