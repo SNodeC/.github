@@ -1,6 +1,6 @@
 # SNodeC control repository
 
-This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and `docs-audit` keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point. Historical rollout descriptions below do not authorize moving existing tags.
+This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and `docs-audit` keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
 
 ## Documentation
 
@@ -49,17 +49,14 @@ repository, not the working directory.
 - `templates/`: the exact future CI caller and commented build-only manifest.
   Forks are not enrolled.
 
-The supplied named list has 33 existing repositories plus this new control
-repository. Every named entry is included. No project count is generated in the
-organization profile. Retiring/retired entries are catalog classifications only:
-this repository does not archive anything. All six upstream forks remain active.
+No project count is generated in the organization profile. Retiring/retired entries are catalog classifications only: this repository does not archive anything. Upstream forks are not enrolled in shared Verify.
 
 Workflow badges show an existing workflow, **not** a promise of push/PR testing.
 The snode.c and mqttsuite release-package workflows remain tag-triggered;
 shared Verify callers are manual-only. The control repository's CI
 path is included because that workflow is delivered here.
 
-## Shared Verify (Phase 2)
+## Shared Verify
 
 `.github/workflows/verify.yml` remains `workflow_call`-only and read-only. The
 manifest is the single authority for build options; the catalog holds identity.
@@ -67,7 +64,7 @@ Preparation validates the manifest before selecting the C++ container or native
 Python matrix. The canonical caller uses only `workflow_dispatch`: full
 Verify does not run on ordinary pushes, PRs or version-tag pushes. Heavy
 release builds/tests stay in the existing tag-triggered package pipeline.
-The control repository retains its lightweight catalog/unit/drift checks.
+The control repository retains its lightweight catalog/unit/drift checks. Its own `CI` workflow is currently disabled by owner decision; changing its files does not authorize re-enabling it.
 Every checkout uses the exact PR head SHA, otherwise the event
 SHA, with no persisted credentials. C++ includes recursive submodules.
 
@@ -87,6 +84,8 @@ executing build code. No dependency binaries are downloaded or published.
 The caller configures with Ninja, builds, runs CTest as an unprivileged `snodec`
 user when enabled (`--no-tests=error`), then installs into a staging prefix.
 `CMAKE_INSTALL_LIBDIR=lib` and dependency paths are owned by the workflow.
+Linux jobs use `ubuntu-24.04` runners. Preparation has a 10-minute timeout and hygiene a 15-minute timeout. C++ builds default to 60 minutes; the optional integer `ci.timeout_minutes` accepts 10–180 minutes for the `cpp` profile only. Each Python matrix job has a fixed 60-minute timeout.
+
 Runtime directories and IPv6 remain opt-in; IPv6 adds NET_ADMIN, the sysctl and
 `fd00::1/128` on a dummy interface. snode.c enables its existing component, unit,
 policy and staged installed-consumer tests explicitly in its manifest.
@@ -105,31 +104,19 @@ after test failures, without turning a failed test job green.
 
 Whitespace checks run against the PR base or previous push commit (empty tree
 on the initial commit). An independent job also checks changed C/C++ and CMake
-files against existing repository formatting policies and changed Markdown's
-local file links. It neither invents a style where none exists nor performs
-unreliable external-URL probes. Failures are collected rather than stopping at
-the first file. This job still runs when compilation/tests fail.
+files against existing repository formatting policies. It runs `docs-audit` over all tracked documentation using tooling checked out at the exact called workflow commit. It neither invents a style where none exists nor performs unreliable external-URL probes. Failures are collected rather than stopping at the first file. This job still runs when compilation/tests fail.
 
-### Coordinated rollout
+### Verify releases and caller pins
 
-Merge the control workflow change first. The maintainer then publishes the
-reviewed shared-workflow commit by moving the existing `v1.0` tag in
-**SNodeC/.github**. Callers and the canonical template use `@v1.0`; no new
-`v1` tag is created. The maintainer explicitly approved moving this existing tag.
-Merge callers without dispatching Verify. Release qualification is triggered
-through the existing product version-tag package pipeline. Consumers build
-their ordered dependencies from source, with no release-asset prerequisites.
-AutoTalk can follow the control workflow independently. No duplicate old/native
-build jobs remain after migration.
+A changed `verify.yml` ships at a new `vX.Y` tag after review and merge. Existing tags are never moved. The current release is `v1.2`, commit `37b76768a383ea28c03fd9e7ceda7eecf3007c0a`. Callers pin the full release commit SHA with a `# vX.Y` comment; they pass no secrets unless Verify actually reads one (currently none). Product CI remains `workflow_dispatch`-only by owner decision, independent of the existing version-tag package pipelines.
+
+Every Verify release updates `templates/ci.yml` and all callers to the new tag's full commit SHA in the same release step, once the new tag exists. The template is the canonical onboarding example, not a mutable-tag shortcut. The documented release step keeps the template current without a network-dependent newest-tag test.
 
 Tests execute the actual inline workflow scripts, including ordered source
 builds and a real CMake/CTest/staged-install consumer, Python commands and
 hygiene aggregation. Boundary tests also assert that binary dependency modes,
 publication options and publisher workflows are absent or rejected.
 
-Repository README frames are **Phase 4**, not Phase 2. Package/release/site,
-figure, ecosystem and org-sync lanes remain separate later phases.
+Repository README frames and generated navigation are governed by the [navigation plan](navigation/README.md). Package/release publication remains a separate responsibility.
 
-See [Phase 2 evidence and rollout](history/PHASE2.md), [Phase 1 evidence](history/EVIDENCE.md),
-[brand values](brand/README.md), [contributing](CONTRIBUTING.md) and
-[security](SECURITY.md).
+Historical rollout and design records live only in [history](history/README.md); they are not current release policy. See also [brand values](brand/README.md), [contributing](CONTRIBUTING.md) and [security](SECURITY.md).
