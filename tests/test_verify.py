@@ -64,6 +64,7 @@ class ManifestTests(unittest.TestCase):
             self.assertEqual(config["ctest_args"], ["--output-on-failure"])
             self.assertTrue(config["ctest"])
             self.assertFalse(config["runtime_dirs"])
+            self.assertEqual(config["timeout_minutes"], 60)
             result = prepare(path, {"ipv6": True, "container": "gcc:15.3.0-trixie"})
             self.assertEqual(result["options"],
                              "--cap-add=NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0")
@@ -78,6 +79,18 @@ class ManifestTests(unittest.TestCase):
             for key, value in ci.items():
                 self.assertEqual(json.loads(result["config"])[key], value)
 
+    def test_cpp_timeout_boundaries_and_python_profile_rejection(self):
+        with tempfile.TemporaryDirectory() as name:
+            for value in (10, 60, 180):
+                with self.subTest(value=value):
+                    config = json.loads(prepare(Path(name), {"timeout_minutes": value})["config"])
+                    self.assertEqual(config["timeout_minutes"], value)
+            ci = {"profile": "python", "native_build": ["python", "tools/build.py"],
+                  "smoke": {system: ["program"] for system in ("Linux", "Windows", "macOS")},
+                  "artifact_globs": ["dist/*.zip"], "timeout_minutes": 60}
+            with self.assertRaises(ValueError):
+                prepare(Path(name), ci)
+
     def test_invalid_manifests_fail_before_container(self):
         cases = [{"profile": "python"}, {"ipv6": "true"}, {"runtime_dirs": 1},
                  {"ctest": None}, {"apt": "--bad"}, {"deps": ["snode.c@release"]},
@@ -85,6 +98,8 @@ class ManifestTests(unittest.TestCase):
                  {"apt": ["libssl-dev;echo bad"]}, {"container": "gcc:15\noptions=bad"},
                  {"cmake_options": [False]}, {"ctest_args": ["bad\0argument"]},
                  {"deps": ["other/snode.c@source"]}, {"unknown": 1}, {"parallel": 0}, {"parallel": True},
+                 {"timeout_minutes": 9}, {"timeout_minutes": 181}, {"timeout_minutes": True},
+                 {"timeout_minutes": "60"}, {"timeout_minutes": 60.0}, {"timeout_minutes": None},
                  {"sdk": "yes"}, {"env": {"GH_READ_TOKEN": "bad"}}, {"env": {"OK": 1}}]
         with tempfile.TemporaryDirectory() as directory_name:
             for ci in cases:
@@ -113,6 +128,41 @@ class WorkflowContractTests(unittest.TestCase):
         cpp = WORKFLOW["jobs"]["cpp"]
         self.assertEqual(cpp["container"]["image"], "${{ needs.prepare.outputs.container }}")
         self.assertEqual(cpp["container"]["options"], "${{ needs.prepare.outputs.options }}")
+
+    def test_jobs_have_bounded_timeouts_fixed_linux_and_full_action_pins(self):
+        jobs = WORKFLOW["jobs"]
+        self.assertEqual(jobs["prepare"]["timeout-minutes"], "10")
+        self.assertEqual(jobs["hygiene"]["timeout-minutes"], "15")
+        self.assertEqual(jobs["python"]["timeout-minutes"], "60")
+        self.assertEqual(jobs["cpp"]["timeout-minutes"],
+                         "${{ fromJSON(needs.prepare.outputs.config).timeout_minutes }}")
+        for name, job in jobs.items():
+            self.assertEqual(job["runs-on"], "${{ matrix.os }}" if name == "python" else "ubuntu-24.04")
+            for step in job["steps"]:
+                if "uses" in step:
+                    self.assertRegex(step["uses"], r"^actions/(checkout|setup-python|upload-artifact)@[0-9a-f]{40}$")
+        text = (ROOT / ".github/workflows/verify.yml").read_text()
+        for line in text.splitlines():
+            if "uses:" in line:
+                self.assertRegex(line, r"@[0-9a-f]{40} # v[0-9]+\.[0-9]+\.[0-9]+$")
+
+    def test_documentation_has_one_authority_at_called_workflow_sha(self):
+        steps = WORKFLOW["jobs"]["hygiene"]["steps"]
+        checkout = next(step for step in steps if step.get("name") == "Check out the called workflow tooling")
+        self.assertEqual(checkout["with"]["repository"], "${{ job.workflow_repository }}")
+        self.assertEqual(checkout["with"]["ref"], "${{ job.workflow_sha }}")
+        self.assertEqual(checkout["with"]["persist-credentials"], "false")
+        self.assertEqual(checkout["with"]["path"], ".snodec-ci-tools")
+        for name in ("Check whitespace against PR base or previous commit", "Check changed source formatting"):
+            check = next(step for step in steps if step.get("name") == name)
+            self.assertLess(steps.index(checkout), steps.index(check))
+            self.assertEqual(check["if"], "${{ always() && !cancelled() }}")
+        audit = next(step for step in steps if step.get("name") == "Audit all tracked documentation")
+        self.assertEqual(audit["if"], "${{ always() && !cancelled() }}")
+        self.assertIn('docs-audit --repo "$GITHUB_WORKSPACE"', audit["run"])
+        self.assertNotIn('path.suffix.lower() == ".md"', script("hygiene", "Check changed source formatting"))
+        self.assertIn("python3-yaml", next(step["run"] for step in steps if "apt-get install" in step.get("run", "")))
+        self.assertNotIn("secrets.", (ROOT / ".github/workflows/verify.yml").read_text())
 
     def test_template_exact_and_control_checks_independent(self):
         self.assertEqual((ROOT / "templates/ci.yml").read_text(),
@@ -331,7 +381,7 @@ class PhaseTwoBoundaryTests(unittest.TestCase):
         self.assertIn('not audio_device', script("python", "Tests independent of physical audio devices"))
 
     def test_changed_file_hygiene_collects_all_failures(self):
-        code = script("hygiene", "Check changed source formatting and documentation links")
+        code = script("hygiene", "Check changed source formatting")
         with tempfile.TemporaryDirectory() as name:
             root = Path(name)
             git(root, "init", "--initial-branch=hygiene/from-api")
@@ -356,9 +406,36 @@ class PhaseTwoBoundaryTests(unittest.TestCase):
                 with self.assertRaises(SystemExit) as error:
                     exec(code, {})
             self.assertEqual(set(tools), {"clang-format", "cmake-format"})
-            self.assertIn("missing-new.md", str(error.exception))
-            self.assertNotIn("missing-old.md", str(error.exception))
-            self.assertNotIn("ignored.md", str(error.exception))
+            self.assertIn("changed.cpp: clang-format", str(error.exception))
+            self.assertIn("CMakeLists.txt: cmake-format", str(error.exception))
+            self.assertNotIn("missing-new.md", str(error.exception))
+
+    def test_workflow_docs_audit_checks_old_and_new_tracked_pages(self):
+        code = script("hygiene", "Audit all tracked documentation")
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            git(root, "init", "--initial-branch=audit/from-api")
+            git(root, "remote", "add", "origin", "https://github.com/SNodeC/AutoTalk.git")
+            (root / "README.md").write_text("[old](old.md)\n")
+            (root / "old.md").write_text("[old missing](missing-old.md)\n")
+            commit(root)
+            (root / "README.md").write_text("[old](old.md) [new](new.md)\n")
+            (root / "new.md").write_text("[new missing](missing-new.md)\n```\n[code](ignored.md)\n```\n")
+            commit(root)
+            (root / ".snodec-ci-tools").symlink_to(ROOT, target_is_directory=True)
+            result = subprocess.run(["bash", "-e", "-c", code], cwd=root,
+                                    env=os.environ | {"GITHUB_WORKSPACE": str(root)}, capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("missing-old.md", result.stdout)
+            self.assertIn("missing-new.md", result.stdout)
+            self.assertNotIn("ignored.md", result.stdout)
+            (root / "missing-old.md").write_text("Old target\n")
+            (root / "missing-new.md").write_text("New target\n")
+            git(root, "add", ".")
+            result = subprocess.run(["bash", "-e", "-c", code], cwd=root,
+                                    env=os.environ | {"GITHUB_WORKSPACE": str(root)}, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("0 violations", result.stdout)
 
     def test_source_only_verification_has_no_publication_capability(self):
         self.assertFalse((ROOT / ".github/workflows/publish-dev.yml").exists())

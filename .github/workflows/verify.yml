@@ -6,7 +6,8 @@ permissions:
 jobs:
   prepare:
     name: Read build manifest
-    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    runs-on: ubuntu-24.04
     outputs:
       profile: ${{ steps.manifest.outputs.profile }}
       config: ${{ steps.manifest.outputs.config }}
@@ -14,11 +15,11 @@ jobs:
       options: ${{ steps.manifest.outputs.options }}
       artifact_paths: ${{ steps.manifest.outputs.artifact_paths }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
       - run: python -m pip install PyYAML==6.0.3
@@ -38,7 +39,7 @@ jobs:
           cpp = {
               "profile": "cpp", "container": "gcc:15.3.0-trixie", "apt": [], "deps": [],
               "cmake_options": [], "ctest": True, "ctest_args": ["--output-on-failure"],
-              "ipv6": False, "runtime_dirs": False, "parallel": 2, "env": {}, "ctest_launcher": [],
+              "ipv6": False, "runtime_dirs": False, "parallel": 2, "env": {}, "ctest_launcher": [], "timeout_minutes": 60,
           }
           python = {
               "profile": "python", "python_version": "3.12", "pip": ".[dev]",
@@ -77,6 +78,8 @@ jobs:
               raise ValueError("env must contain non-reserved single-line environment values")
           if profile == "cpp" and (type(config["parallel"]) is not int or not 1 <= config["parallel"] <= 32):
               raise ValueError("parallel must be between 1 and 32")
+          if profile == "cpp" and (type(config["timeout_minutes"]) is not int or not 10 <= config["timeout_minutes"] <= 180):
+              raise ValueError("timeout_minutes must be an integer between 10 and 180")
           for key in ("apt", "deps", "cmake_options", "ctest_args", "ctest_launcher") if profile == "cpp" else ():
               if not isinstance(config[key], list) or any(
                   not isinstance(item, str) or not item or any(c in item for c in "\r\n\0")
@@ -100,9 +103,10 @@ jobs:
 
   cpp:
     name: snodec / cpp
+    timeout-minutes: ${{ fromJSON(needs.prepare.outputs.config).timeout_minutes }}
     needs: prepare
     if: ${{ needs.prepare.outputs.profile == 'cpp' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ${{ needs.prepare.outputs.container }}
       options: ${{ needs.prepare.outputs.options }}
@@ -112,7 +116,7 @@ jobs:
     env:
       CI_CONFIG: ${{ needs.prepare.outputs.config }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
@@ -229,20 +233,28 @@ jobs:
 
   hygiene:
     name: snodec / hygiene
+    timeout-minutes: 15
     needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ${{ needs.prepare.outputs.container }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
       - run: |
           apt-get update
-          apt-get install -y --no-install-recommends git ca-certificates python3 clang-format cmake-format
+          apt-get install -y --no-install-recommends git ca-certificates python3 python3-yaml clang-format cmake-format
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Check out the called workflow tooling
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ job.workflow_repository }}
+          ref: ${{ job.workflow_sha }}
+          path: .snodec-ci-tools
+          persist-credentials: false
       - name: Check whitespace against PR base or previous commit
         if: ${{ always() && !cancelled() }}
         env:
@@ -256,7 +268,7 @@ jobs:
             base="$(git hash-object -t tree /dev/null)"
           fi
           git diff --check "$base" HEAD
-      - name: Check changed source formatting and documentation links
+      - name: Check changed source formatting
         if: ${{ always() && !cancelled() }}
         shell: python3 {0}
         env:
@@ -264,9 +276,7 @@ jobs:
         run: |
           import os
           from pathlib import Path
-          import re
           import subprocess
-          from urllib.parse import unquote, urlsplit
 
           base = os.environ.get("PR_BASE") or subprocess.run(
               ["git", "rev-parse", "HEAD^"], capture_output=True, text=True).stdout.strip()
@@ -286,23 +296,16 @@ jobs:
               if (path.name == "CMakeLists.txt" or path.suffix == ".cmake") and Path(".cmake-format.py").exists():
                   if subprocess.run(["cmake-format", "--check", filename]).returncode:
                       failures.append(filename + ": cmake-format")
-              if path.suffix.lower() == ".md":
-                  prose = re.sub(r"```.*?```|~~~.*?~~~", "", path.read_text(), flags=re.S)
-                  links = re.findall(r"!?(?:\[[^\]]*\])\(([^ )]+)", prose)
-                  links += re.findall(r"^\[[^\]]+\]:\s*(\S+)", prose, flags=re.M)
-                  for link in links:
-                      target = urlsplit(link.strip("<>"))
-                      if target.scheme or target.netloc or not target.path:
-                          continue
-                      local = Path(unquote(target.path))
-                      local = local if local.is_absolute() else path.parent / local
-                      if not local.exists():
-                          failures.append(filename + ": missing link " + link)
           if failures:
               raise SystemExit("\n".join(failures))
 
+      - name: Audit all tracked documentation
+        if: ${{ always() && !cancelled() }}
+        run: python3 .snodec-ci-tools/tools/snodec_sync docs-audit --repo "$GITHUB_WORKSPACE"
+
   python:
     name: snodec / python (${{ matrix.os }})
+    timeout-minutes: 60
     needs: prepare
     if: ${{ needs.prepare.outputs.profile == 'python' }}
     strategy:
@@ -313,11 +316,11 @@ jobs:
     env:
       CI_CONFIG: ${{ needs.prepare.outputs.config }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ fromJSON(needs.prepare.outputs.config).python_version }}
       - name: Install development dependencies
@@ -353,7 +356,7 @@ jobs:
           import os
           import subprocess
           subprocess.run(json.loads(os.environ["CI_CONFIG"])["smoke"][os.environ["RUNNER_OS"]], check=True)
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ always() && !cancelled() && steps.package.outcome == 'success' }}
         with:
           name: ${{ github.event.repository.name }}-${{ runner.os }}-${{ runner.arch }}

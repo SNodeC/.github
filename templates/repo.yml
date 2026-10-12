@@ -11,6 +11,7 @@ ci:
   ctest_args: [--output-on-failure]
   ipv6: false            # NET_ADMIN, IPv6 enabled and dummy interface fd00::1/128.
   runtime_dirs: false    # snodec group; /etc/snode.c, /var/log/snode.c, /var/run/snode.c.
+  timeout_minutes: 60   # Optional C++ job timeout (integer, 10–180 minutes).
   parallel: 2           # Build workers (1–32); ctest parallelism belongs in ctest_args.
   env: {}               # Non-secret build/test environment, e.g. CODEXUI_TIMING_POLICY.
   ctest_launcher: []    # Optional argument-list wrapper, e.g. [xvfb-run, -a].
