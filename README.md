@@ -108,7 +108,7 @@ files against existing repository formatting policies. Documentation and present
 
 ### Verify releases and caller pins
 
-A changed `verify.yml` ships at a new `vX.Y` tag after review and merge. Existing tags are never moved. The current release is `v1.2`, commit `37b76768a383ea28c03fd9e7ceda7eecf3007c0a`. Callers pin the full release commit SHA with a `# vX.Y` comment; they pass no secrets unless Verify actually reads one (currently none). Product CI remains `workflow_dispatch`-only by owner decision, independent of the existing version-tag package pipelines.
+A changed `verify.yml` ships at a new `vX.Y` tag after review and merge. Existing tags are never moved. The current release is `v1.3`, commit `465c7e9398b1c1ab294967153bf855af52b84082`. Callers pin the full release commit SHA with a `# vX.Y` comment; they pass no secrets unless Verify actually reads one (currently none). Product CI remains `workflow_dispatch`-only by owner decision, independent of the existing version-tag package pipelines.
 
 Every Verify release updates `templates/ci.yml` and all callers to the new tag's full commit SHA in the same release step, once the new tag exists. The template is the canonical onboarding example, not a mutable-tag shortcut. The documented release step keeps the template current without a network-dependent newest-tag test.
 
@@ -121,4 +121,4 @@ Repository README frames and generated navigation are governed by the [navigatio
 
 Historical rollout and design records live only in [history](history/README.md); they are not current release policy. See also [brand values](brand/README.md), [contributing](CONTRIBUTING.md) and [security](SECURITY.md).
 
-The default branch removes documentation enforcement from Verify. Existing callers remain on immutable `v1.2` until a new release is approved and pinned; no existing tag is moved.
+Verify `v1.3` removes documentation enforcement. The canonical template and existing callers pin its full commit SHA. Existing `v1.0`, `v1.1` and `v1.2` tags remain unchanged.

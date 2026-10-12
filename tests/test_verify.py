@@ -151,7 +151,7 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertEqual((ROOT / "templates/ci.yml").read_text(),
                          "name: CI\non: [workflow_dispatch]\n"
                          "permissions: { contents: read }\njobs:\n  snodec:\n"
-                         "    uses: SNodeC/.github/.github/workflows/verify.yml@37b76768a383ea28c03fd9e7ceda7eecf3007c0a # v1.2\n")
+                         "    uses: SNodeC/.github/.github/workflows/verify.yml@465c7e9398b1c1ab294967153bf855af52b84082 # v1.3\n")
         ci = yaml.load((ROOT / ".github/workflows/ci.yml").read_text(), Loader=yaml.BaseLoader)
         steps = ci["jobs"]["control"]["steps"]
         self.assertEqual(ci["on"], ["push", "pull_request", "workflow_dispatch"])
