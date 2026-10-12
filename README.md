@@ -1,6 +1,6 @@
 # SNodeC control repository
 
-This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
+This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and optional `docs-audit` command keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
 
 ## Documentation
 
@@ -106,11 +106,11 @@ Whitespace checks run against the PR base or previous push commit (empty tree
 on the initial commit). An independent job also checks changed C/C++ and CMake
 files against existing repository formatting policies. Documentation and presentation assets are not verification gates. It neither invents a style where none exists nor performs unreliable external-URL probes. Failures are collected rather than stopping at the first file. This job still runs when compilation/tests fail.
 
-### Verify releases and caller pins
+### Shared Verify updates
 
-A changed `verify.yml` ships at a new `vX.Y` tag after review and merge. Existing tags are never moved. The current release is `v1.3`, commit `465c7e9398b1c1ab294967153bf855af52b84082`. Callers pin the full release commit SHA with a `# vX.Y` comment; they pass no secrets unless Verify actually reads one (currently none). Product CI remains `workflow_dispatch`-only by owner decision, independent of the existing version-tag package pipelines.
+The five product callers and `templates/ci.yml` use `verify.yml@main`, following the API-verified default branch of this control repository. A merged shared-workflow change is used by their next manually started CI runs; it does not start those runs. Callers pass no secrets unless Verify actually reads one (currently none). Product CI remains `workflow_dispatch`-only, independent of version-tag package pipelines.
 
-Every Verify release updates `templates/ci.yml` and all callers to the new tag's full commit SHA in the same release step, once the new tag exists. The template is the canonical onboarding example, not a mutable-tag shortcut. The documented release step keeps the template current without a network-dependent newest-tag test.
+Existing tags are historical snapshots and are never moved. Page-header, menu and profile generation are separate from build CI; documentation changes require neither a Verify release nor caller updates. `docs-audit` is optional local/PR review tooling and is never a build, signing or publication gate.
 
 Tests execute the actual inline workflow scripts, including ordered source
 builds and a real CMake/CTest/staged-install consumer, Python commands and
@@ -121,4 +121,4 @@ Repository README frames and generated navigation are governed by the [navigatio
 
 Historical rollout and design records live only in [history](history/README.md); they are not current release policy. See also [brand values](brand/README.md), [contributing](CONTRIBUTING.md) and [security](SECURITY.md).
 
-Verify `v1.3` removes documentation enforcement. The canonical template and existing callers pin its full commit SHA. Existing `v1.0`, `v1.1` and `v1.2` tags remain unchanged.
+Verify no longer enforces documentation. Existing `v1.0`–`v1.3` tags remain unchanged.

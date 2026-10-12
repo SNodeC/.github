@@ -12,14 +12,16 @@ An ecosystem for building event-driven networked programs in C++ and running MQT
 - **Learn:** [Book companion](https://github.com/SNodeC/SNode.C-Book-Companion) and [examples](#learn)
 - **Install signed packages:** [Packages](https://github.com/SNodeC/Packages) · snode.c · mqttsuite
 
+<!-- snodec:begin menu -->
 <p>
-<a href="#framework" title="Framework"><img src="media/menu/framework-108.svg" alt="Framework" width="160" height="28"></a>
-<a href="#suites" title="Suites"><img src="media/menu/suites-108.svg" alt="Suites" width="160" height="28"></a>
-<a href="#applications" title="Applications"><img src="media/menu/applications-108.svg" alt="Applications" width="160" height="28"></a>
-<a href="#learn" title="Learn"><img src="media/menu/learn-108.svg" alt="Learn" width="160" height="28"></a>
-<a href="#community-projects" title="Community projects"><img src="media/menu/community-108.svg" alt="Community projects" width="160" height="28"></a>
-<a href="#distribution--infrastructure" title="Distribution &amp; infrastructure"><img src="media/menu/infrastructure-108.svg" alt="Distribution &amp; infrastructure" width="160" height="28"></a>
+<a href="#framework" title="Framework"><img src="media/menu/framework.svg" alt="Framework" width="160" height="28"></a>
+<a href="#suites" title="Suites"><img src="media/menu/suites.svg" alt="Suites" width="160" height="28"></a>
+<a href="#applications" title="Applications"><img src="media/menu/applications.svg" alt="Applications" width="160" height="28"></a>
+<a href="#learn" title="Learn"><img src="media/menu/learn.svg" alt="Learn" width="160" height="28"></a>
+<a href="#community-projects" title="Community projects"><img src="media/menu/community.svg" alt="Community projects" width="160" height="28"></a>
+<a href="#distribution--infrastructure" title="Distribution &amp; infrastructure"><img src="media/menu/infrastructure.svg" alt="Distribution &amp; infrastructure" width="160" height="28"></a>
 </p>
+<!-- snodec:end menu -->
 
 ## Framework
 

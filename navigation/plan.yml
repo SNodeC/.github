@@ -139,8 +139,8 @@ snode.c:
     kind: code
     title: Express Compatibility Suite (Node.js/Express v4 vs SNode.C/Express)
     label: Tests
-    up: README.md
-    up_label: SNode.C
+    up: src/apps/README.md
+    up_label: Examples
   - old: src/tools/snodec-control/README.md
     new: src/tools/snodec-control/README.md
     kind: code
@@ -167,8 +167,8 @@ snode.c:
     kind: code
     title: Legacy Stream Component Test Coverage
     label: Tests
-    up: README.md
-    up_label: SNode.C
+    up: docs/guides/README.md
+    up_label: Guides
 mqttsuite:
   display: MQTTSuite
   source: mqttsuite
@@ -881,6 +881,7 @@ Packages:
   - old: status/README.md
     new: status/README.md
     kind: doc
+    section_list: false
     title: (generated)
     label: Package status
     up: README.md
@@ -915,22 +916,33 @@ Packages:
     remove: true
 # Visible-label shortening required by the approved 160px menu rule.
 # Destinations, tooltips and alternative text remain unchanged.
-menu_labels:
-  Native client & server: Client/server
-  SSE & WebSocket: SSE/WebSocket
-  Subprotocol source: Subprotocol
-  Signed packages: Packages
-  Build from source: From source
-  Mapping examples: Examples
-  Mapping schema: Map schema
-  MQTTStore guide: Store guide
-  Projection schema: Projection
-  Grouping & lifecycle: Groups/lifecycle
-  Browser frontend: Browser
-  Selected packages: Selected
+menu_labels: {}
 
 DistributionPackages:
   display: DistributionPackages
+  exempt:
+  - path: site/install/install.sh
+    reason: Resolves in published Packages.
+  - path: site/status/**
+    reason: Resolves in published Packages.
+  - path: site/keys/*.asc
+    reason: Resolves in published Packages.
+  - path: site/keys/*.pub
+    reason: Resolves in published Packages.
+  - path: site/keys/*.pem
+    reason: Resolves in published Packages.
+  - path: site/openwrt/**
+    reason: Resolves in published Packages.
+  - path: site/raspberrypios/**
+    reason: Resolves in published Packages.
+  - path: site/debian/**
+    reason: Resolves in published Packages.
+  - path: site/ubuntu/**
+    reason: Resolves in published Packages.
+  - path: site/rocky/**
+    reason: Resolves in published Packages.
+  - path: site/fedora/**
+    reason: Resolves in published Packages.
   source: DistributionPackages
   sections:
     docs: Documentation
@@ -943,7 +955,7 @@ DistributionPackages:
     intro: Setup and maintenance of package publication.
     label: Documentation
     up: README.md
-    up_label: Distribution
+    up_label: Dist. Packages
   - old: docs/maintainers.md
     new: docs/maintainers.md
     kind: doc

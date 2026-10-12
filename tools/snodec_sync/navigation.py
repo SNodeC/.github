@@ -25,6 +25,15 @@ def validate_plan(plan):
             if not isinstance(config, dict) or any(not isinstance(k, str) or not isinstance(v, str) or not v.strip() for k, v in config.items()):
                 raise ValueError('menu_labels requires nonempty text labels')
             continue
+        for entry in config.get('exempt', []):
+            if (not isinstance(entry, dict) or set(entry) != {'path', 'reason'}
+                    or not isinstance(entry['path'], str) or not entry['path']
+                    or PurePosixPath(entry['path']).is_absolute() or '..' in PurePosixPath(entry['path']).parts
+                    or not isinstance(entry['reason'], str) or '\n' in entry['reason'] or '\r' in entry['reason']
+                    or not entry['reason'].lower().startswith(('vendored', 'third-party', 'generated test fixture', 'resolves in published packages'))):
+                raise ValueError(f'{name}: exempt requires a safe path glob and approved one-line reason')
+            if entry['reason'].lower().startswith('resolves in published packages') and (name != 'DistributionPackages' or not entry['path'].startswith('site/') or len(PurePosixPath(entry['path']).parts) < 3 or PurePosixPath(entry['path']).parts[1] == 'docs'):
+                raise ValueError('Published-output exemptions are limited to DistributionPackages/site targets')
         active = {}
         for page in config['pages']:
             for field in ('old', 'new', 'up'):
@@ -33,6 +42,8 @@ def validate_plan(plan):
                     raise ValueError(f'{name}: unsafe {field}: {path}')
             if len(page['up_label']) > 15 or not page['up_label'].strip():
                 raise ValueError(f'{name}: Up label exceeds 15 characters: {page["up_label"]}')
+            if 'section_list' in page and type(page['section_list']) is not bool:
+                raise ValueError(f'{name}: section_list must be boolean')
             if page.get('deleted'):
                 continue
             if page['new'] in active:
@@ -200,6 +211,8 @@ def _strip_header(text):
 
 
 def _section_list(config, path, texts):
+    if not _page(config, path).get('section_list', True):
+        return ''
     entries = []
     for page in config['pages']:
         if page.get('deleted') or page.get('excluded') or page['up'] != path or page['new'] not in texts:
@@ -325,8 +338,9 @@ def page_headers(repo, check=False):
                 listing = '## Sections\n\n' + _section_list(config, path, texts)
                 pattern = r'(?:## Sections\n\n)?<!-- snodec:begin section-pages -->.*?<!-- snodec:end section-pages -->'
                 body = re.sub(pattern, '', body, flags=re.S).rstrip()
-                prefix, separator, rest = body.partition('\n## ')
-                body = prefix.rstrip() + '\n\n' + listing + ('\n\n## ' + rest if separator else '')
+                if page.get('section_list', True):
+                    prefix, separator, rest = body.partition('\n## ')
+                    body = prefix.rstrip() + '\n\n' + listing + ('\n\n## ' + rest if separator else '')
             body = _header(config, path) + '\n\n' + body
         texts[path] = (prefixes[path] + '\n\n' if prefixes[path] else '') + body + '\n'
     outputs.update(texts)

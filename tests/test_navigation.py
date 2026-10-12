@@ -171,3 +171,16 @@ class NavigationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'git rm'):
             page_headers(repo)
         self.assertTrue(deleted.exists())
+
+    def test_section_list_opt_out_preserves_project_table_and_detects_menu_drift(self):
+        repo = self.fixture('Packages')
+        page = repo / 'status/README.md'
+        table = '| Project | Latest release | Status |\n| --- | --- | --- |\n| Third | — | [Third](third.md) |'
+        page.write_text(page.read_text() + '\n' + table + '\n')
+        page_headers(repo)
+        self.assertIn(table, page.read_text())
+        self.assertNotIn('section-pages', page.read_text())
+        self.assertEqual(page_headers(repo, check=True), [])
+        asset = repo / 'docs/media/menu/build.svg'
+        asset.write_text(asset.read_text().replace('font-size="16"', 'font-size="12"'))
+        self.assertIn('docs/media/menu/build.svg', page_headers(repo, check=True))
