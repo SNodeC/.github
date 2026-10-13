@@ -30,9 +30,13 @@ Update links when a section moves into a guide; do not retain an empty README bu
 
 Preserve complete first successes in L1. Extract advanced walkthroughs only when their prerequisites and depth belong in L2, moving full commands, configuration, expected results and boundaries together. The README collection retains essential information; reducing duplicate authorities takes precedence over preserving wording or section location. No placeholder section, unsupported platform promise, unverified release number or invented maintainer contact may be introduced. Existing repository-specific README policies still apply.
 
-## Secondary navigation buttons
+## Links below the title menu
 
-For retained “Go further:” destinations, use one short SVG button per link, with descriptive alternative text and necessary explanations. Remove the navigation prefixes; redundant callouts and their links may be removed. Draw a right arrow in each secondary SVG; omit decorative arrows from its alternative text; keep multiple buttons in one paragraph so they wrap naturally on narrow screens. The linked compact banner replaces separate Back buttons. Labels retain Arial 16 px / weight 600 and baseline 19. Arrows are drawn inside each button SVG with one filled 9×4 shape (`M0 1.25H5.5V0L9 2L5.5 4V2.75H0Z`), a 1.5 px shaft and vertical centre y=14; back arrows mirror that same shape. The shape replaces font arrows, rather than adding a second renderer, and preserves their measured ink bounds while the buttons expand to fit 16 px text. Main-menu labels remain arrow-free at their consistent 160×28 size and wrap naturally; do not force the menu into a single unbroken browser-width line. Ordinary text links do not gain arrows.
+Button images belong only in the banner navigation row, the root Organization block and the marked title menu. Everything below is an ordinary text link, without arrows.
+
+Use `navigation/README.md` and `python tools/snodec_sync page-headers` as the authority for button size and type.
+
+The link text after "Next:" starts lowercase. Proper names keep their own spelling, such as SNode.C, MQTTSuite, CodexUI, Debian, OpenWrt, SSE and WebSocket. Example: `Next: [deployment and access controls](…)`.
 
 ## Common navigation semantics and depth
 
