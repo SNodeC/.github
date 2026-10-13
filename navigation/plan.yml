@@ -911,6 +911,16 @@ Packages:
     label: Install
     target: '#quick-install'
     replacement: Quick install
+  - pages:
+    - docs/installation/debian.md
+    - docs/installation/ubuntu.md
+    - docs/installation/fedora.md
+    - docs/installation/rocky-linux.md
+    - docs/installation/raspberry-pi-os.md
+    - docs/installation/openwrt.md
+    label: Choose packages
+    target: '#choose-packages'
+    replacement: Custom install
   - pages: [status/snodec.md, status/mqttsuite.md]
     label: All projects
     remove: true
