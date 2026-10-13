@@ -55,6 +55,8 @@ repository, not the working directory.
 - `templates/`: the exact future CI caller and commented build-only manifest.
   Forks are not enrolled.
 
+After the existing CI succeeds on a push to `main` (including a merged pull request) or a manual run on `main`, it sends `sync-organization-profile` to `SNodeC/.github-private`. That private repository owns the publication workflow: it pulls the current public `main` profile and assets, validates the generated profile and commits changes only when needed. Unmerged pull requests run checks without dispatching or changing the member view. Dispatch requires this repository's `ORG_PROFILE_TOKEN` secret, a fine-grained token with Contents read/write access to `.github-private`. The private workflow also supports a manual trigger. The catalog, template and generator remain authoritative here.
+
 No project count is generated in the organization profile. Retiring/retired entries are catalog classifications only: this repository does not archive anything. Upstream forks are not enrolled in shared Verify.
 
 Workflow badges show an existing workflow, **not** a promise of push/PR testing.

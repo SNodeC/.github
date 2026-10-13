@@ -21,3 +21,17 @@ jobs:
       - name: Unit and workflow boundary tests
         if: ${{ always() && !cancelled() }}
         run: python -m unittest discover -s tests -v
+  trigger-member-profile:
+    name: Trigger member organization profile sync
+    needs: control
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Request private profile refresh from public main
+        env:
+          GH_TOKEN: ${{ secrets.ORG_PROFILE_TOKEN }}
+        run: |
+          test -n "$GH_TOKEN"
+          gh api --method POST repos/SNodeC/.github-private/dispatches \
+            -f event_type=sync-organization-profile
