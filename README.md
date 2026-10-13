@@ -2,11 +2,15 @@
 <p><a href="https://github.com/SNodeC" title="SNodeC organization"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/nav/organization-dark.svg"><img align="right" src="docs/media/nav/organization-light.svg" alt="SNodeC organization" title="SNodeC organization" width="160" height="28"></picture></a><br clear="all"></p>
 <!-- snodec:end organization -->
 
+<a id="project-overview"></a>
+
 # SNodeC control repository
 
 This repository owns the organization catalog and the [profile](profile/README.md) generated from catalog rows and authored prose. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and optional `docs-audit` command keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
 
 ## Documentation
+
+This repository owns organization-profile generation and reusable project verification. The [workflow graph](docs/workflow-graph.md#page-overview) documents all entry points, repository handoffs and publication guards.
 
 - [Navigation generator](navigation/README.md)
 - [Navigation plan review](navigation/PLAN.md)

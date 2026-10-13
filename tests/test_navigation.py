@@ -25,6 +25,11 @@ class NavigationTests(unittest.TestCase):
         repo.mkdir()
         (repo / 'README.md').write_text('<a id="project-overview"></a>\n# Root\n\n'
                                       '<a href="docs/README.md#page-overview"><img src="docs/media/menu/build.svg" alt="Build" width="274" height="28"></a>\n')
+        if name == '.github':
+            root = repo / 'README.md'
+            root.write_text('<!-- snodec:begin organization -->\n'
+                            '<p><a href="https://github.com/SNodeC">SNodeC</a></p>\n'
+                            '<!-- snodec:end organization -->\n\n' + root.read_text())
         menu = repo / 'docs/media/menu'
         menu.mkdir(parents=True)
         (menu / 'build.svg').write_text(_menu_svg('Build', 274, 'right'))
@@ -55,6 +60,14 @@ class NavigationTests(unittest.TestCase):
     def hashes(self, repo):
         return {str(p.relative_to(repo)): hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in repo.rglob('*') if p.is_file()}
+
+    def test_control_repository_uses_declared_navigation(self):
+        repo = self.fixture('.github')
+        page_headers(repo)
+        guide = (repo / 'docs/workflow-graph.md').read_text()
+        self.assertIn(render_header('.github', 'docs/workflow-graph.md'), guide)
+        self.assertIn('One physical prose paragraph.', guide)
+        self.assertEqual(page_headers(repo, check=True), [])
 
     def test_plan_chains_and_label_limit(self):
         validate_plan(self.plan)
