@@ -1,4 +1,5 @@
-name: Verify
+name: Reusable build, test and package verification
+# Reusable manifest-driven build, test, formatting and native-package verification.
 on:
   workflow_call:
 permissions:

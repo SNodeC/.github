@@ -1,18 +1,18 @@
 {
   ".github": {
     "default_branch": "main",
-    "workflow": ".github/workflows/ci.yml"
+    "workflow": ".github/workflows/validate-organization.yml"
   },
   "AISuite": {
     "default_branch": "master",
     "readme_anchor": "project-overview",
-    "source_commit": "2ca800516b45eba7f5fb2c055adebfe7c53ee51f",
-    "workflow": ".github/workflows/ci.yml"
+    "source_commit": "45bbc477546bca8055575c17cebbb16db7bb24be",
+    "workflow": ".github/workflows/build-and-test.yml"
   },
   "AutoTalk": {
     "default_branch": "main",
-    "source_commit": "36ab5fb80b029e6ecaf292353c0b6ff9f9ca6671",
-    "workflow": ".github/workflows/ci.yml"
+    "source_commit": "cef28ba531e25116ed7b5557886b9d88867f61d2",
+    "workflow": ".github/workflows/test-and-package.yml"
   },
   "CLI11": {
     "default_branch": "main",
@@ -22,13 +22,13 @@
   "CodexUI": {
     "default_branch": "master",
     "readme_anchor": "project-overview",
-    "source_commit": "292d45a616daabc32a58fc4742dfb82657d0d107",
-    "workflow": ".github/workflows/ci.yml"
+    "source_commit": "33a5357bee5978ecaa31a2b7dab55b858843e9f7",
+    "workflow": ".github/workflows/build-and-qualify.yml"
   },
   "DistributionPackages": {
     "default_branch": "main",
-    "source_commit": "40d7a9638125de8e384150693cf3328d6afaed72",
-    "workflow": ".github/workflows/release.yml"
+    "source_commit": "f941021a88953cf962ac2b926e456cb25d2fda18",
+    "workflow": ".github/workflows/sign-and-publish-packages.yml"
   },
   "GpsdOsmViewer": {
     "default_branch": "master",
@@ -116,8 +116,8 @@
       "prerelease": false,
       "tag": "v1.0.2"
     },
-    "source_commit": "af349df3a418a046796c80debe1a960e5243793d",
-    "workflow": ".github/workflows/ci.yml"
+    "source_commit": "3cfaa5dde4af54970ef3f5132d2cd26c4d5277a8",
+    "workflow": ".github/workflows/build-and-test.yml"
   },
   "mqttsuite-doc": {
     "default_branch": "main",
@@ -139,8 +139,8 @@
       "prerelease": false,
       "tag": "v2.0.0"
     },
-    "source_commit": "692c914dd8bcfa2cc070cfb589f5b645185efad5",
-    "workflow": ".github/workflows/ci.yml"
+    "source_commit": "2ab5974153f7e36641e77791a888debd575b897f",
+    "workflow": ".github/workflows/build-and-test.yml"
   },
   "snode.c-doc": {
     "default_branch": "main",

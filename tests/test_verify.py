@@ -12,7 +12,7 @@ from unittest.mock import patch
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKFLOW = yaml.load((ROOT / ".github/workflows/verify.yml").read_text(), Loader=yaml.BaseLoader)
+WORKFLOW = yaml.load((ROOT / ".github/workflows/verify-project.yml").read_text(), Loader=yaml.BaseLoader)
 
 
 def script(job, name):
@@ -141,18 +141,18 @@ class WorkflowContractTests(unittest.TestCase):
             for step in job["steps"]:
                 if "uses" in step:
                     self.assertRegex(step["uses"], r"^actions/(checkout|setup-python|upload-artifact)@[0-9a-f]{40}$")
-        text = (ROOT / ".github/workflows/verify.yml").read_text()
+        text = (ROOT / ".github/workflows/verify-project.yml").read_text()
         for line in text.splitlines():
             if "uses:" in line:
                 self.assertRegex(line, r"@[0-9a-f]{40} # v[0-9]+\.[0-9]+\.[0-9]+$")
 
 
     def test_template_exact_and_control_checks_independent(self):
-        self.assertEqual((ROOT / "templates/ci.yml").read_text(),
-                         "name: CI\non: [workflow_dispatch]\n"
+        self.assertEqual((ROOT / "templates/build-and-test.yml").read_text(),
+                         "name: Build and test project\non: [workflow_dispatch]\n"
                          "permissions: { contents: read }\njobs:\n  snodec:\n"
-                         "    uses: SNodeC/.github/.github/workflows/verify.yml@main\n")
-        ci = yaml.load((ROOT / ".github/workflows/ci.yml").read_text(), Loader=yaml.BaseLoader)
+                         "    uses: SNodeC/.github/.github/workflows/verify-project.yml@main\n")
+        ci = yaml.load((ROOT / ".github/workflows/validate-organization.yml").read_text(), Loader=yaml.BaseLoader)
         steps = ci["jobs"]["control"]["steps"]
         self.assertEqual(ci["on"], ["push", "pull_request", "workflow_dispatch"])
         self.assertEqual(ci["jobs"]["control"]["runs-on"], "ubuntu-24.04")
