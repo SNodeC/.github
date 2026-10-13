@@ -76,10 +76,10 @@ def _config(repo):
         name = next((key for key, value in plan.items()
                      if '/' in value['source'] and value['source'].split('/')[0] == name
                      and checkout.name == value['source'].split('/')[-1]), name)
-    if name in ('.github', 'SNode.C-Book-Companion'):
-        config = {'display': 'SNodeC' if name == '.github' else 'SNode.C Book Companion', 'pages': [], 'sections': {}}
-    elif name in plan:
+    if name in plan:
         config = plan[name]
+    elif name in ('.github', 'SNode.C-Book-Companion'):
+        config = {'display': 'SNodeC' if name == '.github' else 'SNode.C Book Companion', 'pages': [], 'sections': {}}
     else:
         raise ValueError(f'Checkout is not in navigation/plan.yml: {repo}')
     catalog = yaml.safe_load((ROOT / 'catalog.yml').read_text())
