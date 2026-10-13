@@ -1,4 +1,5 @@
-name: CI
+name: Validate organization catalog and profile
+# Validate the catalog and generated profile, then request the member-profile refresh.
 on: [push, pull_request, workflow_dispatch]
 permissions: { contents: read }
 jobs:

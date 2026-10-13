@@ -66,7 +66,7 @@ path is included because that workflow is delivered here.
 
 ## Shared Verify
 
-`.github/workflows/verify.yml` remains `workflow_call`-only and read-only. The
+`.github/workflows/verify-project.yml` remains `workflow_call`-only and read-only. The
 manifest is the single authority for build options; the catalog holds identity.
 Preparation validates the manifest before selecting the C++ container or native
 Python matrix. The canonical caller uses only `workflow_dispatch`: full
@@ -116,7 +116,7 @@ files against existing repository formatting policies. Documentation and present
 
 ### Shared Verify updates
 
-The five product callers and `templates/ci.yml` use `verify.yml@main`, following the API-verified default branch of this control repository. A merged shared-workflow change is used by their next manually started CI runs; it does not start those runs. Callers pass no secrets unless Verify actually reads one (currently none). Product CI remains `workflow_dispatch`-only, independent of version-tag package pipelines.
+The five product callers and `templates/build-and-test.yml` use `verify-project.yml@main`, following the API-verified default branch of this control repository. A merged shared-workflow change is used by their next manually started CI runs; it does not start those runs. Callers pass no secrets unless Verify actually reads one (currently none). Product CI remains `workflow_dispatch`-only, independent of version-tag package pipelines.
 
 Existing tags are historical snapshots and are never moved. Page-header, menu and profile generation are separate from build CI; documentation changes require neither a Verify release nor caller updates. `docs-audit` is optional local/PR review tooling and is never a build, signing or publication gate.
 

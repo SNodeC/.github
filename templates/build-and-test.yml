@@ -1,0 +1,6 @@
+name: Build and test project
+on: [workflow_dispatch]
+permissions: { contents: read }
+jobs:
+  snodec:
+    uses: SNodeC/.github/.github/workflows/verify-project.yml@main
