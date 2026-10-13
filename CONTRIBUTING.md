@@ -6,6 +6,6 @@ Keep changes scoped to their owning project. Do not create, change or require li
 
 ## Control repository
 
-Open control-repository pull requests in [SNodeC/.github](https://github.com/SNodeC/.github/pulls). Repository identity belongs in `catalog.yml`; build settings belong in the owning repository's manifest. Edit the profile's generator inputs, not generated `profile/README.md`.
+Open control-repository pull requests in [SNodeC/.github](https://github.com/SNodeC/.github/pulls). Repository identity belongs in `catalog.yml`; build settings belong in the owning repository's manifest. The profile is generated from `catalog.yml` (rows) and `profile/template.md` (prose). Edit those two files, never `profile/README.md`. Optional `tier` selects product, learn, install or secondary; `title` and `purpose` are single-line product display text; boolean `student` adds an entry to Student projects. Product rows require title/purpose and product/app kind; learn titles are optional, and secondary products require `student: true`.
 
 Run the generator and checks described in [README.md](README.md). Cite sources for identity changes; use `confirm: true` for summaries needing maintainer confirmation. The [scoped README frame](templates/readme-frame.md) applies only to the four repositories explicitly enrolled in that frame.

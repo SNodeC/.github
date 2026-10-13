@@ -97,13 +97,13 @@
     "source_commit": "f15f156c69bfea115267b189c0129462f6511913",
     "workflow": ".github/workflows/test.yaml"
   },
-  "leiches-masterproject": {
-    "default_branch": "main",
-    "source_commit": "167e3b7de85b192ffc698777af02ea5df1ae467a"
-  },
   "libucontext": {
     "default_branch": "master",
     "source_commit": "a0323579ac50b9a9d4033754d089f1fed0f59a00"
+  },
+  "mqtt-bridge-config-ui": {
+    "default_branch": "main",
+    "source_commit": "47303745064e693f71909f00bc67a01d4884c98f"
   },
   "mqtt-open-hue": {
     "default_branch": "main",
@@ -123,6 +123,11 @@
     "default_branch": "main",
     "source_commit": "b8324f82d693f1c7f2d6595e15d67b52cc2fd9a6"
   },
+  "mqttsuite-integrator-rest-api": {
+    "default_branch": "master",
+    "source_commit": "d7d5c30abb323191e69d6bf36368868517889d96",
+    "workflow": ".github/workflows/main.yml"
+  },
   "simple-form-snodec": {
     "default_branch": "main",
     "source_commit": "157c860bc91ab678658a9f8ca37f69e866bffefd"
@@ -140,6 +145,10 @@
   "snode.c-doc": {
     "default_branch": "main",
     "source_commit": "bd5b09a593f982258b4b1cdae2782a8814b41da2"
+  },
+  "snode.c-idp": {
+    "default_branch": "main",
+    "source_commit": "ea1e02de005d0919701f37292dbf7c74101f0fd9"
   },
   "snodec-forum-webapp": {
     "default_branch": "main",
