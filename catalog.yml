@@ -9,6 +9,9 @@
   site: true
   pinned: true
   accent: foundation-blue
+  tier: product
+  title: SNode.C
+  purpose: 'Write networked programs and your own protocols in C++: event-driven, with HTTP, WebSocket, SSE and MQTT'
 - name: mqttsuite
   area: suites
   kind: product
@@ -20,6 +23,9 @@
   site: true
   pinned: true
   accent: iot-green
+  tier: product
+  title: MQTTSuite
+  purpose: Run an MQTT broker, translate topics, bridge brokers and store messages
 - name: AISuite
   area: suites
   kind: product
@@ -30,6 +36,9 @@
   packaged: false
   pinned: true
   accent: protocol-violet
+  tier: product
+  title: AISuite
+  purpose: 'Connect applications to coding agents: asynchronous C++ and TypeScript'
 - name: CodexUI
   area: applications
   kind: app
@@ -39,6 +48,9 @@
   - snode.c
   status: active
   pinned: true
+  tier: product
+  title: Codex(W)UI
+  purpose: Follow a coding agent's work in a native Qt or browser workspace
 - name: AutoTalk
   area: applications
   kind: app
@@ -62,12 +74,7 @@
   - snode.c
   status: active
   pinned: true
-- name: talks
-  area: learn
-  kind: learning
-  summary: Talks and slides about SNode.C
-  depends_on: []
-  status: active
+  tier: learn
 - name: echo
   area: learn
   kind: example
@@ -76,6 +83,8 @@
   - snode.c
   status: active
   confirm: true
+  tier: learn
+  title: Echo
 - name: websocket-echo
   area: learn
   kind: example
@@ -84,6 +93,16 @@
   - snode.c
   status: active
   confirm: true
+  tier: learn
+  title: Websocket-echo
+- name: talks
+  area: learn
+  kind: learning
+  summary: Talks and slides about SNode.C
+  depends_on: []
+  status: active
+  tier: learn
+  title: Talks
 - name: tiktaktoe
   area: learn
   kind: example
@@ -148,20 +167,6 @@
   - snode.c
   status: active
   confirm: true
-- name: IOTApplicationDesigner
-  area: community
-  kind: community
-  summary: Visual editor for IoT topics and mappings with import and export
-  depends_on: []
-  status: active
-  confirm: true
-- name: leiches-masterproject
-  area: community
-  kind: community
-  summary: HTTP and WebSocket backend and web frontend for Philips Hue control
-  depends_on: []
-  status: active
-  confirm: true
 - name: mqtt-open-hue
   area: community
   kind: community
@@ -169,6 +174,45 @@
   depends_on: []
   status: active
   confirm: true
+- name: IOTApplicationDesigner
+  area: community
+  kind: community
+  summary: Visual editor for IoT topics and mappings with import and export
+  depends_on: []
+  status: active
+  confirm: true
+- name: mqtt-bridge-config-ui
+  area: applications
+  kind: app
+  summary: Graphical editor for MQTTBridge configurations
+  depends_on: []
+  status: active
+  student: true
+- name: mqttsuite-integrator-rest-api
+  area: suites
+  kind: product
+  summary: MQTTIntegrator with a REST admin API for mapping drafts, validation, deployment, rollback and history
+  depends_on:
+  - snode.c
+  status: active
+  student: true
+- name: snode.c-idp
+  area: applications
+  kind: app
+  summary: 'SNode.C Identity Provider: OAuth2 and OpenID Connect with TOTP multi-factor authentication'
+  depends_on:
+  - snode.c
+  status: active
+  student: true
+  tier: product
+  title: SNode.C-idp
+  purpose: 'SNode.C Identity Provider: OAuth2 and OpenID Connect with TOTP multi-factor authentication'
+- name: DistributionPackages
+  area: infrastructure
+  kind: infra
+  summary: Build recipes, release CI and signing for distribution packages
+  depends_on: []
+  status: active
 - name: .github
   area: infrastructure
   kind: infra
@@ -182,12 +226,7 @@
   depends_on: []
   status: active
   pinned: true
-- name: DistributionPackages
-  area: infrastructure
-  kind: infra
-  summary: Build recipes, release CI and signing for distribution packages
-  depends_on: []
-  status: active
+  tier: install
 - name: SNode.C-Landingpages
   area: infrastructure
   kind: infra

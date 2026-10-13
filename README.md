@@ -4,7 +4,7 @@
 
 # SNodeC control repository
 
-This repository owns the organization catalog and the [profile](profile/README.md) generated from it. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and optional `docs-audit` command keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
+This repository owns the organization catalog and the [profile](profile/README.md) generated from catalog rows and authored prose. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and optional `docs-audit` command keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
 
 ## Documentation
 
@@ -27,25 +27,27 @@ python3 -m venv .venv
 python -m pip install -r requirements.txt
 python tools/snodec_sync check
 python tools/snodec_sync profile
+git diff --exit-code profile/README.md
 python -m unittest discover -s tests -v
 python tools/snodec_sync profile --output /tmp/snodec-profile.md
 diff -u profile/README.md /tmp/snodec-profile.md
 ```
 
 `check` reports all catalog validation errors and exits non-zero.
-`profile` validates before writing. Both commands accept `--catalog`; rendering
+`profile` validates before writing. Edit `catalog.yml` for rows and `profile/template.md` for prose, never generated `profile/README.md`. Both commands accept `--catalog`; rendering
 also accepts `--metadata` and `--output`. Defaults resolve relative to this
 repository, not the working directory.
 
 ## Authorities
 
 - `catalog.yml`: identity, classification, ecosystem edges and lifecycle only.
-  Entry order controls row order; areas always use the prescribed organization order.
+  Entry order controls row order. Optional `tier` selects `product`, `learn`, `install` or the default `secondary`; product rows require single-line `title` and `purpose`. Learn titles are optional. Boolean `student` places entries in Student projects; a product with `student: true` also retains its product row. Product tiers require product/app kind; secondary products require `student: true`.
+- [profile/template.md](profile/template.md): authored profile prose and exactly one standalone marker each for Products, Learn and More rows. `snodec_sync profile` combines it with `catalog.yml`; `profile/README.md` remains generated.
 - `profile/github-metadata.json`: checked-in GitHub API evidence for default
   branches, workflow paths and release tags. No timestamps or network requests
   enter rendering. Update this snapshot deliberately when those facts change;
   profile generation is not a live inventory sync. Missing workflow/release
-  fields never invent badges or version numbers: the compact Status cell omits an unavailable CI badge and uses a dash for an unavailable release.
+  fields never invent badges or version numbers: product Status cells omit unavailable CI badges, and product navigation omits unavailable Releases links.
 - `brand/tokens.yml`: one authority for light/dark text and tinted backgrounds,
   plus area-to-accent mappings. Products may override their area's accent.
   CodexUI inherits Applications' interface amber; app entries never use `accent`.

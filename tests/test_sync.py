@@ -23,7 +23,8 @@ class CatalogTests(unittest.TestCase):
             "SNode.C-Book-Companion", "talks", "echo", "websocket-echo", "tiktaktoe",
             "ServerClient", "MiniGateway", "INJA-Templatebuilder", "IM510-Project",
             "snodec-forum-webapp", "SnodeCWebForum", "simple-form-snodec",
-            "IOTApplicationDesigner", "leiches-masterproject", "mqtt-open-hue", ".github",
+            "IOTApplicationDesigner", "mqtt-open-hue", ".github",
+            "snode.c-idp", "mqtt-bridge-config-ui", "mqttsuite-integrator-rest-api",
             "Packages", "DistributionPackages", "SNode.C-Landingpages", "snode.c-doc",
             "mqttsuite-doc", "OpenWRT", "CLI11", "json-schema-validator", "libucontext",
             "termux-packages", "arduino-LoRa", "iotempower",
@@ -87,111 +88,158 @@ class CatalogTests(unittest.TestCase):
 
 
 class ProfileTests(unittest.TestCase):
-    def test_retired_has_no_ci_but_retiring_keeps_it(self):
-        catalog = yaml.safe_load((ROOT / 'catalog.yml').read_text())
-        metadata = json.loads((ROOT / 'profile/github-metadata.json').read_text())
-        rendered = render_profile(catalog, metadata)
-        for name in ['OpenWRT', 'SNode.C-Landingpages']:
-            workflow = Path(metadata[name]['workflow']).name
-            present = f'https://github.com/SNodeC/{name}/actions/workflows/{workflow}/badge.svg' in rendered
-            self.assertEqual(present, name != 'OpenWRT')
-        self.assertIn('_Retired_', rendered)
-
-
     def setUp(self):
         self.catalog = yaml.safe_load((ROOT / "catalog.yml").read_text())
         self.metadata = json.loads((ROOT / "profile/github-metadata.json").read_text())
+        self.template = (ROOT / "profile/template.md").read_text()
         self.profile = render_profile(self.catalog, self.metadata)
 
-    def test_deterministic_and_no_drift(self):
+    def test_deterministic_reference_and_navigation_stability(self):
         self.assertEqual(self.profile, render_profile(self.catalog, self.metadata))
+        self.assertEqual(self.profile, (ROOT / "profile/README.md").read_text())
+        from tools.snodec_sync.navigation import page_headers
+        self.assertEqual(page_headers(ROOT, check=True), [])
+        self.assertTrue(self.profile.endswith("\n"))
 
-
-    def test_install_scope_follows_catalog(self):
-        catalog = [dict(entry) for entry in self.catalog]
-        next(entry for entry in catalog if entry["name"] == "AISuite")["packaged"] = True
-        next(entry for entry in catalog if entry["name"] == "snode.c")["status"] = "retired"
-        install = next(line for line in render_profile(catalog, self.metadata).splitlines() if "**Install signed packages:**" in line)
-        self.assertTrue(install.endswith("mqttsuite · AISuite"))
-        for entry in catalog:
-            entry["packaged"] = False
-        install = next(line for line in render_profile(catalog, self.metadata).splitlines() if "**Install signed packages:**" in line)
-        self.assertTrue(install.endswith("[Packages](https://github.com/SNodeC/Packages)"))
-
-    def test_every_repository_once_and_archived_separately(self):
+    def test_every_catalog_entry_has_exact_row_coverage(self):
         for entry in self.catalog:
-            self.assertEqual(self.profile.replace("&#8203;", "").count(f"| [{entry['name']}]("), 1)
-        visible, archive = self.profile.replace("&#8203;", "").split("<summary>Archive</summary>")
+            with self.subTest(name=entry['name']):
+                # Count catalog row links, not intentional prose/badge/route links.
+                pattern = r"^\| (?:\*\*)?\[[^]]+\]\(https://github.com/SNodeC/" + re.escape(entry['name']) + r"(?=[)#/])"
+                expected = 0 if entry.get('tier') == 'install' else 2 if entry.get('tier') == 'product' and entry.get('student') else 1
+                self.assertEqual(len(re.findall(pattern, self.profile, re.M)), expected)
+                if entry.get('tier') == 'install':
+                    self.assertRegex(self.template, r'https://github.com/SNodeC/' + re.escape(entry['name']) + r'(?=[)#/])')
+
+    def test_no_unknown_repository_links(self):
+        names = {entry['name'] for entry in self.catalog}
+        linked = set(re.findall(r'https://github.com/SNodeC/([^/#?\s)]+)(?=[)#/])', self.profile))
+        self.assertEqual(linked - names, set())
+
+    def test_only_verified_product_workflows_and_releases(self):
         for entry in self.catalog:
-            row = f"| [{entry['name']}]("
-            if entry["status"] != "active":
-                self.assertNotIn(row, visible)
-                self.assertIn(row, archive)
-        forks = visible.split("<summary>Upstream forks</summary>")[1]
-        for entry in self.catalog:
-            if entry["kind"] == "fork":
-                self.assertIn(f"| [{entry['name']}](", forks)
-                self.assertIn("https://github.com/" + entry["upstream"], forks)
+            if entry.get('tier') != 'product':
+                continue
+            name = entry['name']
+            row = next(line for line in self.profile.splitlines() if line.startswith(f"| **[{entry['title']}]("))
+            self.assertEqual('[![CI]' in row, bool(self.metadata[name].get('workflow')))
+            self.assertEqual('[Releases]' in row, bool(self.metadata[name].get('release')))
+        for key in ['workflow', 'release']:
+            self.metadata['snode.c'].pop(key)
+        rendered = render_profile(self.catalog, self.metadata)
+        row = next(line for line in rendered.splitlines() if line.startswith('| **[SNode.C]('))
+        self.assertNotIn('[![CI]', row)
+        self.assertNotIn('[Releases]', row)
 
-    def test_only_verified_workflows_and_releases(self):
-        for entry in self.catalog:
-            name = entry["name"]
-            row = next(line for line in self.profile.replace("&#8203;", "").splitlines() if line.startswith(f"| [{name}]("))
-            self.assertEqual("[![CI]" in row, "workflow" in self.metadata[name] and entry["status"] != "retired")
-            self.assertEqual("/releases/tag/" in row, "release" in self.metadata[name])
-        for entry in self.catalog:
-            row = next(line for line in self.profile.replace("&#8203;", "").splitlines() if line.startswith(f"| [{entry['name']}]("))
-            self.assertIn(f"<br>{entry['kind']} |", row)
-            self.assertEqual("Depends on:" in row, bool(entry["depends_on"]))
-            for dep in entry["depends_on"]:
-                self.assertIn(f"[{dep}](https://github.com/SNodeC/{dep}" + (f"#{self.metadata[dep]['readme_anchor']}" if self.metadata[dep].get("readme_anchor") else "") + ")", row)
-        self.assertIn("[v2.0.0]", self.profile)
-        self.assertIn("[v1.0.2]", self.profile)
+    def test_repository_navigation_uses_metadata_anchors_only(self):
+        for name in ['snode.c', 'mqttsuite', 'AISuite', 'CodexUI']:
+            self.assertIn(f'](https://github.com/SNodeC/{name}#project-overview)**', self.profile)
+            self.assertNotIn(f'{name}#project-overview/actions/', self.profile)
+            self.assertNotIn(f'{name}#project-overview/releases/', self.profile)
+        self.metadata['AISuite'].pop('readme_anchor')
+        rendered = render_profile(self.catalog, self.metadata)
+        row = next(line for line in rendered.splitlines() if line.startswith('| **[AISuite]('))
+        self.assertIn('](https://github.com/SNodeC/AISuite)**', row)
+        self.assertNotIn('[Quick start]', row)
+        self.assertNotIn('[Install]', row)
+        self.metadata['AISuite']['readme_anchor'] = 'banner/with space'
+        self.assertIn('AISuite#banner%2Fwith%20space)**', render_profile(self.catalog, self.metadata))
 
-    def test_repository_navigation_uses_verified_banner_anchors_only(self):
-        for name in ("snode.c", "mqttsuite", "AISuite", "CodexUI"):
-            with self.subTest(name=name):
-                self.assertEqual(self.metadata[name]["readme_anchor"], "project-overview")
-                destinations = re.findall(r"\]\((https://github.com/SNodeC/" + re.escape(name) + r"(?:#[^)]*)?)\)", self.profile)
-                self.assertTrue(destinations)
-                self.assertEqual(set(destinations), {f"https://github.com/SNodeC/{name}#project-overview"})
-                self.assertNotIn(f"{name}#project-overview/actions/", self.profile)
-                self.assertNotIn(f"{name}#project-overview/releases/", self.profile)
-        self.assertIn("[Packages](https://github.com/SNodeC/Packages)", self.profile)
-        self.metadata["AISuite"].pop("readme_anchor")
-        result = render_profile(self.catalog, self.metadata)
-        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite)<br>product", result.replace("&#8203;", ""))
-        self.metadata["AISuite"]["readme_anchor"] = "banner/with space"
-        result = render_profile(self.catalog, self.metadata)
-        self.assertIn("[AISuite](https://github.com/SNodeC/AISuite#banner%2Fwith%20space)", result.replace("&#8203;", ""))
-
-
-
-
-    def test_default_branch_is_metadata_not_constant(self):
-        self.metadata[".github"]["default_branch"] = "control/branch"
-        self.metadata["snode.c"]["default_branch"] = "framework/branch"
-        result = render_profile(self.catalog, self.metadata)
-        self.assertIn("/blob/control%2Fbranch/", result)
-        self.assertIn("?branch=framework%2Fbranch", result)
+    def test_default_branch_comes_from_metadata(self):
+        self.metadata['.github']['default_branch'] = 'control/branch'
+        self.metadata['snode.c']['default_branch'] = 'framework/branch'
+        rendered = render_profile(self.catalog, self.metadata)
+        self.assertIn('/blob/control%2Fbranch/', rendered)
+        self.assertIn('?branch=framework%2Fbranch', rendered)
 
     def test_authored_text_cannot_break_table_or_inject_html(self):
-        self.catalog[0]["summary"] = "<script> | [unexpected](bad)"
+        for field in ['title', 'purpose', 'summary']:
+            self.catalog[0][field] = '<script> | [unexpected](bad)'
         rendered = render_profile(self.catalog, self.metadata)
-        self.assertIn("&lt;script&gt;", rendered)
-        self.assertIn(r"\|", rendered)
-        self.assertIn(r"\[unexpected\]", rendered)
-        self.assertNotIn("<script>", rendered)
+        self.assertIn('&lt;script&gt;', rendered)
+        self.assertIn(r'\|', rendered)
+        self.assertIn(r'\[unexpected\]', rendered)
+        self.assertNotIn('<script>', rendered)
+        # Summary sanitising also applies to Learn and collapsed groups.
+        for name in ['echo', 'AutoTalk']:
+            next(e for e in self.catalog if e['name'] == name)['summary'] = '<script> | [unexpected](bad)'
+        self.assertNotIn('<script>', render_profile(self.catalog, self.metadata))
+
+    def test_tier_validation(self):
+        for field, value in [('tier', 'unknown'), ('tier', []), ('title', ''), ('title', 'two\nlines'),
+                             ('purpose', None), ('purpose', 'two\rlines'), ('student', 'true'), ('student', 1)]:
+            with self.subTest(field=field, value=value):
+                catalog = copy.deepcopy(self.catalog)
+                catalog[0][field] = value
+                self.assertTrue(validate(catalog))
+        for field in ['title', 'purpose']:
+            catalog = copy.deepcopy(self.catalog)
+            catalog[0].pop(field)
+            self.assertTrue(validate(catalog))
+        catalog = copy.deepcopy(self.catalog)
+        catalog[0]['kind'] = 'example'
+        catalog[0].pop('accent')
+        self.assertIn('product tier requires product or app kind', '\n'.join(validate(catalog)))
+        catalog[0].update(kind='product', tier='secondary')
+        self.assertIn('secondary products require student: true', '\n'.join(validate(catalog)))
+        catalog[0]['student'] = True
+        self.assertEqual(validate(catalog), [])
+        catalog[0].pop('tier')
+        self.assertEqual(validate(catalog), [])
+        catalog[0]['student'] = False
+        self.assertTrue(validate(catalog))
+
+    def test_grouping_and_precedence(self):
+        groups = {re.search(r'<b>([^<]+)</b>', block)[1]: block
+                  for block in self.profile.split('<details>')[1:]}
+        for name, group in [('tiktaktoe', 'Examples'), ('IOTApplicationDesigner', 'Student projects'),
+                            ('mqtt-bridge-config-ui', 'Student projects'), ('mqttsuite-integrator-rest-api', 'Student projects'),
+                            ('snode.c-idp', 'Student projects'), ('AutoTalk', 'Standalone applications'),
+                            ('DistributionPackages', 'Infrastructure'), ('CLI11', 'Upstream forks'), ('OpenWRT', 'Archive')]:
+            self.assertIn(f'| [{name}](', groups[group])
+        for name in ['snode.c', 'mqttsuite', 'AISuite', 'CodexUI', 'echo', 'Packages']:
+            self.assertNotIn(f'| [{name}](', '\n'.join(groups.values()))
+        entry = next(e for e in self.catalog if e['name'] == 'mqtt-bridge-config-ui')
+        entry.update(status='retiring', kind='example')
+        rendered = render_profile(self.catalog, self.metadata)
+        visible, archive = rendered.split('<summary><b>Archive</b>')
+        self.assertNotIn('| [mqtt-bridge-config-ui](', visible)
+        self.assertIn('| [mqtt-bridge-config-ui](', archive)
+        self.assertIn('Graphical editor for MQTTBridge configurations · retiring', archive)
+        entry['status'] = 'active'
+        rendered = render_profile(self.catalog, self.metadata)
+        student = rendered.split('<summary><b>Student projects</b>')[1].split('</details>')[0]
+        self.assertIn('| [mqtt-bridge-config-ui](', student)
+        examples = rendered.split('<summary><b>Examples</b>')[1].split('</details>')[0]
+        self.assertNotIn('| [mqtt-bridge-config-ui](', examples)
+        # Empty groups are omitted rather than rendered as empty tables.
+        catalog = [e for e in self.catalog if e['kind'] != 'example' or e.get('tier') == 'learn']
+        self.assertNotIn('<summary><b>Examples</b>', render_profile(catalog, self.metadata))
+
+    def test_template_markers_are_exactly_once_and_standalone(self):
+        for name in ['products', 'learn', 'more']:
+            marker = f'<!-- profile:{name} -->'
+            for template in [self.template.replace(marker, ''), self.template + marker,
+                             self.template.replace(marker, 'prefix ' + marker)]:
+                with self.subTest(marker=marker, template=template[-40:]):
+                    with self.assertRaisesRegex(ValueError, 'exactly one standalone'):
+                        render_profile(self.catalog, self.metadata, template)
+
+    def test_relative_media_paths_exist(self):
+        paths = re.findall(r'(?:src|srcset)="(media/[^"\s]+)"', self.profile)
+        self.assertTrue(paths)
+        for path in paths:
+            self.assertTrue((ROOT / 'profile' / path).is_file(), path)
 
     def test_metadata_is_separate_and_complete(self):
-        self.assertEqual(set(self.metadata), {e["name"] for e in self.catalog})
+        self.assertEqual(set(self.metadata), {e['name'] for e in self.catalog})
         for name, info in self.metadata.items():
-            self.assertIsInstance(info["default_branch"], str)
-            self.assertTrue(info["default_branch"])
-            if name != ".github":
-                self.assertRegex(info["source_commit"], r"^[a-f0-9]{40}$")
-            if "workflow" in info:
-                self.assertRegex(info["workflow"], r"^\.github/workflows/[^/]+\.ya?ml$")
-            if "release" in info:
-                self.assertIsInstance(info["release"]["tag"], str)
-                self.assertIsInstance(info["release"]["prerelease"], bool)
+            self.assertIsInstance(info['default_branch'], str)
+            self.assertTrue(info['default_branch'])
+            if name != '.github':
+                self.assertRegex(info['source_commit'], r'^[a-f0-9]{40}$')
+            if 'workflow' in info:
+                self.assertRegex(info['workflow'], r'^\.github/workflows/[^/]+\.ya?ml$')
+            if 'release' in info:
+                self.assertIsInstance(info['release']['tag'], str)
+                self.assertIsInstance(info['release']['prerelease'], bool)
