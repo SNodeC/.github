@@ -58,7 +58,7 @@ def validate_plan(plan):
                 seen.add(path)
                 path = active[path]['up']
         for change in config.get('menu_changes', []):
-            if any(p not in active for p in change['pages']):
+            if any(p != 'README.md' and p not in active for p in change['pages']):
                 raise ValueError(f'{name}: menu change references an undeclared page')
 
 

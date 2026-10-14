@@ -69,6 +69,17 @@ class NavigationTests(unittest.TestCase):
         self.assertIn('One physical prose paragraph.', guide)
         self.assertEqual(page_headers(repo, check=True), [])
 
+    def test_packages_root_removes_start_button(self):
+        repo = self.fixture('Packages')
+        root = repo / 'README.md'
+        root.write_text(root.read_text() + '\n<a href="#quick-start"><img src="docs/media/menu/start.svg" alt="Start"></a>\n')
+        (repo / 'docs/media/menu/start.svg').write_text(_menu_svg('Start', 160))
+        page_headers(repo)
+        self.assertNotIn('href="#quick-start"', root.read_text())
+        self.assertNotIn('alt="Start"', root.read_text())
+        self.assertIn('href="docs/README.md#page-overview"', root.read_text())
+        self.assertEqual(page_headers(repo, check=True), [])
+
     def test_plan_chains_and_label_limit(self):
         validate_plan(self.plan)
         invalid = copy.deepcopy(self.plan)
