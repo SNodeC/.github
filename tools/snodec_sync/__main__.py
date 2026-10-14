@@ -121,7 +121,7 @@ def render_profile(catalog, metadata, template=None):
             if info.get("workflow"):
                 workflow = f"{url}/actions/workflows/{quote(Path(info['workflow']).name, safe='')}"
                 branch = quote(info["default_branch"], safe="")
-                badge = f"[![CI]({workflow}/badge.svg?branch={branch})]({workflow})"
+                badge = f"[![CI](https://img.shields.io/github/actions/workflow/status/SNodeC/{quote(name, safe='')}/{quote(Path(info['workflow']).name, safe='')}?branch={branch}&label=CI&style=flat)]({workflow})"
             products.append(f"| **[{text(entry['title'])}]({repo_url(name, anchor)})** | {purpose} | {badge} |")
         elif tier == "learn":
             learn.append(f"| **[{text(entry.get('title', name))}]({url})** | {text(entry['summary'])} |")

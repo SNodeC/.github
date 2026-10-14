@@ -1,10 +1,10 @@
 <!-- snodec:begin organization -->
-<p><a href="https://github.com/SNodeC" title="SNodeC organization"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/nav/organization-dark.svg"><img align="right" src="docs/media/nav/organization-light.svg" alt="SNodeC organization" title="SNodeC organization" width="160" height="28"></picture></a><br clear="all"></p>
+<p><a href="https://github.com/SNodeC" title="SNode.C organization"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/nav/organization-dark.svg"><img align="right" src="docs/media/nav/organization-light.svg" alt="SNode.C organization" title="SNode.C organization" width="160" height="28"></picture></a><br clear="all"></p>
 <!-- snodec:end organization -->
 
 <a id="project-overview"></a>
 
-# SNodeC control repository
+# SNode.C control repository
 
 This repository owns the organization catalog and the [profile](profile/README.md) generated from catalog rows and authored prose. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and optional `docs-audit` command keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
 
@@ -33,8 +33,6 @@ python tools/snodec_sync check
 python tools/snodec_sync profile
 git diff --exit-code profile/README.md
 python -m unittest discover -s tests -v
-python tools/snodec_sync profile --output /tmp/snodec-profile.md
-diff -u profile/README.md /tmp/snodec-profile.md
 ```
 
 `check` reports all catalog validation errors and exits non-zero.
@@ -122,7 +120,7 @@ files against existing repository formatting policies. Documentation and present
 
 The five product callers and `templates/build-and-test.yml` use `verify-project.yml@main`, following the API-verified default branch of this control repository. A merged shared-workflow change is used by their next manually started CI runs; it does not start those runs. Callers pass no secrets unless Verify actually reads one (currently none). Product CI remains `workflow_dispatch`-only, independent of version-tag package pipelines.
 
-Existing tags are historical snapshots and are never moved. Page-header, menu and profile generation are separate from build CI; documentation changes require neither a Verify release nor caller updates. `docs-audit` is optional local/PR review tooling and is never a build, signing or publication gate.
+This control repository publishes no release tags; callers follow `verify-project.yml@main`. Page-header, menu and profile generation are separate from build CI; documentation changes require neither a Verify release nor caller updates. `docs-audit` is optional local/PR review tooling and is never a build, signing or publication gate.
 
 Tests execute the actual inline workflow scripts, including ordered source
 builds and a real CMake/CTest/staged-install consumer, Python commands and
@@ -132,5 +130,3 @@ publication options and publisher workflows are absent or rejected.
 Repository README frames and generated navigation are governed by the [navigation plan](navigation/README.md). Package/release publication remains a separate responsibility.
 
 Historical rollout and design records live only in [history](history/README.md); they are not current release policy. See also [brand values](brand/README.md), [contributing](CONTRIBUTING.md) and [security](SECURITY.md).
-
-Verify no longer enforces documentation. Existing `v1.0`–`v1.3` tags remain unchanged.

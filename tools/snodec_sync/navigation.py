@@ -79,7 +79,7 @@ def _config(repo):
     if name in plan:
         config = plan[name]
     elif name in ('.github', 'SNode.C-Book-Companion'):
-        config = {'display': 'SNodeC' if name == '.github' else 'SNode.C Book Companion', 'pages': [], 'sections': {}}
+        config = {'display': 'SNode.C' if name == '.github' else 'SNode.C Book Companion', 'pages': [], 'sections': {}}
     else:
         raise ValueError(f'Checkout is not in navigation/plan.yml: {repo}')
     catalog = yaml.safe_load((ROOT / 'catalog.yml').read_text())
@@ -126,7 +126,7 @@ def _button(nav, stem, title, href, right=False, mobile=False):
 
 def _organization():
     return ('<!-- snodec:begin organization -->\n<p>' +
-            _button('docs/media/nav', 'organization', 'SNodeC organization',
+            _button('docs/media/nav', 'organization', 'SNode.C organization',
                     'https://github.com/SNodeC', True) +
             '<br clear="all"></p>\n<!-- snodec:end organization -->')
 
@@ -137,9 +137,9 @@ def _header(config, page_path):
     nav = _relative('docs/media/nav', page_path)
     escape = lambda text: html.escape(text, quote=True)
     up_fragment = 'project-overview' if page['up'] == 'README.md' else 'page-overview'
-    buttons = [_button(nav, 'up-' + slug(page['up_label']), 'Up to ' + page['up_label'],
+    buttons = [_button(nav, 'up-' + slug(page['up_label']), 'Up to ' + config['menu_labels'].get(page['up_label'], page['up_label']),
                       _relative(page['up'], page_path) + '#' + up_fragment),
-               _button(nav, 'organization', 'SNodeC organization', 'https://github.com/SNodeC', True, True),
+               _button(nav, 'organization', 'SNode.C organization', 'https://github.com/SNodeC', True, True),
                _button(nav, 'repository', display + ' repository',
                       _relative('README.md', page_path) + '#project-overview', True, True)]
     return ('<!-- snodec:begin page-header -->\n<a id="page-overview"></a>\n'
@@ -373,8 +373,8 @@ def page_headers(repo, check=False):
         for compact in (False, True):
             outputs[f'docs/media/nav/banner-{slug(label)}{"-compact" if compact else ""}.svg'] = _banner(name, config['display'], label, accent['dark']['text'], compact)
     buttons = [('repository', 'Repository', config['display'] + ' repository', 'repo', accent),
-               ('organization', 'Organization', 'SNodeC organization', 'organization', org_accent)]
-    buttons += [('up-' + slug(label), label, 'Up to ' + label, 'arrow-up', accent)
+               ('organization', 'Organization', 'SNode.C organization', 'organization', org_accent)]
+    buttons += [('up-' + slug(label), config['menu_labels'].get(label, label), 'Up to ' + config['menu_labels'].get(label, label), 'arrow-up', accent)
                 for label in sorted({p['up_label'] for p in active})]
     buttons = [button for button in buttons if active or button[0] == 'organization']
     if active or root_organization:

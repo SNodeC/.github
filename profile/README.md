@@ -2,11 +2,11 @@
 <p>
 <picture>
   <source media="(max-width: 600px)" srcset="media/hero-mobile.svg">
-  <img src="media/hero.svg" alt="SNodeC — one event loop, a whole ecosystem: SNode.C, MQTTSuite, AISuite, CodexUI, Packages, the Book Companion and community projects." width="100%">
+  <img src="media/hero.svg" alt="SNode.C — one event loop, a whole ecosystem: SNode.C, MQTTSuite, AISuite, CodexUI, Packages, the Book Companion and community projects." width="100%">
 </picture>
 </p>
 
-# SNodeC
+# SNode.C
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="media/snodec-org-chip-dark.svg">
@@ -19,7 +19,7 @@
 
 **Write the protocol. Run the messages. Ship it signed.**
 
-SNodeC builds event-driven networking in C++. At its centre is [SNode.C](https://github.com/SNodeC/snode.c#project-overview), a C++20 framework for Linux; around it are MQTT and AI suites, a coding-agent workspace and signed packages for six Linux distributions.
+SNode.C builds event-driven networking in C++. At its centre is [SNode.C](https://github.com/SNodeC/snode.c#project-overview), a C++20 framework for Linux; around it are MQTT and AI suites, a coding-agent workspace and signed packages for six Linux distributions.
 
 <!-- snodec:begin menu -->
 <p>
@@ -34,10 +34,10 @@ SNodeC builds event-driven networking in C++. At its centre is [SNode.C](https:/
 
 | Project | What it is for | Status |
 | --- | --- | --- |
-| **[SNode.C](https://github.com/SNodeC/snode.c#project-overview)** | Write networked programs and your own protocols in C++: event-driven, with HTTP, WebSocket, SSE and MQTT<br>[Quick start](https://github.com/SNodeC/snode.c#quick-start) · [Install](https://github.com/SNodeC/snode.c#install) · [Releases](https://github.com/SNodeC/snode.c/releases) | [![CI](https://github.com/SNodeC/snode.c/actions/workflows/build-and-test.yml/badge.svg?branch=master)](https://github.com/SNodeC/snode.c/actions/workflows/build-and-test.yml) |
-| **[MQTTSuite](https://github.com/SNodeC/mqttsuite#project-overview)** | Run an MQTT broker, translate topics, bridge brokers and store messages<br>[Quick start](https://github.com/SNodeC/mqttsuite#quick-start) · [Install](https://github.com/SNodeC/mqttsuite#install) · [Releases](https://github.com/SNodeC/mqttsuite/releases) | [![CI](https://github.com/SNodeC/mqttsuite/actions/workflows/build-and-test.yml/badge.svg?branch=master)](https://github.com/SNodeC/mqttsuite/actions/workflows/build-and-test.yml) |
-| **[AISuite](https://github.com/SNodeC/AISuite#project-overview)** | Connect applications to coding agents: asynchronous C++ and TypeScript<br>[Quick start](https://github.com/SNodeC/AISuite#quick-start) · [Install](https://github.com/SNodeC/AISuite#install) | [![CI](https://github.com/SNodeC/AISuite/actions/workflows/build-and-test.yml/badge.svg?branch=master)](https://github.com/SNodeC/AISuite/actions/workflows/build-and-test.yml) |
-| **[Codex(W)UI](https://github.com/SNodeC/CodexUI#project-overview)** | Follow a coding agent's work in a native Qt or browser workspace<br>[Quick start](https://github.com/SNodeC/CodexUI#quick-start) · [Install](https://github.com/SNodeC/CodexUI#install) | [![CI](https://github.com/SNodeC/CodexUI/actions/workflows/build-and-qualify.yml/badge.svg?branch=master)](https://github.com/SNodeC/CodexUI/actions/workflows/build-and-qualify.yml) |
+| **[SNode.C](https://github.com/SNodeC/snode.c#project-overview)** | Write networked programs and your own protocols in C++: event-driven, with HTTP, WebSocket, SSE and MQTT<br>[Quick start](https://github.com/SNodeC/snode.c#quick-start) · [Install](https://github.com/SNodeC/snode.c#install) · [Releases](https://github.com/SNodeC/snode.c/releases) | [![CI](https://img.shields.io/github/actions/workflow/status/SNodeC/snode.c/build-and-test.yml?branch=master&label=CI&style=flat)](https://github.com/SNodeC/snode.c/actions/workflows/build-and-test.yml) |
+| **[MQTTSuite](https://github.com/SNodeC/mqttsuite#project-overview)** | Run an MQTT broker, translate topics, bridge brokers and store messages<br>[Quick start](https://github.com/SNodeC/mqttsuite#quick-start) · [Install](https://github.com/SNodeC/mqttsuite#install) · [Releases](https://github.com/SNodeC/mqttsuite/releases) | [![CI](https://img.shields.io/github/actions/workflow/status/SNodeC/mqttsuite/build-and-test.yml?branch=master&label=CI&style=flat)](https://github.com/SNodeC/mqttsuite/actions/workflows/build-and-test.yml) |
+| **[AISuite](https://github.com/SNodeC/AISuite#project-overview)** | Connect applications to coding agents: asynchronous C++ and TypeScript<br>[Quick start](https://github.com/SNodeC/AISuite#quick-start) · [Install](https://github.com/SNodeC/AISuite#install) | [![CI](https://img.shields.io/github/actions/workflow/status/SNodeC/AISuite/build-and-test.yml?branch=master&label=CI&style=flat)](https://github.com/SNodeC/AISuite/actions/workflows/build-and-test.yml) |
+| **[Codex(W)UI](https://github.com/SNodeC/CodexUI#project-overview)** | Follow a coding agent's work in a native Qt or browser workspace<br>[Quick start](https://github.com/SNodeC/CodexUI#quick-start) · [Install](https://github.com/SNodeC/CodexUI#install) | [![CI](https://img.shields.io/github/actions/workflow/status/SNodeC/CodexUI/build-and-qualify.yml?branch=master&label=CI&style=flat)](https://github.com/SNodeC/CodexUI/actions/workflows/build-and-qualify.yml) |
 | **[SNode.C-idp](https://github.com/SNodeC/snode.c-idp)** | SNode.C Identity Provider: OAuth2 and OpenID Connect with TOTP multi-factor authentication |  |
 
 ## Install
@@ -64,9 +64,9 @@ Supported releases, architectures and current builds: [package status](https://g
 | **[Websocket-echo](https://github.com/SNodeC/websocket-echo)** | WebSocket echo server, client and browser demo built on SNode.C |
 | **[Talks](https://github.com/SNodeC/talks)** | Talks and slides about SNode.C |
 
-Further example programs are listed under [More from SNodeC](#more-from-snodec).
+Further example programs are listed under [More from SNode.C](#more-from-snodec).
 
-## More from SNodeC
+## More from SNode.C
 
 <details>
 <summary><b>Examples</b> — small programs built on SNode.C</summary>

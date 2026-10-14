@@ -2,11 +2,11 @@
 <p>
 <picture>
   <source media="(max-width: 600px)" srcset="media/hero-mobile.svg">
-  <img src="media/hero.svg" alt="SNodeC — one event loop, a whole ecosystem: SNode.C, MQTTSuite, AISuite, CodexUI, Packages, the Book Companion and community projects." width="100%">
+  <img src="media/hero.svg" alt="SNode.C — one event loop, a whole ecosystem: SNode.C, MQTTSuite, AISuite, CodexUI, Packages, the Book Companion and community projects." width="100%">
 </picture>
 </p>
 
-# SNodeC
+# SNode.C
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="media/snodec-org-chip-dark.svg">
@@ -19,7 +19,7 @@
 
 **Write the protocol. Run the messages. Ship it signed.**
 
-SNodeC builds event-driven networking in C++. At its centre is [SNode.C](https://github.com/SNodeC/snode.c#project-overview), a C++20 framework for Linux; around it are MQTT and AI suites, a coding-agent workspace and signed packages for six Linux distributions.
+SNode.C builds event-driven networking in C++. At its centre is [SNode.C](https://github.com/SNodeC/snode.c#project-overview), a C++20 framework for Linux; around it are MQTT and AI suites, a coding-agent workspace and signed packages for six Linux distributions.
 
 <!-- snodec:begin menu -->
 <p>
@@ -53,9 +53,9 @@ Supported releases, architectures and current builds: [package status](https://g
 
 <!-- profile:learn -->
 
-Further example programs are listed under [More from SNodeC](#more-from-snodec).
+Further example programs are listed under [More from SNode.C](#more-from-snodec).
 
-## More from SNodeC
+## More from SNode.C
 
 <!-- profile:more -->
 
