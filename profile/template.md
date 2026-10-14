@@ -1,16 +1,16 @@
-<!-- Authored prose for the generated organization profile; edit this template and catalog.yml, not profile/README.md. -->
+<!-- Authored prose for the generated organization profile; edit this template and catalog.yml, not profile/README.md. Use absolute public asset URLs so GitHub Mobile and the member profile share the same image location. -->
 <p>
 <picture>
-  <source media="(max-width: 600px)" srcset="media/hero-mobile.svg">
-  <img src="media/hero.svg" alt="SNode.C — one event loop, a whole ecosystem: SNode.C, MQTTSuite, AISuite, CodexUI, Packages, the Book Companion and community projects." width="100%">
+  <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/hero-mobile.svg">
+  <img src="https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/hero.svg" alt="SNode.C — one event loop, a whole ecosystem: SNode.C, MQTTSuite, AISuite, CodexUI, Packages, the Book Companion and community projects." width="100%">
 </picture>
 </p>
 
 # SNode.C
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="media/snodec-org-chip-dark.svg">
-  <img src="media/snodec-org-chip-light.svg" alt="Organization · Ecosystem" width="240" height="32">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/snodec-org-chip-dark.svg">
+  <img src="https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/snodec-org-chip-light.svg" alt="Organization · Ecosystem" width="240" height="32">
 </picture>
 
 <!-- snodec:begin status -->
@@ -23,10 +23,10 @@ SNode.C builds event-driven networking in C++. At its centre is [SNode.C](https:
 
 <!-- snodec:begin menu -->
 <p>
-<a href="#products" title="Products"><img src="media/menu/products.svg" alt="Products" width="160" height="28"></a>
-<a href="#install" title="Install"><img src="media/menu/install.svg" alt="Install" width="160" height="28"></a>
-<a href="#learn" title="Learn"><img src="media/menu/learn.svg" alt="Learn" width="160" height="28"></a>
-<a href="#contributing" title="Contribute"><img src="media/menu/contribute.svg" alt="Contribute" width="160" height="28"></a>
+<a href="#products" title="Products"><img src="https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/menu/products.svg" alt="Products" width="160" height="28"></a>
+<a href="#install" title="Install"><img src="https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/menu/install.svg" alt="Install" width="160" height="28"></a>
+<a href="#learn" title="Learn"><img src="https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/menu/learn.svg" alt="Learn" width="160" height="28"></a>
+<a href="#contributing" title="Contribute"><img src="https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/menu/contribute.svg" alt="Contribute" width="160" height="28"></a>
 </p>
 <!-- snodec:end menu -->
 

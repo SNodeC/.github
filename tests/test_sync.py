@@ -240,11 +240,13 @@ class ProfileTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, 'exactly one standalone'):
                         render_profile(self.catalog, self.metadata, template)
 
-    def test_relative_media_paths_exist(self):
-        paths = re.findall(r'(?:src|srcset)="(media/[^"\s]+)"', self.profile)
+    def test_profile_images_use_absolute_public_urls_and_owned_assets(self):
+        prefix = 'https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/'
+        paths = re.findall(r'(?:src|srcset)="([^"\s]+)"', self.profile)
         self.assertTrue(paths)
         for path in paths:
-            self.assertTrue((ROOT / 'profile' / path).is_file(), path)
+            self.assertTrue(path.startswith(prefix), path)
+            self.assertTrue((ROOT / 'profile' / path.removeprefix(prefix)).is_file(), path)
 
     def test_metadata_is_separate_and_complete(self):
         self.assertEqual(set(self.metadata), {e['name'] for e in self.catalog})

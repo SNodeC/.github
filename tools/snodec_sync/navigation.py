@@ -266,10 +266,9 @@ def _menus(checkout, config, texts, outputs):
         text = re.sub(r'\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)',
                       lambda m: '' if _up_link(m[2], m[3], path, ancestors) else m[0], text)
         for src in re.findall(r'(?:src="|!\[[^\]]*\]\()([^"\s)]+\.svg)', text):
-            if src.startswith(('https:', 'http:', '/')):
-                continue
-            asset = posixpath.normpath(posixpath.join(posixpath.dirname(path), src))
-            if '..' in PurePosixPath(asset).parts or not (checkout / asset).is_file():
+            asset = posixpath.normpath(posixpath.join(posixpath.dirname(path),
+                src.removeprefix('https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/') if path == 'profile/README.md' else src))
+            if asset.startswith('/') or ':/' in asset or '..' in PurePosixPath(asset).parts or not (checkout / asset).is_file():
                 continue
             svg = ET.parse(checkout / asset).getroot()
             if svg.attrib.get('height') != '28' or 'nav' in PurePosixPath(asset).parts:
