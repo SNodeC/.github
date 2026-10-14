@@ -29,10 +29,10 @@ File links point to the current workflow definitions. “Sends/calls” distingu
 | .github | [verify-project.yml](https://github.com/SNodeC/.github/blob/main/.github/workflows/verify-project.yml) — Reusable build, test and package verification | `workflow_call` only | No dispatch | Manifest-driven C++ or Python verification and artifacts |
 | .github-private | [sync-member-profile.yml](https://github.com/SNodeC/.github-private/blob/main/.github/workflows/sync-member-profile.yml) — Sync member organization profile | `sync-organization-profile`; manual | No dispatch | Pull and validate public main; commit changed member profile/media |
 | snode.c | [build-and-test.yml](https://github.com/SNodeC/snode.c/blob/master/.github/workflows/build-and-test.yml) — Build and test SNode.C | Manual only | Calls .github `verify-project.yml@main` | Build, tests and staged-install verification |
-| snode.c | [build-distribution-packages.yml](https://github.com/SNodeC/snode.c/blob/master/.github/workflows/build-distribution-packages.yml) — Build SNode.C distribution packages | Version-tag push; `build-dependent-packages` receiver retained for future use, currently unused | `sign-and-publish-packages` → DistributionPackages per successful target | Capture sources and recipes; build unsigned packages and logs |
+| snode.c | [build-distribution-packages.yml](https://github.com/SNodeC/snode.c/blob/master/.github/workflows/build-distribution-packages.yml) — Build SNode.C distribution packages | Version-tag push; manual existing-tag start on default branch; `build-dependent-packages` receiver retained for future use, currently unused | `sign-and-publish-packages` → DistributionPackages per successful target | Capture sources and recipes; build unsigned packages and logs |
 | snode.c | [trigger-book-companion-verification.yml](https://github.com/SNodeC/snode.c/blob/master/.github/workflows/trigger-book-companion-verification.yml) — Trigger book companion verification | Non-deleted `Book-*` tag push | `verify-companion-framework-edition` → SNode.C-Book | Request verification of framework tag/SHA |
 | mqttsuite | [build-and-test.yml](https://github.com/SNodeC/mqttsuite/blob/master/.github/workflows/build-and-test.yml) — Build and test MQTTSuite | Manual only | Calls .github `verify-project.yml@main` | Build and tests |
-| mqttsuite | [build-distribution-packages.yml](https://github.com/SNodeC/mqttsuite/blob/master/.github/workflows/build-distribution-packages.yml) — Build MQTTSuite distribution packages | Version-tag push; `build-dependent-packages` from DistributionPackages | `sign-and-publish-packages` → DistributionPackages per successful target | Build unsigned packages against the selected published framework |
+| mqttsuite | [build-distribution-packages.yml](https://github.com/SNodeC/mqttsuite/blob/master/.github/workflows/build-distribution-packages.yml) — Build MQTTSuite distribution packages | Version-tag push; manual existing-tag start on default branch; `build-dependent-packages` from DistributionPackages | `sign-and-publish-packages` → DistributionPackages per successful target | Build unsigned packages against the selected published framework |
 | DistributionPackages | [sign-and-publish-packages.yml](https://github.com/SNodeC/DistributionPackages/blob/main/.github/workflows/sign-and-publish-packages.yml) — Sign and publish distribution packages | `sign-and-publish-packages` only | After SNode.C publication: `build-dependent-packages` → mqttsuite | Authenticate artifacts; sign, publish feeds and update recorded status |
 | DistributionPackages | [publish-guides-and-status.yml](https://github.com/SNodeC/DistributionPackages/blob/main/.github/workflows/publish-guides-and-status.yml) — Publish package guides and render status | Manual only | No dispatch | Copy current authored site and render Packages records |
 | AISuite | [build-and-test.yml](https://github.com/SNodeC/AISuite/blob/master/.github/workflows/build-and-test.yml) — Build and test AISuite and verify Codex protocol | Manual only | Calls .github `verify-project.yml@main` | Build/tests plus pinned protocol-generation check |
@@ -77,11 +77,15 @@ The five callers are SNode.C, MQTTSuite, AISuite, CodexUI and AutoTalk. The mani
 
 ```mermaid
 flowchart TD
-    STag[SNode.C version-tag push] --> SBuild[SNode.C package target matrix]
+    STag[SNode.C version-tag push] --> SCapture[SNode.C prepare: fresh capture]
+    SManual[Manual existing SNode.C tag] --> SCapture
+    SCapture --> SBuild[SNode.C package target matrix]
     SBuild -->|sign-and-publish-packages| SPub[DistributionPackages authenticate, sign, publish]
     SPub --> Packages[Packages feeds, records and documentation]
     SPub -->|build-dependent-packages after SNode.C publication| MBuild[MQTTSuite selected target build]
-    MTag[MQTTSuite version-tag push] --> MBuild
+    MTag[MQTTSuite version-tag push] --> MCapture[MQTTSuite prepare: fresh capture]
+    MManual[Manual existing MQTTSuite tag] --> MCapture
+    MCapture --> MBuild
     MBuild -->|sign-and-publish-packages| MPub[DistributionPackages authenticate, sign, publish]
     MPub --> Packages
     Manual[Manual publish guides and status] --> Render[Copy authored site and render recorded status]
@@ -91,6 +95,10 @@ flowchart TD
 Version tags match `v[0-9]*.[0-9]*.[0-9]*`; preparation validates the version and captures the source pair, target definitions and publication tools. Each successful target uploads unsigned artifacts and requests signing. The receiver validates repository, workflow, run, attempt, capture and target-job identity, plus trusted recipe provenance. Target job labels are `distribution · suite · architecture`.
 
 After publishing a SNode.C target, DistributionPackages requests the corresponding MQTTSuite target with the exact Packages publication commit. The dependent build checks the captured source pair and published framework revision. MQTTSuite publication ends that chain. A source or README push to a normal product branch starts neither package workflow.
+
+To start a fresh package build without changing a tag, open the source repository’s distribution-package workflow, select **Run workflow** on its default branch and supply an existing `vMAJOR.MINOR.PATCH` as `release_tag`. The existing capture path validates the tag/Version match, allocates a new package revision and snapshots current DistributionPackages tooling. The publisher accepts a manual origin only from that repository’s default-branch package workflow with its own capture/run ID, then validates attempt and target-job identity as usual. A dependent MQTTSuite request still reuses the originating SNode.C capture.
+
+A fresh manual start is separate from **Re-run jobs**. Retries require the original capture artifact and cannot safely recreate it under the same run identity; use a new manual start if the artifact is unavailable. The manual workflow definition comes from the selected default branch, whereas a tag push uses the definition on the tagged source commit.
 
 Both DistributionPackages publication workflows share `package-publication` concurrency with cancellation disabled. This serializes publication, not all product build jobs. APT publication uses GPG repository signing; RPM publication signs packages and repository metadata; OpenWrt 24.10 uses usign and 25.12 uses APK signing.
 
@@ -156,7 +164,7 @@ Repository-dispatch receivers live on default branches. Captured package tools a
 | Public .github main push or PR merge | Validate; on success request member-profile refresh | None for profile publication |
 | Product README/source branch push or merge | No manual product verification or package build | Run the relevant manual verification when wanted |
 | DistributionPackages authored site push or merge | No guide/status publication | Run Publish package guides and render status, or allow a successful package publication to copy the current site |
-| SNode.C or MQTTSuite version-tag push | Package build matrix; successful targets request signing/publication | Inspect both builder and publisher results |
+| SNode.C or MQTTSuite version-tag push, or manual existing-tag start | Fresh capture and package build matrix; successful targets request signing/publication | Inspect both builder and publisher results |
 | SNode.C Book-tag push | Framework-edition verification only | No companion publication implied |
 | Matching Book companion source/build-file merge | Verification and eligible reader-export publication | Inspect publication guard/result |
 | Book reader-template change | No path-filtered companion run | Run Verify and publish Book companion changes on default branch |
