@@ -64,7 +64,7 @@ After the existing CI succeeds on a push to `main` (including a merged pull requ
 No project count is generated in the organization profile. Retiring/retired entries are catalog classifications only: this repository does not archive anything. Upstream forks are not enrolled in shared Verify.
 
 Workflow badges show an existing workflow, **not** a promise of push/PR testing.
-The snode.c and mqttsuite release-package workflows remain tag-triggered;
+The snode.c and mqttsuite release-package workflows support version-tag pushes and manual fresh starts for existing tags;
 shared Verify callers are manual-only. The control repository's CI
 path is included because that workflow is delivered here.
 
