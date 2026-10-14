@@ -1,5 +1,5 @@
 .github:
-  display: SNodeC
+  display: SNode.C
   source: .github
   sections: {}
   media: []
@@ -7,10 +7,10 @@
   - old: docs/workflow-graph.md
     new: docs/workflow-graph.md
     kind: doc
-    title: SNodeC workflow graph
+    title: SNode.C workflow graph
     label: Workflows
     up: README.md
-    up_label: SNodeC
+    up_label: SNodeC  # Stable asset key; displayed through menu_labels below.
 snode.c:
   display: SNode.C
   source: snode.c
@@ -251,6 +251,20 @@ mqttsuite:
     label: Documentation
     up: docs/README.md
     up_label: Documentation
+  - old: mqttbridge/ui/README.md
+    new: mqttbridge/ui/README.md
+    kind: doc
+    title: MQTT Bridge Configuration UI
+    label: Bridge UI
+    up: docs/guides/bridging.md
+    up_label: Bridging
+  - old: mqttintegrator/ui/README.md
+    new: mqttintegrator/ui/README.md
+    kind: doc
+    title: MQTT Integrator Mapping UI
+    label: Integrator UI
+    up: docs/guides/mapping.md
+    up_label: Mapping
 AISuite:
   display: AISuite
   source: AISuite
@@ -937,9 +951,10 @@ Packages:
   - pages: [status/snodec.md, status/mqttsuite.md]
     label: All projects
     remove: true
-# Visible-label shortening required by the approved 160px menu rule.
-# Destinations, tooltips and alternative text remain unchanged.
+# Visible labels may differ from stable asset keys.
+# Menu shortening preserves destinations, tooltips and alternative text.
 menu_labels:
+  SNodeC: SNode.C
   Native Linux build: Native Linux
   OpenWrt cross-compilation: OpenWrt
 

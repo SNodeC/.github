@@ -28,7 +28,7 @@ class NavigationTests(unittest.TestCase):
         if name == '.github':
             root = repo / 'README.md'
             root.write_text('<!-- snodec:begin organization -->\n'
-                            '<p><a href="https://github.com/SNodeC">SNodeC</a></p>\n'
+                            '<p><a href="https://github.com/SNodeC">SNode.C</a></p>\n'
                             '<!-- snodec:end organization -->\n\n' + root.read_text())
         menu = repo / 'docs/media/menu'
         menu.mkdir(parents=True)
@@ -67,6 +67,11 @@ class NavigationTests(unittest.TestCase):
         guide = (repo / 'docs/workflow-graph.md').read_text()
         self.assertIn(render_header('.github', 'docs/workflow-graph.md'), guide)
         self.assertIn('One physical prose paragraph.', guide)
+        self.assertIn('Up to SNode.C', guide)
+        self.assertIn('SNode.C repository', guide)
+        self.assertIn('up-snodec-light.svg', guide)
+        self.assertFalse((repo / 'docs/media/nav/up-snode-c-light.svg').exists())
+        self.assertIn('SNode.C', (repo / 'docs/media/nav/up-snodec-light.svg').read_text())
         self.assertEqual(page_headers(repo, check=True), [])
 
     def test_plan_chains_and_label_limit(self):
@@ -202,7 +207,7 @@ class NavigationTests(unittest.TestCase):
         import xml.etree.ElementTree as ET
         from tools.snodec_sync.navigation import _header_button, FONT
         header = render_header('snode.c', 'docs/guides/README.md')
-        self.assertLess(header.index('SNodeC organization'), header.index('SNode.C repository'))
+        self.assertLess(header.index('SNode.C organization'), header.index('SNode.C repository'))
         self.assertEqual(header.count('(max-width: 640px) and (prefers-color-scheme: dark)'), 2)
         self.assertEqual(header.count('width="160" height="28"'), 1)
         for width in (36, 160):

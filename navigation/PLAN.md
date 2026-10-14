@@ -237,7 +237,7 @@ Generated inventory of all subpages: proposed path, banner text and upward butto
 
 | Repository | Finding | Recommendation |
 | --- | --- | --- |
-| snode.c | The two Vite scaffolding READMEs under `src/apps/oauth2/**/vue-frontend-*` ("Vue 3 + TypeScript + Vite") are template boilerplate, not SNodeC documentation. | Exclude from the header (no banner, no button). |
+| snode.c | The two Vite scaffolding READMEs under `src/apps/oauth2/**/vue-frontend-*` ("Vue 3 + TypeScript + Vite") are template boilerplate, not SNode.C documentation. | Exclude from the header (no banner, no button). |
 | snode.c | `docs/config-comment-metadata.md` is referenced from source comments in 5 files of `src/tools/snodec-control` (ConfigModel.h, Json.h, Metadata.h, ui/UiState.cpp, tests/SnodecControlConfigParserTest.cpp). | Update those path mentions in the move commit (comment-only change). |
 | snode.c, mqttsuite | `docs/assets/` is used by Doxygen (`cmake/doxygen.cmake`) and, in mqttsuite, by `mqttbridge/html/index.html`. | Do not move `docs/assets/`; it is build input, not page media. |
 | AISuite, CodexUI | `docs/media/README.md` ("Landing-page assets") documents image sources, it is not a reader page. | Exclude from the header. |

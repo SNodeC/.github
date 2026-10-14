@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from urllib.parse import quote
 
 import yaml
 
@@ -111,6 +112,13 @@ class ProfileTests(unittest.TestCase):
                 if entry.get('tier') == 'install':
                     self.assertRegex(self.template, r'https://github.com/SNodeC/' + re.escape(entry['name']) + r'(?=[)#/])')
 
+    def test_organization_name_preserves_more_anchor(self):
+        from tools.snodec_sync.docs_audit import _document
+        self.assertIn('# SNode.C\n', self.profile)
+        self.assertIn('## More from SNode.C', self.profile)
+        self.assertIn('(#more-from-snodec)', self.profile)
+        self.assertIn('more-from-snodec', _document(self.profile)[1])
+
     def test_no_unknown_repository_links(self):
         names = {entry['name'] for entry in self.catalog}
         linked = set(re.findall(r'https://github.com/SNodeC/([^/#?\s)]+)(?=[)#/])', self.profile))
@@ -124,6 +132,12 @@ class ProfileTests(unittest.TestCase):
             row = next(line for line in self.profile.splitlines() if line.startswith(f"| **[{entry['title']}]("))
             self.assertEqual('[![CI]' in row, bool(self.metadata[name].get('workflow')))
             self.assertEqual('[Releases]' in row, bool(self.metadata[name].get('release')))
+            if self.metadata[name].get('workflow'):
+                workflow = quote(Path(self.metadata[name]['workflow']).name, safe='')
+                branch = quote(self.metadata[name]['default_branch'], safe='')
+                self.assertIn(f'https://img.shields.io/github/actions/workflow/status/SNodeC/{quote(name, safe="")}/{workflow}?branch={branch}&label=CI&style=flat', row)
+                self.assertIn(f'](https://github.com/SNodeC/{quote(name, safe="")}/actions/workflows/{workflow})', row)
+                self.assertNotIn('/badge.svg', row)
         for key in ['workflow', 'release']:
             self.metadata['snode.c'].pop(key)
         rendered = render_profile(self.catalog, self.metadata)
@@ -148,9 +162,10 @@ class ProfileTests(unittest.TestCase):
     def test_default_branch_comes_from_metadata(self):
         self.metadata['.github']['default_branch'] = 'control/branch'
         self.metadata['snode.c']['default_branch'] = 'framework/branch'
+        self.metadata['snode.c']['workflow'] = '.github/workflows/build and test.yml'
         rendered = render_profile(self.catalog, self.metadata)
         self.assertIn('/blob/control%2Fbranch/', rendered)
-        self.assertIn('?branch=framework%2Fbranch', rendered)
+        self.assertIn('snode.c/build%20and%20test.yml?branch=framework%2Fbranch&label=CI&style=flat', rendered)
 
     def test_authored_text_cannot_break_table_or_inject_html(self):
         for field in ['title', 'purpose', 'summary']:
