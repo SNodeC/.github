@@ -74,6 +74,22 @@ class NavigationTests(unittest.TestCase):
         self.assertIn('SNode.C', (repo / 'docs/media/nav/up-snodec-light.svg').read_text())
         self.assertEqual(page_headers(repo, check=True), [])
 
+    def test_absolute_profile_menu_keeps_local_generation_and_url(self):
+        repo = self.fixture('.github')
+        asset = repo / 'profile/media/menu/products.svg'
+        asset.parent.mkdir(parents=True)
+        asset.write_text(_menu_svg('Products', 274))
+        url = 'https://raw.githubusercontent.com/SNodeC/.github/refs/heads/main/profile/media/menu/products.svg'
+        foreign = 'https://example.com/menu.svg'
+        profile = repo / 'profile/README.md'
+        profile.write_text(f'# Organization\n\n<a href="#products"><img src="{url}" width="274" height="28"></a>\n'
+                           f'<img src="{foreign}" width="274" height="28">\n')
+        page_headers(repo)
+        self.assertIn('width="160" height="28"', asset.read_text())
+        self.assertIn(f'src="{url}" width="160" height="28"', profile.read_text())
+        self.assertIn(f'src="{foreign}" width="274" height="28"', profile.read_text())
+        self.assertEqual(page_headers(repo, check=True), [])
+
     def test_plan_chains_and_label_limit(self):
         validate_plan(self.plan)
         invalid = copy.deepcopy(self.plan)
