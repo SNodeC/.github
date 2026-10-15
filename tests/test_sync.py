@@ -147,9 +147,9 @@ class ProfileTests(unittest.TestCase):
 
     def test_repository_navigation_uses_metadata_anchors_only(self):
         for name in ['snode.c', 'mqttsuite', 'AISuite', 'CodexUI']:
-            self.assertIn(f'](https://github.com/SNodeC/{name}#project-overview)**', self.profile)
-            self.assertNotIn(f'{name}#project-overview/actions/', self.profile)
-            self.assertNotIn(f'{name}#project-overview/releases/', self.profile)
+            self.assertIn(f'](https://github.com/SNodeC/{name}#banner)**', self.profile)
+            self.assertNotIn(f'{name}#banner/actions/', self.profile)
+            self.assertNotIn(f'{name}#banner/releases/', self.profile)
         self.metadata['AISuite'].pop('readme_anchor')
         rendered = render_profile(self.catalog, self.metadata)
         row = next(line for line in rendered.splitlines() if line.startswith('| **[AISuite]('))

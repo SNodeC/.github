@@ -1,11 +1,12 @@
 {
   ".github": {
     "default_branch": "main",
+    "readme_anchor": "banner",
     "workflow": ".github/workflows/validate-organization.yml"
   },
   "AISuite": {
     "default_branch": "master",
-    "readme_anchor": "project-overview",
+    "readme_anchor": "banner",
     "source_commit": "45bbc477546bca8055575c17cebbb16db7bb24be",
     "workflow": ".github/workflows/build-and-test.yml"
   },
@@ -21,12 +22,13 @@
   },
   "CodexUI": {
     "default_branch": "master",
-    "readme_anchor": "project-overview",
+    "readme_anchor": "banner",
     "source_commit": "33a5357bee5978ecaa31a2b7dab55b858843e9f7",
     "workflow": ".github/workflows/build-and-qualify.yml"
   },
   "DistributionPackages": {
     "default_branch": "main",
+    "readme_anchor": "banner",
     "source_commit": "f941021a88953cf962ac2b926e456cb25d2fda18",
     "workflow": ".github/workflows/sign-and-publish-packages.yml"
   },
@@ -61,6 +63,7 @@
   },
   "Packages": {
     "default_branch": "main",
+    "readme_anchor": "banner",
     "source_commit": "5db17156d81577f85705c114ccb4c73e635dfe75"
   },
   "SNode.C-Book-Companion": {
@@ -111,7 +114,7 @@
   },
   "mqttsuite": {
     "default_branch": "master",
-    "readme_anchor": "project-overview",
+    "readme_anchor": "banner",
     "release": {
       "prerelease": false,
       "tag": "v1.0.2"
@@ -134,7 +137,7 @@
   },
   "snode.c": {
     "default_branch": "master",
-    "readme_anchor": "project-overview",
+    "readme_anchor": "banner",
     "release": {
       "prerelease": false,
       "tag": "v2.0.0"

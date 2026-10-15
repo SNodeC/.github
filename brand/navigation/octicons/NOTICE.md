@@ -1,6 +1,6 @@
 # Octicons attribution
 
-Icons are the 16px `arrow-up`, `repo` and `organization` SVGs from `@primer/octicons` 19.40.0 (https://github.com/primer/octicons), copied without path changes. The following notice is also included in every generated header button. No repository licence files are added or changed.
+Icons are the 16px `arrow-up`, `repo`, `organization` and `person` SVGs from `@primer/octicons` 19.40.0 (https://github.com/primer/octicons), copied without path changes. The person icon was retrieved from the upstream main branch on 2026-10-15; the other icons are from the version above. The following notice is also included in every generated header button. No repository licence files are added or changed.
 
 ```text
 MIT License
