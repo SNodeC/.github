@@ -1,16 +1,18 @@
+<a id="banner"></a>
+<p><img src="docs/media/control-banner.svg" alt="SNode.C — Organization control repository" width="100%"></p>
 <!-- snodec:begin organization -->
-<p><a href="https://github.com/SNodeC" title="SNode.C organization"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/nav/organization-dark.svg"><img align="right" src="docs/media/nav/organization-light.svg" alt="SNode.C organization" title="SNode.C organization" width="160" height="28"></picture></a><br clear="all"></p>
+<p><a href="https://github.com/VolkerChristian#banner" title="Volker Christian account"><picture><source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="docs/media/nav/account-icon-dark.svg"><source media="(max-width: 640px)" srcset="docs/media/nav/account-icon-light.svg"><source media="(prefers-color-scheme: dark)" srcset="docs/media/nav/account-dark.svg"><img align="right" src="docs/media/nav/account-light.svg" alt="Volker Christian account" title="Volker Christian account"></picture></a><a href="https://github.com/SNodeC#banner" title="SNode.C organization"><picture><source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="docs/media/nav/organization-icon-dark.svg"><source media="(max-width: 640px)" srcset="docs/media/nav/organization-icon-light.svg"><source media="(prefers-color-scheme: dark)" srcset="docs/media/nav/organization-dark.svg"><img align="right" src="docs/media/nav/organization-light.svg" alt="SNode.C organization" title="SNode.C organization"></picture></a><a href="#banner" title="SNode.C repository"><picture><source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="docs/media/nav/repository-icon-dark.svg"><source media="(max-width: 640px)" srcset="docs/media/nav/repository-icon-light.svg"><source media="(prefers-color-scheme: dark)" srcset="docs/media/nav/repository-dark.svg"><img align="right" src="docs/media/nav/repository-light.svg" alt="SNode.C repository" title="SNode.C repository"></picture></a><br clear="all"></p>
 <!-- snodec:end organization -->
 
 <a id="project-overview"></a>
 
 # SNode.C control repository
 
-This repository owns the organization catalog and the [profile](profile/README.md) generated from catalog rows and authored prose. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and optional `docs-audit` command keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
+This repository owns the organization catalog and the [profile](profile/README.md#banner) generated from catalog rows and authored prose. Brand tokens define the shared accents, contrast pairs and glyphs. The shared Verify workflow provides reusable, manifest-driven verification. The navigation plan, page-header generator and optional `docs-audit` command keep documentation paths, generated navigation and tracked-page reachability reviewable from one control point.
 
 ## Documentation
 
-This repository owns organization-profile generation and reusable project verification. The [workflow graph](docs/workflow-graph.md#page-overview) documents all entry points, repository handoffs and publication guards.
+This repository owns organization-profile generation and reusable project verification. The [workflow graph](docs/workflow-graph.md#banner) documents all entry points, repository handoffs and publication guards.
 
 - [Navigation generator](navigation/README.md)
 - [Navigation plan review](navigation/PLAN.md)
@@ -44,7 +46,7 @@ repository, not the working directory.
 
 - `catalog.yml`: identity, classification, ecosystem edges and lifecycle only.
   Entry order controls row order. Optional `tier` selects `product`, `learn`, `install` or the default `secondary`; product rows require single-line `title` and `purpose`. Learn titles are optional. Boolean `student` places entries in Student projects; a product with `student: true` also retains its product row. Product tiers require product/app kind; secondary products require `student: true`.
-- [profile/template.md](profile/template.md): authored profile prose and exactly one standalone marker each for Products, Learn and More rows. `snodec_sync profile` combines it with `catalog.yml`; `profile/README.md` remains generated.
+- [profile/template.md](profile/template.md#banner): authored profile prose and exactly one standalone marker each for Products, Learn and More rows. `snodec_sync profile` combines it with `catalog.yml`; `profile/README.md` remains generated.
 - `profile/github-metadata.json`: checked-in GitHub API evidence for default
   branches, workflow paths and release tags. No timestamps or network requests
   enter rendering. Update this snapshot deliberately when those facts change;

@@ -123,8 +123,9 @@ class NavigationTests(unittest.TestCase):
                 before_root = (repo / 'README.md').read_text()
                 page_headers(repo)
                 self.assertNotIn('page-header', (repo / 'README.md').read_text())
-                self.assertEqual(re.findall(r'href="[^"]+"', before_root),
-                                 re.findall(r'href="[^"]+"', (repo / 'README.md').read_text()))
+                strip_identity = lambda value: re.sub(r'<!-- snodec:begin organization -->.*?<!-- snodec:end organization -->', '', value, flags=re.S)
+                self.assertEqual(re.findall(r'href="[^"]+"', strip_identity(before_root)),
+                                 re.findall(r'href="[^"]+"', strip_identity((repo / 'README.md').read_text())))
                 for page in config['pages']:
                     if page.get('deleted'):
                         continue
@@ -137,7 +138,7 @@ class NavigationTests(unittest.TestCase):
                     self.assertNotIn('<a href=', header.split('<p>')[1].split('</p>')[0])
                     for target in re.findall(r'(?:href|src|srcset)="([^"]+)"', header):
                         if target.startswith('https:'):
-                            self.assertEqual(target, 'https://github.com/SNodeC')
+                            self.assertIn(target, ('https://github.com/SNodeC#banner', 'https://github.com/VolkerChristian#banner'))
                             continue
                         file, _, fragment = target.partition('#')
                         destination = (repo / page['new']).parent / file
@@ -153,7 +154,7 @@ class NavigationTests(unittest.TestCase):
 
     def test_project_registry_extension_inherits_generated_policy(self):
         text = render_header('Packages', 'status/third-project.md')
-        self.assertIn('href="README.md#page-overview"', text)
+        self.assertIn('href="README.md#banner"', text)
         self.assertIn('banner-package-status.svg', text)
         with self.assertRaises(ValueError):
             render_header('Packages', 'docs/unplanned.md')
@@ -178,7 +179,7 @@ class NavigationTests(unittest.TestCase):
             self.assertIn('```sh\necho unchanged\n```', p.read_text())
             self.assertIn('id="historic-anchor"', p.read_text())
         section = (repo / 'docs/installation/README.md').read_text()
-        self.assertIn('[Debian](debian.md#page-overview)', section)
+        self.assertIn('[Debian](debian.md#banner)', section)
         self.assertNotIn('install-snodec.md', section)
 
     def test_read_only_check_and_cli(self):
@@ -224,7 +225,7 @@ class NavigationTests(unittest.TestCase):
         from tools.snodec_sync.navigation import _header_button, FONT
         header = render_header('snode.c', 'docs/guides/README.md')
         self.assertLess(header.index('SNode.C organization'), header.index('SNode.C repository'))
-        self.assertEqual(header.count('(max-width: 640px) and (prefers-color-scheme: dark)'), 2)
+        self.assertEqual(header.count('(max-width: 640px) and (prefers-color-scheme: dark)'), 3)
         self.assertEqual(header.count('width="160" height="28"'), 1)
         for width in (36, 160):
             svg = ET.fromstring(_header_button('Repository', 'Repository', 'repo', '#075985', 'light', width))
@@ -247,5 +248,32 @@ class NavigationTests(unittest.TestCase):
         self.assertIn('Preserved reader text.', text)
         self.assertLess(text.index('snodec:begin organization'), text.index('# Companion'))
         self.assertTrue((repo / 'docs/media/nav/organization-light.svg').is_file())
-        self.assertFalse((repo / 'docs/media/nav/repository-light.svg').exists())
+        self.assertTrue((repo / 'docs/media/nav/repository-light.svg').exists())
+        self.assertTrue((repo / 'docs/media/nav/account-light.svg').exists())
         self.assertEqual(page_headers(repo, check=True), [])
+
+    def test_banner_precedes_image_and_identity_destinations(self):
+        repo = self.fixture('snode.c')
+        page_headers(repo)
+        for path in ['README.md', 'docs/README.md', 'docs/guides/build-from-source.md']:
+            body = (repo / path).read_text()
+            self.assertEqual(body.count('id="banner"'), 1)
+            self.assertLess(body.index('id="banner"'), body.index('# '))
+            if path != 'README.md':
+                self.assertLess(body.index('id="banner"'), body.index('<picture>'))
+                self.assertIn('https://github.com/SNodeC#banner', body)
+                self.assertIn('https://github.com/VolkerChristian#banner', body)
+                self.assertIn('id="page-overview"', body)
+        for stem, title, label in [('repository', 'SNode.C repository', 'SNode.C'),
+                                   ('organization', 'SNode.C organization', 'SNode.C'),
+                                   ('account', 'Volker Christian account', 'Volker Christian')]:
+            asset = (repo / f'docs/media/nav/{stem}-light.svg').read_text()
+            self.assertIn(f'<title>{title}</title>', asset)
+            self.assertIn(f'>{label}</text>', asset)
+        self.assertEqual(page_headers(repo, check=True), [])
+
+    def test_long_repository_name_is_not_clipped(self):
+        import xml.etree.ElementTree as ET
+        from tools.snodec_sync.navigation import _header_button
+        svg = ET.fromstring(_header_button('DistributionPackages', 'DistributionPackages repository', 'repo', '#075985', 'light'))
+        self.assertGreater(int(svg.attrib['width']), 160)

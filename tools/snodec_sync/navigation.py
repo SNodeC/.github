@@ -124,11 +124,11 @@ def _button(nav, stem, title, href, right=False, mobile=False):
             f'alt="{escape(title)}" title="{escape(title)}"{size}></picture></a>')
 
 
-def _organization():
-    return ('<!-- snodec:begin organization -->\n<p>' +
-            _button('docs/media/nav', 'organization', 'SNode.C organization',
-                    'https://github.com/SNodeC', True) +
-            '<br clear="all"></p>\n<!-- snodec:end organization -->')
+def _identity(nav, display, repository):
+    return ''.join(_button(nav, stem, title, href, True, True) for stem, title, href in [
+        ('account', 'Volker Christian account', 'https://github.com/VolkerChristian#banner'),
+        ('organization', 'SNode.C organization', 'https://github.com/SNodeC#banner'),
+        ('repository', display + ' repository', repository)])
 
 
 def _header(config, page_path):
@@ -136,18 +136,16 @@ def _header(config, page_path):
     display = config['display']
     nav = _relative('docs/media/nav', page_path)
     escape = lambda text: html.escape(text, quote=True)
-    up_fragment = 'project-overview' if page['up'] == 'README.md' else 'page-overview'
-    buttons = [_button(nav, 'up-' + slug(page['up_label']), 'Up to ' + config['menu_labels'].get(page['up_label'], page['up_label']),
-                      _relative(page['up'], page_path) + '#' + up_fragment),
-               _button(nav, 'organization', 'SNode.C organization', 'https://github.com/SNodeC', True, True),
-               _button(nav, 'repository', display + ' repository',
-                      _relative('README.md', page_path) + '#project-overview', True, True)]
-    return ('<!-- snodec:begin page-header -->\n<a id="page-overview"></a>\n'
+    buttons = _button(nav, 'up-' + slug(page['up_label']),
+                      'Up to ' + config['menu_labels'].get(page['up_label'], page['up_label']),
+                      _relative(page['up'], page_path) + '#banner')
+    buttons += _identity(nav, display, _relative('README.md', page_path) + '#banner')
+    return ('<!-- snodec:begin page-header -->\n<a id="banner"></a><a id="page-overview"></a>\n'
             f'<p><picture><source media="(max-width: 640px)" '
             f'srcset="{nav}/banner-{slug(page["label"])}-compact.svg">'
             f'<img src="{nav}/banner-{slug(page["label"])}.svg" '
             f'alt="{escape(display + " — " + page["label"])}" width="100%"></picture></p>\n'
-            '<p>' + ''.join(buttons) + '<br clear="all"></p>\n<!-- snodec:end page-header -->')
+            '<p>' + buttons + '<br clear="all"></p>\n<!-- snodec:end page-header -->')
 
 
 def render_header(repo, page_path):
@@ -166,6 +164,7 @@ def _svg(width, height, label, body):
 
 
 def _header_button(label, title, icon, color, theme, width=160):
+    width = max(width, 44 + len(label) * 8) if width != 36 else width
     fill, stroke, text = (('#f6f8fa', '#d0d7de', '#1f2328') if theme == 'light'
                           else ('#161b22', '#3d444d', '#e6edf3'))
     original = ET.parse(ROOT / f'brand/navigation/octicons/{icon}.svg').getroot()
@@ -180,7 +179,7 @@ def _header_button(label, title, icon, color, theme, width=160):
 
 
 def _banner(name, display, label, color, compact=False):
-    mark = ET.parse(ROOT / f'brand/navigation/marks/{"Packages" if name == "DistributionPackages" else name}.svg').getroot()
+    mark = ET.parse(ROOT / f'brand/navigation/marks/{ {"DistributionPackages": "Packages", ".github": "snode.c"}.get(name, name)}.svg').getroot()
     x, y, width, height = map(float, mark.attrib['viewBox'].split())
     scale = 44 / height
     graphic = ''.join(ET.tostring(child, encoding='unicode') for child in mark)
@@ -232,7 +231,7 @@ def _section_list(config, path, texts):
         if page.get('deleted') or page.get('excluded') or page['up'] != path or page['new'] not in texts:
             continue
         title = re.search(r'^# (.+)$', texts[page['new']], re.M)[1]
-        entries.append(f'- [{title}]({_relative(page["new"], path)}#page-overview)')
+        entries.append(f'- [{title}]({_relative(page["new"], path)}#banner)')
     return '<!-- snodec:begin section-pages -->\n' + '\n'.join(entries) + '\n<!-- snodec:end section-pages -->'
 
 
@@ -240,7 +239,7 @@ def _up_link(src, href, path, ancestors):
     target, _, fragment = href.partition('#')
     target = posixpath.normpath(posixpath.join(posixpath.dirname(path), target))
     return PurePosixPath(src).name.startswith('back-') or (
-        target in ancestors and fragment in ('', 'page-overview', 'project-overview', 'readme'))
+        target in ancestors and fragment in ('', 'banner', 'page-overview', 'project-overview', 'readme'))
 
 
 def _menus(checkout, config, texts, outputs):
@@ -252,16 +251,8 @@ def _menus(checkout, config, texts, outputs):
             ancestors.add(parent)
             if parent == 'README.md':
                 break
-        def anchor(match):
-            tag = match[0]
-            image = re.search(r'<img\b[^>]*src="([^"]+)"[^>]*>', tag)
-            if not image:
-                return tag
-            href = re.search(r'href="([^"]+)"', tag)[1]
-            if _up_link(image[1], href, path, ancestors):
-                return ''
-            return tag
-        text = re.sub(r'<a\b[^>]*href="[^"]+"[^>]*>\s*<img\b[^>]*>\s*</a>', anchor, original)
+        text = re.sub(r'<a\b[^>]*href="([^"]+)"[^>]*>\s*<img\b[^>]*src="([^"]+)"[^>]*>\s*</a>',
+                      lambda m: '' if _up_link(m[2], m[1], path, ancestors) else m[0], original)
         # Markdown image uplinks are likewise buttons, not ordinary prose references.
         text = re.sub(r'\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)',
                       lambda m: '' if _up_link(m[2], m[3], path, ancestors) else m[0], text)
@@ -358,7 +349,9 @@ def page_headers(repo, check=False):
         texts[path] = (prefixes[path] + '\n\n' if prefixes[path] else '') + body + '\n'
     root_organization = name in ('.github', 'SNode.C-Book-Companion') or 'snodec:begin organization' in texts['README.md']
     if root_organization:
-        block = _organization()
+        block = ('<!-- snodec:begin organization -->\n<p>' +
+                 _identity('docs/media/nav', config['display'], '#banner') +
+                 '<br clear="all"></p>\n<!-- snodec:end organization -->')
         text = texts['README.md']
         pattern = r'<!-- snodec:begin organization -->.*?<!-- snodec:end organization -->'
         if re.search(pattern, text, re.S):
@@ -366,21 +359,22 @@ def page_headers(repo, check=False):
         else:
             text = re.sub(r'^# ', lambda _: block + '\n\n# ', text, count=1, flags=re.M)
         texts['README.md'] = text
+    texts['README.md'] = '<a id="banner"></a>\n' + re.sub(r'<a id="banner"></a>\s*', '', texts['README.md'])
     outputs.update(texts)
     active = [p for p in config['pages'] if not p.get('deleted') and not p.get('excluded')]
     for label in sorted({p['label'] for p in active}):
         for compact in (False, True):
             outputs[f'docs/media/nav/banner-{slug(label)}{"-compact" if compact else ""}.svg'] = _banner(name, config['display'], label, accent['dark']['text'], compact)
-    buttons = [('repository', 'Repository', config['display'] + ' repository', 'repo', accent),
-               ('organization', 'Organization', 'SNode.C organization', 'organization', org_accent)]
+    buttons = [('repository', config['display'], config['display'] + ' repository', 'repo', accent),
+               ('organization', 'SNode.C', 'SNode.C organization', 'organization', org_accent),
+               ('account', 'Volker Christian', 'Volker Christian account', 'person', org_accent)]
     buttons += [('up-' + slug(label), config['menu_labels'].get(label, label), 'Up to ' + config['menu_labels'].get(label, label), 'arrow-up', accent)
                 for label in sorted({p['up_label'] for p in active})]
-    buttons = [button for button in buttons if active or button[0] == 'organization']
     if active or root_organization:
         for stem, label, title, icon, colors in buttons:
             for theme in ('light', 'dark'):
                 outputs[f'docs/media/nav/{stem}-{theme}.svg'] = _header_button(label, title, icon, colors[theme]['text'], theme)
-                if active and stem in ('repository', 'organization'):
+                if stem in ('repository', 'organization', 'account'):
                     outputs[f'docs/media/nav/{stem}-icon-{theme}.svg'] = _header_button(label, title, icon, colors[theme]['text'], theme, 36)
     drift = [path for path, text in sorted(outputs.items())
              if not (checkout / path).is_file() or (checkout / path).read_text() != text]

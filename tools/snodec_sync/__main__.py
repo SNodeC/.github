@@ -124,7 +124,7 @@ def render_profile(catalog, metadata, template=None):
                 badge = f"[![CI](https://img.shields.io/github/actions/workflow/status/SNodeC/{quote(name, safe='')}/{quote(Path(info['workflow']).name, safe='')}?branch={branch}&label=CI&style=flat)]({workflow})"
             products.append(f"| **[{text(entry['title'])}]({repo_url(name, anchor)})** | {purpose} | {badge} |")
         elif tier == "learn":
-            learn.append(f"| **[{text(entry.get('title', name))}]({url})** | {text(entry['summary'])} |")
+            learn.append(f"| **[{text(entry.get('title', name))}]({repo_url(name, info.get("readme_anchor", ""))})** | {text(entry['summary'])} |")
         if tier != "secondary" and entry.get("student") is not True:
             continue
         group = ("Archive" if entry["status"] != "active" else "Student projects"
@@ -136,7 +136,7 @@ def render_profile(catalog, metadata, template=None):
                        if group == "Upstream forks" else text(entry["summary"]))
             if group == "Archive":
                 purpose += f" · {entry['status']}"
-            groups[group].append(f"| [{text(name)}]({url}) | {purpose} |")
+            groups[group].append(f"| [{text(name)}]({repo_url(name, info.get("readme_anchor", ""))}) | {purpose} |")
     summaries = ["small programs built on SNode.C", "built in courses and projects", "not built on SNode.C",
                  "package pipeline and organization control", "kept for future work", "retiring and retired"]
     more = []
