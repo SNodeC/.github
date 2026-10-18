@@ -1010,3 +1010,55 @@ DistributionPackages:
     label: Documentation
     up: docs/README.md
     up_label: Documentation
+
+snode.c-idp:
+  display: SNode.C IDP
+  source: snode.c-idp
+  sections:
+    docs: Documentation
+  media: []
+  pages:
+  - old: null
+    new: docs/README.md
+    kind: section
+    title: SNode.C IDP documentation
+    label: Documentation
+    up: README.md
+    up_label: SNode.C IDP
+    intro: Build, configure and operate the identity provider and its application
+      integration.
+  - old: docs/local-deployment.md
+    new: docs/local-deployment.md
+    kind: doc
+    title: Local deployment
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+  - old: docs/idp-and-client-guide.md
+    new: docs/idp-and-client-guide.md
+    kind: doc
+    title: IDP and client guide
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+  - old: docs/idp-middleware.md
+    new: docs/idp-middleware.md
+    kind: doc
+    title: Embed the identity provider
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+  - old: docs/authentication-hardening-plan.md
+    new: docs/authentication-hardening-plan.md
+    kind: doc
+    title: Authentication hardening
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+  - old: docs/package-deployment-plan.md
+    new: docs/package-deployment-plan.md
+    kind: doc
+    title: Package and deployment integration
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation

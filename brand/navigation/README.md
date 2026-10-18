@@ -11,3 +11,5 @@ Identity/accent policy remains in `catalog.yml` and `brand/tokens.yml`. These ex
 | Packages gear | [DistributionPackages 47a1da3, site/docs/media/page-banner.svg](https://github.com/SNodeC/DistributionPackages/blob/47a1da32b2ff62aa4730887ce493007c7ac50a4c/site/docs/media/page-banner.svg) |
 
 [Octicons attribution](octicons/NOTICE.md) records the verified package version and required MIT notice; the notice also travels in generated header-button SVGs. No licence files or project licences were added or changed.
+
+The `snode.c-idp` layered mark follows the existing IDP account-page header. It identifies the maintained Jan Eberwein fork; catalog classification remains unchanged.
