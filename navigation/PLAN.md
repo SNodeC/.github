@@ -302,3 +302,5 @@ The maintained identity-provider repository uses the same generated banner, iden
 | `docs/package-deployment-plan.md` | Documentation | Documentation |
 
 The root README retains upstream attribution, provides a concise purpose/build entry point and links to the detailed guides. The layered IDP mark comes from its existing account-page identity. No workflow is enabled by navigation enrollment.
+
+The IDP package deployment guide (`docs/package-deployment.md`) belongs to Documentation; its styled example (`examples/minimal-mfa-app/README.md`) links up to the project root. Packages adds `docs/catalogs/snodec-idp.md` under Catalogs.

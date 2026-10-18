@@ -780,6 +780,13 @@ Packages:
     up: docs/README.md
     up_label: Documentation
     intro: The package catalogs of SNode.C and MQTTSuite.
+  - old: docs/catalogs/snodec-idp.md
+    new: docs/catalogs/snodec-idp.md
+    kind: doc
+    title: SNode.C IDP packages
+    label: Catalogs
+    up: docs/catalogs/README.md
+    up_label: Catalogs
   - old: docs/mqttsuite-package-options.md
     new: docs/catalogs/mqttsuite.md
     kind: doc
@@ -1062,3 +1069,17 @@ snode.c-idp:
     label: Documentation
     up: docs/README.md
     up_label: Documentation
+  - old: docs/package-deployment.md
+    new: docs/package-deployment.md
+    kind: doc
+    title: Install and deploy the packaged IDP
+    label: Documentation
+    up: docs/README.md
+    up_label: Documentation
+  - old: examples/minimal-mfa-app/README.md
+    new: examples/minimal-mfa-app/README.md
+    kind: doc
+    title: Styled MFA example application
+    label: Examples
+    up: README.md
+    up_label: SNode.C IDP
