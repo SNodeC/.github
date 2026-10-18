@@ -287,3 +287,20 @@ Before Step 2, preserve the 1280×56 desktop banner unchanged and add a 480×72 
 - **Audit scope clarification approved by the owner:** the unplanned-page check applies only to header-enrolled repositories. AutoTalk and Book remain unenrolled; their tracked Markdown still receives reachability and link/anchor checks. No exemptions are added.
 
 The Findings ledger parent label is 15 characters, so the existing label guard now accepts up to 15 rather than 14; button size, typography and renderer are unchanged. Longer labels remain rejected. The proposed paths, titles, boundaries and short Distribution label are review decisions for this PR, not an automatic content migration.
+
+## SNode.C IDP
+
+The maintained identity-provider repository uses the same generated banner, identity buttons and parent navigation as other projects. Existing guide paths remain stable.
+
+| Page | Parent | Section |
+| --- | --- | --- |
+| `docs/README.md` | Root README | Documentation |
+| `docs/local-deployment.md` | Documentation | Documentation |
+| `docs/idp-and-client-guide.md` | Documentation | Documentation |
+| `docs/idp-middleware.md` | Documentation | Documentation |
+| `docs/authentication-hardening-plan.md` | Documentation | Documentation |
+| `docs/package-deployment-plan.md` | Documentation | Documentation |
+
+The root README retains upstream attribution, provides a concise purpose/build entry point and links to the detailed guides. The layered IDP mark comes from its existing account-page identity. No workflow is enabled by navigation enrollment.
+
+The IDP package deployment guide (`docs/package-deployment.md`) belongs to Documentation; its styled example (`examples/minimal-mfa-app/README.md`) links up to the project root. Packages adds `docs/catalogs/snodec-idp.md` under Catalogs.
