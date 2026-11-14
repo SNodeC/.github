@@ -1,5 +1,5 @@
 name: Validate organization catalog and profile
-# Validate the catalog and generated profile, then request the member-profile refresh.
+# Validate the catalog and generated profile. Member-profile refresh is manual.
 on: [push, pull_request, workflow_dispatch]
 permissions: { contents: read }
 jobs:
@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt
@@ -22,17 +22,3 @@ jobs:
       - name: Unit and workflow boundary tests
         if: ${{ always() && !cancelled() }}
         run: python -m unittest discover -s tests -v
-  trigger-member-profile:
-    name: Trigger member organization profile sync
-    needs: control
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    steps:
-      - name: Request private profile refresh from public main
-        env:
-          GH_TOKEN: ${{ secrets.ORG_PROFILE_TOKEN }}
-        run: |
-          test -n "$GH_TOKEN"
-          gh api --method POST repos/SNodeC/.github-private/dispatches \
-            -f event_type=sync-organization-profile

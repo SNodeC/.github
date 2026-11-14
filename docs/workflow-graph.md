@@ -25,7 +25,7 @@ File links point to the current workflow definitions. “Sends/calls” distingu
 
 | Repository | Workflow file and name | Triggered by | Sends/calls | Effect |
 | --- | --- | --- | --- | --- |
-| .github | [validate-organization.yml](https://github.com/SNodeC/.github/blob/main/.github/workflows/validate-organization.yml) — Validate organization catalog and profile | Any push, PR, manual | `sync-organization-profile` → .github-private after successful main push/manual run | Catalog, profile and generator checks |
+| .github | [validate-organization.yml](https://github.com/SNodeC/.github/blob/main/.github/workflows/validate-organization.yml) — Validate organization catalog and profile | Any push, PR, manual | No dispatch | Catalog, profile and generator checks |
 | .github | [verify-project.yml](https://github.com/SNodeC/.github/blob/main/.github/workflows/verify-project.yml) — Reusable build, test and package verification | `workflow_call` only | No dispatch | Manifest-driven C++ or Python verification and artifacts |
 | .github-private | [sync-member-profile.yml](https://github.com/SNodeC/.github-private/blob/main/.github/workflows/sync-member-profile.yml) — Sync member organization profile | `sync-organization-profile`; manual | No dispatch | Pull and validate public main; commit changed member profile/media |
 | snode.c | [build-and-test.yml](https://github.com/SNodeC/snode.c/blob/master/.github/workflows/build-and-test.yml) — Build and test SNode.C | Manual only | Calls .github `verify-project.yml@main` | Build, tests and staged-install verification |
@@ -50,14 +50,12 @@ File links point to the current workflow definitions. “Sends/calls” distingu
 ```mermaid
 flowchart LR
     Change[Public push or PR or manual] --> Check[.github: validate organization]
-    Check --> Guard{Successful main run\nand not a PR?}
-    Guard -->|yes: sync-organization-profile| Member[.github-private: sync member profile]
-    Manual[Private manual trigger] --> Member
+    Manual[Private manual trigger] --> Member[.github-private: sync member profile]
     Member --> Pull[Pull public main and validate profile]
     Pull --> Commit[Commit profile and media if changed]
 ```
 
-The public catalog and `profile/template.md` own the content; the private repository pulls it rather than implementing a second generator. Unmerged PRs check without publishing. The sender uses the public repository's `ORG_PROFILE_TOKEN` secret with access to the private receiver. The receiver writes its own repository using `GITHUB_TOKEN`. Publication is serialized with `member-profile-publication`; existing private files outside the mirrored profile are preserved.
+The public catalog and `profile/template.md` own the content; the private repository pulls it rather than implementing a second generator. Public pushes and PRs check without publishing. Member-profile refresh is triggered manually until a GitHub App replaces the token. The receiver writes its own repository using `GITHUB_TOKEN`. Publication is serialized with `member-profile-publication`; existing private files outside the mirrored profile are preserved.
 
 ## Shared product verification
 
